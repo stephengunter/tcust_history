@@ -1,0 +1,219 @@
+﻿@model TzuChiFrontend.Models.EBookSearchModel
+@using Core.Extensions
+
+@{
+    ViewBag.Title = "上人的教育理念";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    bool isVideo = (Model.Menu == 4);
+}
+
+@section styles{
+
+    <link href="~/Content/ebook/big_TeachPhilosophy.css" rel="stylesheet">
+    <link href="~/Content/ebook/myset.css" rel="stylesheet">
+    <link href="~/Content/ebook/reset.css" rel="stylesheet">
+    <link href="~/Content/ebook/water.css" rel="stylesheet">
+
+
+<style>
+   
+
+    .sel {
+        width: 100%;
+        float: left;
+        box-shadow: 0 1px 0 rgba(0,0,0,0.2);
+        font-size: 16pt;
+        font-family: "華康仿宋體W6(P)", "微軟正黑體";
+        background: rgba(255,255,255,1);
+        color: #0388A6;
+        padding: 5px 10px;
+        margin: 5px;
+        border-radius: 5px;
+    }
+
+    .sel_active {
+        background: rgb(248, 255, 174);
+    }
+
+    .font12 {
+        font-size: 14pt;
+    }
+</style>
+}
+
+
+<input type="hidden" id="menu-id" value="@Model.Menu" />
+
+<div id="bookDiv" class="bookbk">
+
+    @if (isVideo)
+    {
+        if (!Model.EBookFileList.IsNullOrEmpty())
+        {
+            @Html.Partial("_Video", Model)
+        }
+
+    }
+    else
+    {
+        @Html.Partial("_Book", Model)
+    }
+
+    
+</div>
+
+<div class='cont1Div'>
+
+    <div style="padding: 0px; text-align: center">
+
+        <!-- tcust加寫側標-->
+        <div id="TabDiv" style="display:none">
+
+        </div>
+        <!--回到首頁按鈕-->
+        <div id="gobkDiv" class="btn">
+            <a href="@Url.Action("index","Test")">
+                <img src="~/images/ebook/gobk.png" width="130" height="130" border="0">
+            </a>
+        </div>
+
+        <div id="waDiv">
+            <canvas id="canvas" width="544" height="327"></canvas>
+        </div>
+        <!--上方主選單 Start-->
+        <div class="cont1Div">
+            @Html.Partial("_MenuIdea", Model)
+        </div>
+
+        @if (isVideo && !Model.CategoryList.IsNullOrEmpty())
+        {
+
+            <!--右邊單開始-->
+            <div style="width:110px; position:absolute; right:50px; top:250px; ">
+
+                @for (int i = 0; i < Model.CategoryList.Count; i++)
+                {
+                    var category = Model.CategoryList[i];
+                    if (i == 0)
+                    {
+                        <a class="sel sel_active video-category" href="#" data-id="@category.Id" >@category.Text</a>
+                    }
+                    else
+                    {
+                        <a class="sel video-category" href="#" data-id="@category.Id" >@category.Text</a>
+                    }
+                }
+
+               
+            </div>
+            <!--右邊單結束-->
+
+        }
+    </div>
+
+
+
+    <!--翻頁控制-->
+    <div id="toolbox">
+
+    </div>
+
+
+</div>
+
+@section scripts{
+    <script type="text/javascript" src="~/Scripts/jquery.min.1.7.js"></script>
+    <script type="text/javascript" src="~/Scripts/turn.js"></script>
+    <!-- 加入按鈕動畫 -->
+    <script src="~/Scripts/easeljs-0.6.0.min.js"></script>
+    <script src="~/Scripts/tweenjs-0.4.0.min.js"></script>
+    <script src="~/Scripts/movieclip-0.6.0.min.js"></script>
+    <script src="~/Scripts/preloadjs-0.3.0.min.js"></script>
+    <script src="~/Scripts/water.js"></script>
+    <script src="~/Scripts/ebook/init.js"></script>
+    <script>
+
+        function initVideos() {
+            $('video').attr('src', $('.Mvglow').eq(0).find('img').attr('data-video'));
+            //文字的click事件
+            $(".Mvtxt").click(function (e) {
+                e.preventDefault();
+                $('video').fadeOut();
+
+                var index = $('.Mvtxt').index($(this));                
+                $('video').attr('src', $('.Mvglow').eq(index).find('img').attr('data-video'));
+                $('video').attr('poster', $('.Mvglow').eq(index).find('img').attr('src'));
+
+                $('video').fadeIn();
+            });
+
+            //預覽圖的click事件
+            $(".Mvglow").click(function (e) {
+                e.preventDefault();
+                $('video').fadeOut();
+
+                var index = $('.Mvglow').index($(this));
+                $('video').attr('src', $('.Mvglow').eq(index).find('img').attr('data-video'));
+                $('video').attr('poster', $('.Mvglow').eq(index).find('img').attr('src'));
+
+                $('video').fadeIn();
+            });
+        }//影片頁面專用
+
+
+        function fetchVideosByCategory(category) {
+            var url = '@Url.Action("GetVideos", "Test")';
+
+            $.ajax({
+                type: "GET",
+                url: url,
+                data: { category: category },
+                dataType: 'html',
+                success: function (data) {
+                    $('#bookDiv').html(data);
+                },
+                error: function () {
+                    OnError();
+                }
+            });
+        }
+
+        $(document).ready(function () {
+           
+            init();//水紋
+            $('body').css('top', -(document.documentElement.scrollTop) + 'px').addClass('noscroll');
+            //關閉彈跳視窗
+            $(".WINclose").click(function () {
+                document.getElementById('videoDiv').style.visibility = 'hidden';
+            });
+            //bookInit();//for the first time
+            //顯示彈跳視窗
+            $("#showVideoFrame").click(function () {
+                document.getElementById('videoDiv').style.visibility = 'visible';
+            });
+
+            let menuId = parseInt($('#menu-id').val());
+            if (menuId == 4) {
+                initVideos();
+
+                $(".video-category").click(function (e) {
+                    e.preventDefault();
+                    $(".video-category").removeClass("sel_active");
+                    $(this).addClass("sel_active");
+
+                    let category = $(this).data('id');
+                    fetchVideosByCategory(category);
+                });
+            }
+            
+
+
+
+        });
+
+
+
+
+    </script>
+}

@@ -1,0 +1,433 @@
+﻿@model TzuChiClassLibrary.BO.PagenationModel
+@{
+    ViewBag.Title = "GetSchoolDiaryList";
+}
+
+@{
+    ViewBag.Title = "校史館 - 資訊查詢 | 校園日誌";
+    string frontendBaseURL = System.Web.Configuration.WebConfigurationManager.AppSettings["website.frontend"];
+    string backendBaseURL = System.Web.Configuration.WebConfigurationManager.AppSettings["website.backend"];
+    string backend = System.Web.Configuration.WebConfigurationManager.AppSettings["upload.folder.name"];
+}
+
+@section scripts {
+    @*<script src="~/Scripts/imgDragforbidden.js"></script>*@    
+@*<script src="~/Scripts/hammer.js-master/hammer.js"></script>
+<script src="~/Scripts/jquery.hammer.js"></script>
+    <script src="~/Scripts/slick/slick_v.js"></script>
+    <script src="@Url.Content("~/Scripts/inform/js/modernizr.custom.79639.js")" type="text/javascript"></script>*@
+    <script>
+        //function iEsc() { return false; }
+        //function iRec() { return true; }
+        //function DisableKeys() {
+        //    if (event.ctrlKey || event.shiftKey || event.altKey) {
+        //        window.event.returnValue = false;
+        //        iEsc();
+        //    }
+        //}
+        //document.ondragstart = iEsc;
+        //document.onkeydown = DisableKeys;
+        //document.oncontextmenu = iEsc;
+        //if (typeof document.onselectstart != "undefined")
+        //    document.onselectstart = iEsc;
+        //else {
+        //    document.onmousedown = iEsc;
+        //    document.onmouseup = iRec;
+        //}
+        //function DisableRightClick(qsyzDOTnet) {
+        //    if (window.Event) {
+        //        if (qsyzDOTnet.which == 2 || qsyzDOTnet.which == 3)
+        //            iEsc();
+        //    }
+        //    else
+        //        if (event.button == 2 || event.button == 3) {
+        //            event.cancelBubble = true
+        //            event.returnValue = false;
+        //            iEsc();
+        //        }
+        //}
+
+
+
+        $(function () {
+
+            //$('.initxt-a').hammer().bind("tap press", function (ev) {
+            //    location.href =  $(this).attr('href');
+            //});
+
+
+            //setDivCenter();
+            //dropDonwList();
+            //$('#submitBtn').click(function () {
+            //    submitForm();
+            //});
+
+           $('.wbox1').fadeIn();
+
+            //$('.slick-slide').hammer().bind("tap press", function (ev) {
+            //    if ($.type($(this).find('.initxt-a').attr('href')) != 'undefined') {
+            //        location.href = $(this).find('.initxt-a').attr('href');
+            //    }
+            //});
+        });
+
+
+        function ajaxSlick() {
+            $.ajax({
+                //url: URLs + '/SchoolDiary/AjaxGetSchoolDiaryList',
+                url: 'AjaxGetSchoolDiaryList',
+                type: "POST",
+                dataType: 'json',
+                success: function (jdata) {
+                    var NumOfJData = jdata.length;
+
+                    for (var i = 0; i < NumOfJData; i++) {
+
+                        var jsonDate = jdata[i].ContentTime;  // returns "/Date(1245398693390)/";
+                        var re = /-?\d+/;
+                        var m = re.exec(jsonDate);
+                        var d = new Date(parseInt(m[0]));
+                        var html = '';
+
+                        var year = d.getFullYear();
+                        var month = (d.getMonth() + 1) + ''; //tostring
+                        var date = (d.getDate()) + ''; //tostring
+                        month = (month.length == 1 ? '0' + month : month);
+                        date = (date.length == 1 ? '0' + date : date);
+
+                        html += '<div><h3><div class="tztable">';
+                        html += '<ul class="title_01">';
+                        html += '<li class="title_02">' + year + '</li>';
+                        html += '<li class="title_03">____________</li>';
+                        html += '<li class="title_04">' + month + '.' + date + '</li>';
+                        html += '</ul>';
+                        html += '<ul class="title_05"><li style="width:510px;overflow:hidden">';
+                        html += jdata[i].ContentName;
+                        html += '</li></ul>';
+                        html += '<ul>';
+
+                        var regex = /(<((?!br)[^>]+)>)/ig;
+                        var txt = jdata[i].Description.replace(regex, "");
+                        
+                        html += '<li class="intxt">' + txt + '</li>';
+                        html += '<li class="imgintxt">';
+
+                        var widthHeightRatio = 433 / 325;
+                        var imageRatio = jdata[i].PicUrlList[0].ImageWidth / jdata[i].PicUrlList[0].ImageHeight;
+                        var displayStr = "";
+
+                        if (widthHeightRatio > imageRatio)
+                            displayStr = ' height="325" style="max-width:433px; text-align: center; margin-left: auto; margin-right: auto;" ';
+                        else
+                            displayStr = ' width="433" style="max-height:325px; text-align: center;" ';
+
+                        var imgUrlString = '@backend' + jdata[i].PicUrlList[0].Path;
+                        html += '<div style="width:443px;height:325px;display: table-cell;  vertical-align: middle;" align="center">'
+                            + '<img  src="' + imgUrlString + '" ' + displayStr + ' ></div>';
+                        html += '</li>';
+                        html += '<li class="intxt1">';
+                        var contentUrl = 'GetSchoolDiaryByContentID/' + jdata[i].ContentID;
+                        html += '<a style="z-index:9999" class="initxt-a" href="' + contentUrl + '">more....</a>';
+                        html += '</li>';
+                        html += '</ul>';
+                        html += '</div></h3></div>';
+
+                        $('.divcenter').slickAdd(html);
+                    }
+                    //$('.initxt-a').hammer().bind("tap press", function (ev) {                        
+                    //    location.href =  $(this).attr('href');                        
+                    //});
+                    $('.slick-slide').hammer().bind("tap press", function (ev) {
+                        location.href = $(this).find('.initxt-a').attr('href');
+                    });
+                },
+                error: function (xhr, ajaxOptions, thrownError) {
+                    //console.log('fail');
+                    //console.log(xhr.status);
+                    //console.log(thrownError);
+                }
+            });
+        }
+
+
+        function setDivCenter() {
+            //var mainWidth = $(".wbox1").width();
+            //var centerWidht = $('.mid').width();
+            //var setCenterW = mainWidth / 2 - centerWidht / 2;
+
+            var mainHeight = $(".wbox1").height();
+            var centerHeight = $('.divcenter').height();
+            var setCenterH = mainHeight / 2 - centerHeight / 2;
+            //$('.divcenter').offset({
+            //    top: setCenterH
+            //});
+            $('.divcenter').slick({
+                centerMode: true,
+                dots: false,
+                vertical: true,
+                slidesToShow: 1,
+                slidesToScroll: 1,
+                infinite: false,
+                onBeforeChange: function () {
+                    //if ($('.slick-slide[index=0]').hasClass('slick-active')) {                        
+                    //    ajaxSlick();                        
+                    //}
+
+                    if ($('.slick-slide').eq(-4).hasClass('slick-active')) {                                                
+                        ajaxSlick();
+                    }
+                },
+            });
+        }
+
+        function dropDonwList() {
+            $('.dropdown li').click(function () {
+                var txt = $(this).text();
+                var val = $(this).attr('data-value');
+                $(this).parent('ul').siblings('.dd-text').text(txt);
+                $(this).parent('ul').siblings('.dd-text').attr('data-value', val);
+            });
+        }
+
+        function submitForm() {
+            $("#yearSearch").val($('#yearDropList').attr('data-value'));
+            $("#semSearch").val($('#semDropList').attr('data-value'));
+            $("#keywordSearch").val($('#keyWordInput').val());
+            document.forms["submitForm"].submit();
+        }
+    </script>
+}
+
+@section styles{
+    @*<link href="~/Content/slick_style.css" rel="stylesheet" type="text/css" />*@
+    <style type="text/css">
+      body {
+-moz-user-select : none;
+-webkit-user-select: none;
+}
+    </style>
+    <link href="~/Content/slick.css" rel="stylesheet" />
+    <link href="~/Scripts/inform/css/reset.css" rel="stylesheet" type="text/css">
+    <link href="~/Scripts/inform/css/tzuchi.css" rel="stylesheet" type="text/css">
+    <link href="~/Scripts/inform/css/style.css" rel="stylesheet" type="text/css">
+    <noscript>
+        <link href="~/Scripts/inform/css/noJS.css" rel="stylesheet" type="text/css" />
+    </noscript>
+    <style>
+        .tztable {
+            width: 1240px !important;
+        }
+
+        .menu5 {
+            margin-top: 20px !important;
+        }
+
+        .title_05 {
+            overflow: hidden;
+            width: 600px;
+            height: 90px;
+            word-break: break-all;
+        }
+
+        .imgintxt {
+            overflow: hidden;
+        }
+
+        .slick-next, .slick-prev {
+            display: none;
+        }
+
+        .divcenter {
+            /*margin-top: 0 !important;*/
+        }
+
+        .intxt {
+            word-break: break-all;
+            weight: 620px;
+            height: 200px;
+            overflow: hidden;
+        }
+
+
+
+        .slick-track {
+            width: 1400px;
+        }
+
+        .slick-list.draggable {
+            height: 900px !important;
+        }
+
+        .slick-track {
+            margin-top: -300px;
+        }
+    </style>
+}
+
+<div class="wbox1" style="width:1920px;display:none;" >  
+    <!--左邊標題-->
+    <div class="leftbox"><img src="~/Scripts/inform/images/inform/title_s1.png" width="134" height="750"></div>
+    <!--中間表格-->
+    <div class="centerbox">
+        <div style="vertical-align:middle; position:absolute; margin-top:100px;">
+            <div id="slick-area" class="divcenter">
+                <div>
+                    <h3>
+                        <div class="tztable">
+                            <ul class="">
+                                <li class="title_02"></li>
+                                <li class="title_03"></li>
+                                <li class="title_04"></li>
+                            </ul>
+                            <ul class="title_05">
+                                <li style="width:510px;overflow:hidden">                                    
+                                </li>
+                            </ul>
+                            <ul>
+                                <li class="intxt">                                    
+                                </li>
+                                <li class="imgintxt">
+                                    <img width="443" height="325" />
+                                </li>
+                                <li class="intxt1"><a  href="javascript:void(0)"></a></li>
+                            </ul>
+                        </div>
+                    </h3>
+                </div>
+
+
+
+
+
+                @foreach (var item in ViewBag.DataModel)
+                {
+                    <div>
+                        <h3>
+                            <div class="tztable">
+                                <ul class="title_01">
+                                    <li class="title_02">@string.Format("{0:yyyy}", item.ContentTime) </li>
+                                    <li class="title_03">____________</li>
+                                    <li class="title_04">@string.Format("{0:MM.dd}", item.ContentTime)</li>
+                                </ul>
+                                <ul class="title_05">
+                                    <li style="width:510px;overflow:hidden">
+                                        @{                    
+                                            var Htmlstring = @System.Text.RegularExpressions.Regex.Replace(item.ContentName, @"<((?!br)[^>]+)>", "");
+                                        }
+                                        @Html.Raw(Htmlstring)
+                                    </li>
+                                </ul>
+
+
+                               
+                                <ul>
+                                    <li class="intxt">
+                                        @{
+                                            var HtmlstringDesc = @System.Text.RegularExpressions.Regex.Replace(item.ContentText, @"<(.[^>]*)>", "");
+                                            HtmlstringDesc = @System.Text.RegularExpressions.Regex.Replace(HtmlstringDesc, @"\r\n", "</br>");
+                                        }
+
+
+                                        @item.Author
+
+                                        @Html.Raw(HtmlstringDesc)
+                                    </li>
+                                    <li class="imgintxt" >
+
+                                       
+
+                                    </li>
+                                    <li class="intxt1">
+                                        <a class="initxt-a" style="z-index:99999" href="@Url.Content("~/SchoolDiary/GetSchoolDiaryByContentID/" + @item.ContentID)">
+                                         more....
+                                        </a>
+                                    </li>
+
+
+                                </ul>
+                            </div>
+                        </h3>
+                    </div>
+                }
+            </div>
+
+        </div>
+    </div>
+    <!--右邊選單-->
+    <div class="rightbox">
+        <div class="div2">
+            <section class="main">
+                <div class="wrapper-demo">
+                    <div id="" class="dd wrapper-dropdown-5" tabindex="1" style="z-index:3" ;>
+                        <div class="dd-text" id="yearDropList" data-value="">學年度</div>
+                        <ul class="dropdown">
+                            <li data-value=""><a href="javascript:void(0)">學年度</a></li>
+                            @foreach (var item in ViewBag.SelectYearList)
+                            {
+                                <li data-value="@item.CategoryName"><a href="javascript:void(0)">@item.CategoryName</a></li>
+                            }
+                        </ul>
+                    </div>
+                </div>
+            </section>
+            <section class="main">
+                <div class="wrapper-demo">
+                    <div id="" class="dd wrapper-dropdown-5" tabindex="1" style="z-index:2" ;>
+                        <div id="semDropList" class="dd-text" data-value="">學期</div>
+                        <ul class="dropdown" style="overflow-y:scroll;height:130px" ;>
+                            <li data-value=""><a href="javascript:void(0)">學期</a></li>
+                            @foreach (var item in ViewBag.SelectTermList)
+                            {
+                                <li data-value="@item.CategoryName"><a href="javascript:void(0)">@item.CategoryName</a></li>
+                            }
+                        </ul>
+                    </div>
+                </div>
+            </section>
+        </div>
+        <div>
+            <ul class="menu5">
+                <input name="textfield" type="text" class="textbox" id="keyWordInput" placeholder="輸入" size="10" maxlength="5">
+            </ul>
+            <ul class="righttitle"><img src="~/Scripts/inform/images/inform/righttitle.png" width="210" height="55"></ul>
+            <ul class="btnright"><a id="submitBtn" href="javascript:void(0)">搜尋</a></ul>
+            <ul class="btnIcon"><a href="@Url.Content("~/SchoolDiary/Index")"></a></ul>
+        </div>
+        <!-- jQuery if needed -->
+        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+        <script type="text/javascript">
+
+            function DropDown(el) {
+                this.dd = el;
+                this.initEvents();
+            }
+            DropDown.prototype = {
+                initEvents: function () {
+                    var obj = this;
+
+                    obj.dd.on('click', function (event) {
+                        $(this).toggleClass('active');
+                        event.stopPropagation();
+                    });
+                }
+            }
+
+            $(function () {
+                var dd = new DropDown($('.dd'));
+                $(document).click(function () {
+                    // all dropdowns
+                    $('.wrapper-dropdown-5').removeClass('active');
+                });
+            });
+        </script>
+    </div>
+</div>
+
+@using (Html.BeginForm("SearchSchoolDiary", "SchoolDiary", null, FormMethod.Post, new { @id = "submitForm" }))
+{
+    <input type="hidden" id="yearSearch" name="yearSearch" />
+    <input type="hidden" id="semSearch" name="semSearch" />
+    <input type="hidden" id="keywordSearch" name="keywordSearch" />
+}
+
+

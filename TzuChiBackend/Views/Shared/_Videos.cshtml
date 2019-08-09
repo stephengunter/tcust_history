@@ -1,0 +1,44 @@
+﻿@model TzuChiClassLibrary.BO.BasePost
+@using Core.Extensions
+@{
+
+    string uploadDir = System.Web.Configuration.WebConfigurationManager.AppSettings["upload.folder.name"];
+  
+}
+@if (!Model.VideoUrlList.IsNullOrEmpty())
+{
+    foreach (var f in Model.VideoUrlList)
+    {
+        <div id="VideoUrl_@(f.ItemOID)">
+            <input type="hidden" name="VideoUrlList.index" value="@(f.ItemOID)" />
+            <input type="hidden" name="VideoUrlList[@(f.ItemOID)].ItemOID" value="@(f.ItemOID)" />
+            <input type="hidden" name="VideoUrlList[@(f.ItemOID)].FunctionOID" value="@(f.FunctionOID)" />
+            <input type="hidden" name="VideoUrlList[@(f.ItemOID)].FunctionType" value="@(f.FunctionType)" />
+            <input type="hidden" name="VideoUrlList[@(f.ItemOID)].ImageHeight" value="@(f.ImageHeight)" />
+            <input type="hidden" name="VideoUrlList[@(f.ItemOID)].ImageWidth" value="@(f.ImageWidth)" />
+            <input type="hidden" name="VideoUrlList[@(f.ItemOID)].FileName" value="@(f.FileName)" />
+            <input type="hidden" name="VideoUrlList[@(f.ItemOID)].Bit" value="@(f.Bit)" />
+            <input type="hidden" name="VideoUrlList[@(f.ItemOID)].Path" value="@(f.Path)" />
+            <input type="hidden" name="VideoUrlList[@(f.ItemOID)].PreviewPath" value="@(f.PreviewPath)" />
+            <input type="hidden" name="VideoUrlList[@(f.ItemOID)].CoverImage" value="@(f.CoverImage ? "true":"false")" class="coverInput" />
+            <table class="table">
+                <tr>
+                    <td width="30%">
+                        <a data-toggle="modal" data-target="#showPhotoModal" onclick="setCoveragePicPath('@Url.Content(string.Format("~/{0}/{1}", uploadDir, f.PreviewPath))')">
+
+
+                            <img src="@Url.Content(string.Format("~/{0}/{1}", uploadDir, f.PreviewPath))" width="50" />
+                        </a>
+                    </td>
+                    <td width="20%">
+                        <a href="@Url.Content(string.Format("~/{0}/{1}", uploadDir, f.Path))" target="_blank">@(f.FileName)</a>
+                    </td>
+                    <td>
+                        <input type="button" value="delete" class="del btn btn-danger" onclick="removeVideoUrl('@(f.ItemOID)')" />
+                    </td>
+                </tr>
+            </table>
+        </div>
+    }
+
+}

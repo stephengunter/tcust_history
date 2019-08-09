@@ -1,0 +1,210 @@
+﻿@model TzuChiClassLibrary.BO.AdminModel
+@{
+    ViewBag.Title = "管理者";
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script src='@Url.Content("~/Scripts/jquery-ui/jquery-ui.js")'></script>
+    <link href="@Url.Content("~/Scripts/jquery-ui/jquery-ui.css")" rel="stylesheet">
+    <style type="text/css">
+        .auto-style4 {
+            color: #FF6300;
+            font-size: medium;
+        }
+
+        .auto-style5 {
+            text-align: center;
+        }
+
+        .auto-style1 {
+            font-size: small;
+        }
+
+        .auto-style7 {
+            font-size: x-small;
+            color: #FF0000;
+        }
+
+        .auto-style8 {
+            font-size: small;
+            color: #808080;
+        }
+
+        .auto-style9 {
+            text-align: right;
+            font-size: small;
+        }
+
+        .auto-style11 {
+            color: #FF0000;
+        }
+    </style>
+    <style type="text/css">
+        /* Styles for validation helpers
+            -----------------------------------------------------------*/
+        .field-validation-error {
+            color: #ff0000;
+        }
+
+        .field-validation-valid {
+            display: none;
+        }
+
+        .input-validation-error {
+            border: 1px solid #ff0000;
+            background-color: #ffeeee;
+        }
+
+        .validation-summary-errors {
+            font-weight: bold;
+            color: #ff0000;
+        }
+
+        .validation-summary-valid {
+            display: none;
+        }
+    </style>
+    <script type="text/javascript">
+
+        $('#reset').click(function () {
+            $('#Password').val('');
+            $('#Name').val('');
+            $('#Tel').val('');
+            $('#Mobile').val('');
+            $('#Email').val('');
+            $('#Enable').attr('checked', false);
+        });
+
+    </script>
+}
+
+<h2>管理者</h2>
+
+@using (Html.BeginForm("Page", "Admin", FormMethod.Post, new { }))
+{
+
+    @Html.AntiForgeryToken()
+
+    <input type="hidden" value="@ViewBag.Commamd" id="command" name="command" />
+    @Html.HiddenFor(m => m.AdminID)
+    
+    <div class="auto-style4">
+        <strong>Activity Infomation</strong>
+    </div>
+
+    <div>
+        <table style="width: 100%" border="1">
+            <tr>
+                <td style="width: 230px" class="auto-style9">
+                    <label style="color:red">*</label>
+                    <strong>
+                        帳號
+                    </strong>
+                </td>
+                <td style="width: 1262px">
+                    @if ("edit".Equals(ViewBag.Commamd) && Model != null)
+                    {
+                        @Html.DisplayFor(m => m.Account)
+                    }
+                    else
+                    {
+                        @Html.TextBoxFor(m => m.Account)
+                        @Html.ValidationMessageFor(m => m.Account)
+                    }
+
+                </td>
+            </tr>
+            <tr>
+                <td style="width: 230px" class="auto-style9">
+                    <label style="color:red">*</label>
+                    <strong>
+                        密碼
+                    </strong>
+                </td>
+                <td style="width: 1262px">
+                    @if ("edit".Equals(ViewBag.Commamd) && Model != null)
+                    {
+                        @Html.PasswordFor(m => m.Password, new { @Value = Model.Password })
+                        @Html.ValidationMessageFor(m => m.Password)
+                    }
+                    else
+                    {
+                        @Html.PasswordFor(m => m.Password)
+                        @Html.ValidationMessageFor(m => m.Password)
+                    }
+                </td>
+            </tr>
+            <tr>
+                <td style="width: 230px" class="auto-style9">
+                    <label style="color:red">*</label>
+                    <strong>
+                        姓名
+                    </strong>
+                </td>
+                <td style="width: 1262px">
+                    @Html.TextBoxFor(m => m.Name)
+                    @Html.ValidationMessageFor(m => m.Name)
+                </td>
+            </tr>
+            <tr>
+                <td style="width: 230px" class="auto-style9">
+                    <strong>
+                        電話
+                    </strong>
+                </td>
+                <td style="width: 1262px">
+                    @Html.TextBoxFor(m => m.Tel)
+                </td>
+            </tr>
+            <tr>
+                <td style="width: 230px" class="auto-style9">
+                    <strong>
+                        手機
+                    </strong>
+                </td>
+                <td style="width: 1262px">
+                    @Html.TextBoxFor(m => m.Mobile)
+                </td>
+            </tr>
+            <tr>
+                <td style="width: 230px" class="auto-style9">
+                    <strong>
+                        信箱
+                    </strong>
+                </td>
+                <td style="width: 1262px">
+                    @Html.TextBoxFor(m => m.Email)
+                    @Html.ValidationMessageFor(m => m.Email)
+                </td>
+            </tr>
+            <tr>
+                <td style="width: 230px" class="auto-style9">
+                    <strong>
+                        啟用
+                    </strong>
+                </td>
+                <td style="width: 1262px">
+                    @Html.CheckBoxFor(m => m.Enable)
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <div>
+        <hr />
+    </div>
+
+    <div class="auto-style5">
+        @if ("add".Equals(ViewBag.Commamd))
+        {
+            <input class="btn btn-success" type="submit" value="新增" />
+        }
+        else if ("edit".Equals(ViewBag.Commamd))
+        {
+            <input class="btn btn-success" type="submit" value="儲存更新" />
+        }
+        <input class="btn btn-success" type="button" id="reset" value="重置" />
+    </div>
+
+}

@@ -1,0 +1,488 @@
+﻿@{
+    String video = "video.folder.TzuCheng.Video";
+    String img = "video.folder.TzuCheng.Img";
+}
+<script type="text/javascript" src="~/Scripts/jquery-1.10.2.min.js"></script>
+<script type="text/javascript" src="/Scripts/modernizr.custom.79639.js"></script>
+<script type="text/javascript">
+    function DropDown(el) {
+        this.dd = el;
+        this.initEvents();
+    }
+    DropDown.prototype = {
+        initEvents: function () {
+            var obj = this;
+
+            obj.dd.on('click', function (event) {
+                $(this).toggleClass('active');
+                event.stopPropagation();
+            });
+        }
+    }
+
+    $(function () {
+
+        var dd = new DropDown($('#dd'));
+
+        $(document).click(function () {
+            // all dropdowns
+            $('.wrapper-dropdown-5').removeClass('active');
+        });
+
+    });
+
+    $(document).ready(function () {
+        $('body').css('top', -(document.documentElement.scrollTop) + 'px').addClass('noscroll');
+            //翻頁特效
+            $('.flipbook').turn({
+                page: 2,
+                width: 1500,
+                height: 905,
+                elevation: 0,
+                gradients: true,
+                autoCenter: false,
+                when: {
+                    start: function (event, pageObject, corner) {
+                        if (pageObject.next == 1)
+                            event.preventDefault();
+                    },
+                    turning: function (event, page, view) {
+                        if (page == 1)
+                            event.preventDefault();
+                    }
+                }
+            });
+
+            $('.dropdown li').click(function () {
+                $('#dd div').text($(this).find('a').text());
+                switch ($(this).index()) {
+                    case 0:
+                        $(".flipbook").turn("page", 2);
+                        break;
+                    case 1:
+                        $(".flipbook").turn("page", 4);
+                        break;
+                    case 2:
+                        $(".flipbook").turn("page", 6);
+                        break;
+                    case 3:
+                        $(".flipbook").turn("page", 8);
+                        break;
+                    case 4:
+                        $(".flipbook").turn("page", 12);
+                        break;
+                    case 5:
+                        $(".flipbook").turn("page", 16);
+                        break;
+                    case 6:
+                        $(".flipbook").turn("page", 22);
+                        break;
+                    case 7:
+                        $(".flipbook").turn("page", 28);
+                        break;
+                    case 8:
+                        $(".flipbook").turn("page", 38);
+                        break;
+                    case 9:
+                        $(".flipbook").turn("page", 48);
+                        break;
+                    case 10:
+                        $(".flipbook").turn("page", 58);
+                        break;
+                    case 11:
+                        $(".flipbook").turn("page", 68);
+                        break;
+                    case 12:
+                        $(".flipbook").turn("page", 78);
+                        break;
+                    case 13:
+                        $(".flipbook").turn("page", 88);
+                        break;
+                    case 14:
+                        $(".flipbook").turn("page", 100);
+                        break;
+                    case 15:
+                        $(".flipbook").turn("page", 112);
+                        break;
+                    case 16:
+                        $(".flipbook").turn("page", 122);
+                        break;
+                    case 17:
+                        $(".flipbook").turn("page", 132);
+                        break;
+                    case 18:
+                        $(".flipbook").turn("page", 144);
+                        break;
+                    case 19:
+                        $(".flipbook").turn("page", 156);
+                        break;
+                    case 20:
+                        $(".flipbook").turn("page", 170);
+                        break;
+                    case 21:
+                        $(".flipbook").turn("page", 184);
+                        break;
+                    case 22:
+                        $(".flipbook").turn("page", 198);
+                        break;
+                    case 23:
+                        $(".flipbook").turn("page", 210);
+                        break;
+                    case 24:
+                        $(".flipbook").turn("page", 224);
+                        break;
+                    case 25:
+                        $(".flipbook").turn("page", 238);
+                        break;
+                    default:
+                        break;
+                }
+            });
+            if ($('#videobtn').length !== 0) {
+                $('#videobtn').click(function () {
+                    $('#MvDiv').show();
+                    $('#MvDiv1').show();
+                });
+            }
+    });
+</script>
+
+<div id="bookDiv" class="bookbk">
+    <!-- 翻頁特效區域 -->
+    <div class="flipbook" style="left:36px;top:24px;">
+        <!-- 為了一開始顯示兩頁,這裡放一個空DIV -->
+        <div></div>
+        <!-- 以下放入各個頁面 -->
+        @*78 page1~2*@
+        <div style="background-image:url(/Images/Humanistic/book1/List/78-1.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/78-2.jpg)" width="750" height="905"></div>
+        @*79 page3~4*@
+        <div style="background-image:url(/Images/Humanistic/book1/List/79-1.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/79-2.jpg)" width="750" height="905"></div>
+        @*80 page5~6*@
+        <div style="background-image:url(/Images/Humanistic/book1/List/80-1.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/80-2.jpg)" width="750" height="905"></div>
+        @*81 page7~10*@
+        <div style="background-image:url(/Images/Humanistic/book1/List/81-1.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/81-2.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/81-3.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/81-4.jpg)" width="750" height="905"></div>
+        @*82 page11~14*@
+        <div style="background-image:url(/Images/Humanistic/book1/List/82-1.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/82-2.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/82-3.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/82-4.jpg)" width="750" height="905"></div>
+        @*83 page15~20*@
+        <div style="background-image:url(/Images/Humanistic/book1/List/83-1.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/83-2.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/83-3.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/83-4.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/83-5.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/83-6.jpg)" width="750" height="905"></div>
+        @*84 page21~26*@
+        <div style="background-image:url(/Images/Humanistic/book1/List/84-1.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/84-2.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/84-3.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/84-4.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/84-5.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/84-6.jpg)" width="750" height="905"></div>
+        @*85 page27~36*@
+        <div style="background-image:url(/Images/Humanistic/book1/List/85-1.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/85-2.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/85-3.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/85-4.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/85-5.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/85-6.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/85-7.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/85-8.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/85-9.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/85-10.jpg)" width="750" height="905"></div>
+        @*86 page37~46*@
+        <div style="background-image:url(/Images/Humanistic/book1/List/86-1.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/86-2.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/86-3.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/86-4.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/86-5.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/86-6.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/86-7.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/86-8.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/86-9.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/86-10.jpg)" width="750" height="905"></div>
+        @*87 page47~56*@
+        <div style="background-image:url(/Images/Humanistic/book1/List/87-1.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/87-2.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/87-3.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/87-4.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/87-5.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/87-6.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/87-7.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/87-8.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/87-9.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/87-10.jpg)" width="750" height="905"></div>
+        @*88 page57~66*@
+        <div style="background-image:url(/Images/Humanistic/book1/List/88-1.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/88-2.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/88-3.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/88-4.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/88-5.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/88-6.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/88-7.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/88-8.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/88-9.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/88-10.jpg)" width="750" height="905"></div>
+        @*89 page67~76*@
+        <div style="background-image:url(/Images/Humanistic/book1/List/89-1.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/89-2.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/89-3.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/89-4.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/89-5.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/89-6.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/89-7.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/89-8.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/89-9.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/89-10.jpg)" width="750" height="905"></div>
+        @*90 page77~86*@
+        <div style="background-image:url(/Images/Humanistic/book1/List/90-1.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/90-2.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/90-3.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/90-4.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/90-5.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/90-6.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/90-7.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/90-8.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/90-9.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/90-10.jpg)" width="750" height="905"></div>
+        @*91 page87~98*@
+        <div style="background-image:url(/Images/Humanistic/book1/List/91-1.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/91-2.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/91-3.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/91-4.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/91-5.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/91-6.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/91-7.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/91-8.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/91-9.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/91-10.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/91-11.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/91-12.jpg)" width="750" height="905"></div>
+        @*92 page99~110*@
+        <div style="background-image:url(/Images/Humanistic/book1/List/92-1.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/92-2.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/92-3.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/92-4.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/92-5.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/92-6.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/92-7.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/92-8.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/92-9.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/92-10.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/92-11.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/92-12.jpg)" width="750" height="905"></div>
+        @*93 page111~120*@
+        <div style="background-image:url(/Images/Humanistic/book1/List/93-1.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/93-2.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/93-3.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/93-4.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/93-5.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/93-6.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/93-7.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/93-8.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/93-9.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/93-10.jpg)" width="750" height="905"></div>
+        @*94 page121~130*@
+        <div style="background-image:url(/Images/Humanistic/book1/List/94-1.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/94-2.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/94-3.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/94-4.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/94-5.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/94-6.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/94-7.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/94-8.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/94-9.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/94-10.jpg)" width="750" height="905"></div>
+        @*95 page131~142*@
+        <div style="background-image:url(/Images/Humanistic/book1/List/95-1.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/95-2.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/95-3.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/95-4.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/95-5.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/95-6.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/95-7.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/95-8.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/95-9.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/95-10.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/95-11.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/95-12.jpg)" width="750" height="905"></div>
+        @*96 page143~154*@
+        <div style="background-image:url(/Images/Humanistic/book1/List/96-1.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/96-2.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/96-3.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/96-4.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/96-5.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/96-6.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/96-7.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/96-8.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/96-9.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/96-10.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/96-11.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/96-12.jpg)" width="750" height="905"></div>
+        @*97 page155~168*@
+        <div style="background-image:url(/Images/Humanistic/book1/List/97-1.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/97-2.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/97-3.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/97-4.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/97-5.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/97-6.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/97-7.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/97-8.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/97-9.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/97-10.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/97-11.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/97-12.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/97-13.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/97-14.jpg)" width="750" height="905"></div>
+        @*98 page169~182*@
+        <div style="background-image:url(/Images/Humanistic/book1/List/98-1.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/98-2.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/98-3.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/98-4.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/98-5.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/98-6.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/98-7.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/98-8.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/98-9.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/98-10.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/98-11.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/98-12.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/98-13.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/98-14.jpg)" width="750" height="905"></div>
+        @*99 page183~196*@
+        <div style="background-image:url(/Images/Humanistic/book1/List/99-1.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/99-2.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/99-3.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/99-4.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/99-5.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/99-6.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/99-7.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/99-8.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/99-9.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/99-10.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/99-11.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/99-12.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/99-13.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/99-14.jpg)" width="750" height="905"></div>
+        @*100 page197~208*@
+        <div style="background-image:url(/Images/Humanistic/book1/List/100-1.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/100-2.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/100-3.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/100-4.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/100-5.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/100-6.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/100-7.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/100-8.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/100-9.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/100-10.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/100-11.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/100-12.jpg)" width="750" height="905"></div>
+        @*101 page209~222*@
+        <div style="background-image:url(/Images/Humanistic/book1/List/101-1.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/101-2.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/101-3.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/101-4.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/101-5.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/101-6.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/101-7.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/101-8.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/101-9.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/101-10.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/101-11.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/101-12.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/101-13.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/101-14.jpg)" width="750" height="905"></div>
+        @*102 page223~236*@
+        <div style="background-image:url(/Images/Humanistic/book1/List/102-1.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/102-2.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/102-3.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/102-4.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/102-5.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/102-6.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/102-7.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/102-8.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/102-9.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/102-10.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/102-11.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/102-12.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/102-13.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/102-14.jpg)" width="750" height="905"></div>
+        @*103 page237~250*@
+        <div style="background-image:url(/Images/Humanistic/book1/List/103-1.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/103-2.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/103-3.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/103-4.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/103-5.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/103-6.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/103-7.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/103-8.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/103-9.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/103-10.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/103-11.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/103-12.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/103-13.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book1/List/103-14.jpg)" width="750" height="905"></div>
+    </div>
+</div>
+
+<!--上方主選單 Start-->
+<div class="cont1Div">
+    <div class="cbtnmenu">
+        <div style="float:left;display:block;width:220px; height:50px;">
+            <ul class="cbtn1"><a href="@Url.Action("BookPage", "Humanistic", new { path = "TzuChengPartial/_OriginalPartial", videoKey = video, imgKey = img })">細說從頭</a></ul><ul class="cbtnline"><img src="/Images/Humanistic/cbtnline4.png" width="220" height="5"></ul>
+        </div>
+        <div style="float:left;display:block;width:220px; height:50px;">
+            <ul class="cbtn1"><a href="@Url.Action("BookPage", "Humanistic", new { path = "TzuChengPartial/_InteractionPartial", videoKey = video, imgKey = img })">溫馨互動</a></ul><ul class="cbtnline"><img src="/Images/Humanistic/cbtnline2.png" width="220" height="5"></ul>
+        </div>
+        <div style="float:left;display:block;width:220px; height:50px;">
+            <ul class="cbtn1">
+                <a href="@Url.Action("BookPage", "Humanistic", new { path = "TzuChengPartial/_ImmortalPartial", videoKey = video, imgKey = img })">緣起不滅</a>
+            </ul><ul class="cbtnline"><img src="/Images/Humanistic/cbtnline2.png" width="220" height="5"></ul>
+        </div>
+        <div style="float:left;display:block;width:220px; height:50px;">
+            <ul class="cbtn1D">懿德名單</ul><ul class="cbtnline"><img src="/Images/Humanistic/cbtnline5D.png" width="220" height="5"></ul>
+        </div>
+        <section style="float:left;display:block;width:135px; height:50px;">
+            <div class="wrapper-demo">
+                <div id="dd" class="wrapper-dropdown-5" tabindex="1" style="z-index:7" ;>
+                    <div>學年度</div>
+                    <ul class="dropdown">
+                        <li><a href="#">103</a></li>
+                        <li><a href="#">102</a></li>
+                        <li><a href="#">101</a></li>
+                        <li><a href="#">100</a></li>
+                        <li><a href="#">99</a></li>
+                        <li><a href="#">98</a></li>
+                        <li><a href="#">97</a></li>
+                        <li><a href="#">96</a></li>
+                        <li><a href="#">95</a></li>
+                        <li><a href="#">94</a></li>
+                        <li><a href="#">93</a></li>
+                        <li><a href="#">92</a></li>
+                        <li><a href="#">91</a></li>
+                        <li><a href="#">90</a></li>
+                        <li><a href="#">89</a></li>
+                        <li><a href="#">88</a></li>
+                        <li><a href="#">87</a></li>
+                        <li><a href="#">86</a></li>
+                        <li><a href="#">85</a></li>
+                        <li><a href="#">84</a></li>
+                        <li><a href="#">83</a></li>
+                        <li><a href="#">82</a></li>
+                        <li><a href="#">81</a></li>
+                        <li><a href="#">80</a></li>
+                        <li><a href="#">79</a></li>
+                        <li><a href="#">78</a></li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+    </div>
+</div>

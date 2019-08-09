@@ -1,0 +1,46 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+@section styles{
+<link href="~/Content/Humanistic/reset.css" rel="stylesheet" type="text/css">
+<link href="~/Content/Humanistic/big.css" rel="stylesheet" type="text/css">
+<style type="text/css">
+    #bk1Div {
+        position: absolute;
+        width: 1920px;
+        height: 1080px;
+        cursor: pointer;
+        z-index: 1;
+    }
+body{
+	overflow-x:hidden;
+overflow-y:hidden;
+}
+</style>
+}
+<script src="~/Scripts/jquery-1.10.2.js"></script>
+<script>
+    var carouselImgs = ['/Images/Humanistic/HomeImg/1.jpg',
+        '/Images/Humanistic/HomeImg/2.jpg',
+        '/Images/Humanistic/HomeImg/3.jpg',
+        '/Images/Humanistic/HomeImg/4.jpg',
+        '/Images/Humanistic/HomeImg/5.jpg'],//所有輪播圖片路徑
+    carouselIndex = 1;
+
+
+    $(function () {
+        setInterval('carouselInit()', 5000);
+    });
+
+    function carouselInit() {
+        $('.timebk').fadeOut('slow', function () {
+            $('.timebk').attr('src', carouselImgs[carouselIndex]);
+            carouselIndex = (carouselIndex + 1) % carouselImgs.length;
+            $('.timebk').fadeIn();
+        });
+    }
+</script>
+
+<div id="bk1Div"><a href="@Url.Content("~/Scripts/bookMenu/index.html")"><img class="timebk" src="/Images/Humanistic/HomeImg/1.jpg" width="1920" height="1080" border="0"></a></div>
+

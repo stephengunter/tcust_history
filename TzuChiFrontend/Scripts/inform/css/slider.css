@@ -1,0 +1,11 @@
+@charset "utf-8";
+/* CSS Document */
+
+.slider {
+	display:block;
+	margin:80px 50px 0px -50px;
+	padding:0px 0px 0px 0px;
+	float: left;	
+	width: 60%;
+	text-align: center;
+}

@@ -1,0 +1,449 @@
+﻿@model TzuChiClassLibrary.BO.PagenationModel
+
+@{
+	ViewBag.Title = "校史館 - 資訊查詢 | 校園日誌";
+	string frontendBaseURL = System.Web.Configuration.WebConfigurationManager.AppSettings["website.frontend"];
+	string backendBaseURL = System.Web.Configuration.WebConfigurationManager.AppSettings["website.backend"];
+}
+
+@section scripts {
+	<script src="@Url.Content("~/Scripts/slick_v.js")"></script>
+	<script src="@Url.Content("~/Scripts/inform/js/modernizr.custom.79639.js")" type="text/javascript"></script>
+	<script src="~/Scripts/infinite-scroll/jquery.infinitescroll.js"></script>
+	<script>
+        $(function () {
+
+            dropDonwList();
+            $('#submitBtn').click(function () {
+                submitForm();
+            });
+            infScroll();
+            triggerInfiniteScoll();
+            selectItem();
+            bindSearch();
+            //chkContentID();
+
+            iniSeleted();
+
+
+
+            $('.wbox1').fadeIn();
+        });
+
+        function iniSeleted() {
+            var iniContentID = $('.title_01').attr('data-contentid');
+            //$('.scroll-el[data-contentid=' + iniContentID + ']').click();
+            $('.scroll-el[data-contentid=' + iniContentID + ']').addClass('selected');
+        }
+
+
+
+
+
+
+        function infScroll() {
+            $('.scrollFrame').infinitescroll({
+                navSelector: "#next:last",
+                nextSelector: "a#next:last",
+                itemSelector: ".scroll-el",
+                dataType: 'html',
+                path: function (index) {
+                    console.log(index + 'sendPageindex');
+                    return "ScrollNews?page=" + index;
+                }
+            }, function (newElements, data, url) {
+                selectItem();
+                //USE FOR PREPENDING
+                // $(newElements).css('background-color','#ffef00');
+                // $(this).prepend(newElements);
+                //
+                //END OF PREPENDING
+                // window.console && console.log('context: ',this);
+                // window.console && console.log('returned: ', newElements);
+            });
+            $(window).unbind('.infscr');
+            $('#next').click(function () {
+                jQuery('.scrollFrame').infinitescroll('retrieve');
+                return false;
+            });
+        }
+
+
+        function triggerInfiniteScoll() {
+            var $scrollFrame = $('.scrollFrame'),
+                _height = $scrollFrame.height(),
+                _scrollHeight = $scrollFrame.prop('scrollHeight'),
+                _maxScrollHeight = _scrollHeight - _height - 20;
+            _least = 0, // 距離底部多少就可以, 0 表示得完全到底部
+
+        $('.scrollFrame').scroll(function () {
+            var $this = $(this);
+            // 如果高度已經達到指定的高度就啟用 $submit
+            if (_maxScrollHeight - $this.scrollTop() <= _least) {
+                $('#next').click();
+                _height = $scrollFrame.height();
+                _scrollHeight = $scrollFrame.prop('scrollHeight');
+                _maxScrollHeight = _scrollHeight - _height - 20;
+            }
+        });
+        }
+
+        function dropDonwList() {
+            $('.dropdown li').click(function () {
+
+                var txt = $(this).text();
+                var val = $(this).attr('data-value');
+                console.log(txt);
+                console.log(val);
+                $(this).parent('ul').siblings('.dd-text').text(txt);
+                $(this).parent('ul').siblings('.dd-text').attr('data-value', val);
+            });
+        }
+
+        function submitForm() {
+            $("#yearSearch").val($('#yearDropList').attr('data-value'));
+            $("#monthSearch").val($('#monthDropList').attr('data-value'));
+            $("#keywordSearch").val($('#keyWordInput').val());
+            document.forms["submitForm"].submit();
+        }
+
+        function selectItem() {
+            $('.scroll-el').click(function () {
+                var selContentID = $(this).attr('data-ContentID');
+                var selItem = $(this);
+
+                $('.selected').removeClass('selected');
+                selItem.addClass('selected');
+
+
+                if (selContentID == $('.title_01').attr('data-ContentID')) {
+                    console.log(selContentID);
+                    console.log($('.title_01').attr('data-ContentID'));
+                    return; //相同資料 不執行
+                } else {
+                    console.log('ajax');
+                    console.log($('.title_01').attr('data-ContentID'));
+                    console.log(selContentID);
+
+
+                    getNewsByContentID(selContentID);
+                }
+            });
+        }
+
+
+        function bindSearch() {
+
+            var year = '@Model.Year' + '';
+            var month = '@Model.Month' + '';
+            var keyword = '@Model.KeyWord' + '';
+
+            if (month.length > 0) {
+                $('#monthDropList').attr('data-value', month);
+
+                var monthArray = new Array(
+                    "一月", "二月", "三月",
+                    "四月", "五月", "六月",
+                    "七月", "八月", "九月",
+                    "十月", "十一月", "十二月");
+
+                $('#monthDropList').text(monthArray[month - 1]);
+            }
+
+            if (year.length > 0) {
+                $('#yearDropList').attr('data-value', year);
+                $('#yearDropList').text(year + "年");
+            }
+
+            if (keyword.length > 0) {
+                $('#keyWordInput').val(keyword);
+            }
+        }
+
+        function getNewsByContentID(ajaxContentID) {
+            $("#contentid").val(ajaxContentID);
+
+
+            $.ajax({
+                url: '/News/AjaxGetNewsByContentID',
+                data: { contentID: ajaxContentID }, //TODO 要放入頁面;
+                type: "POST",
+                dataType: 'json',
+                success: function (jdata) {
+
+
+                    var jsonDate = jdata.ContentTime;  // returns "/Date(1245398693390)/";
+                    var re = /-?\d+/;
+                    var m = re.exec(jsonDate);
+                    var d = new Date(parseInt(m[0]));
+
+                    $('.title_01').attr('data-ContentID', jdata.ContentID);
+                    $('.title_02').text(d.getFullYear());
+
+                    var month = (d.getMonth() + 1) + ''; //tostring
+                    var date = (d.getDate()) + ''; //tostring
+                    month = (month.length == 1 ? '0' + month : month);
+                    date = (date.length == 1 ? '0' + date : date);
+                    $('.title_04').text(month + '.' + date);
+                    $('.title_05').text(jdata.ContentName);
+
+                    //var regex = /(<((?!br)[^>]+)>)/ig;
+                    //var txt = jdata.ContentText.replace(regex, "");
+                    //txt = txt.replace(/&nbsp;/gi, "<br /><br />");
+                    $('.news2').html(jdata.ContentText);
+
+                    if (typeof jdata.VideoUrlList[0] == 'undefined') {
+                        $('#main-img').show();
+                        $('#main-video').hide();
+                        $('#main-video').attr('poster', "");
+                        $('#main-video source').attr('scr', "");
+                        if (typeof jdata.PicUrlList[0] == 'undefined') {
+                            $('#main-img').attr('src', "");
+                        } else {
+                            $('#main-img').attr('src', '@backendBaseURL' + '/Uploads/' + jdata.PicUrlList[0])
+                        }
+                        //TODO 縮圖路徑
+                    } else {
+                        $('#main-video').show();
+                        $('#main-img').hide();
+                        $('#main-img').attr('src', "");
+                        //$("#myVideoTag > source").attr("src", "http://example.com/new_url.mp4"​​​​)
+                        $('#main-video').attr('poster', '@backendBaseURL' + '/Uploads/' + jdata.VideoUrlList[0].PreviewPath);
+                        $('#main-video  source').attr('src', '@backendBaseURL' + '/Uploads/' + jdata.VideoUrlList[0].Path);
+                        $('#main-video').load();
+                    }
+                },
+                error: function (xhr, ajaxOptions, thrownError) {
+
+
+                    console.log('fail');
+                    console.log(xhr.status);
+                    console.log(thrownError);
+                },
+                complete: function () {
+                    $("br").removeAttr("style");
+                }
+            });
+        }
+	</script>
+}
+
+@section styles{
+	<link href="~/Content/slick.css" rel="stylesheet" />
+	<link href="~/Scripts/inform/css/reset.css" rel="stylesheet" type="text/css">
+	<link href="~/Scripts/inform/css/tzuchi.css" rel="stylesheet" type="text/css">
+	<link href="~/Scripts/inform/css/style.css" rel="stylesheet" type="text/css">
+	<noscript>
+		<link href="~/Scripts/inform/css/noJS.css" rel="stylesheet" type="text/css" />
+	</noscript>
+	<style>
+		.news2 {
+			word-break: break-all;
+		}
+
+		.title_05 {
+			height: 90px;
+			width: 600px;
+			overflow: hidden;
+			word-break: break-all;
+		}
+
+		.menu5 {
+			margin-top: 20px;
+		}
+
+		.news2 {
+			font-family: "微軟正黑體", Arial !important;
+			line-height: 40px !important;
+			font-size: 24px !important;
+		}
+
+		/*.intxt3 {
+			height:680px;
+			width:647px;
+		}*/
+
+		.selected {
+			border-color: #CCCCCC;
+			border-style: solid;
+			border-width: 2px;
+			border-radius: 10px 10px 10px 10px;
+			padding: 0px 0px 0px 5px;
+		}
+	</style>
+}
+
+<div class="wbox1" style="width:1920px; display:none;">
+	<!--左邊標題-->
+	<div class="leftbox">
+	<img src="~/Scripts/inform/images/inform/title_s4.png" width="134" height="750">
+	</div>
+	<!--中間表格-->
+	<div class="centerbox">
+		<!--內文1-->
+		<div class="tztable2">
+			<ul class="title_01" data-contentid="@ViewBag.NewsModel.ContentID">
+				<li id="mContentYear" class="title_02">@string.Format("{0:yyyy}", ViewBag.NewsModel.ContentTime)</li>
+				<li class="title_03">____________</li>
+				<li id="mContentDate" class="title_04">@string.Format("{0:MM.dd}", ViewBag.NewsModel.ContentTime)</li>
+			</ul>
+			@*@{ Html.RenderPartial("GetNewsPartial"); }*@
+
+			<ul class="title_05">
+				@ViewBag.NewsModel.ContentName
+			</ul>
+			<ul class="title_06">
+				<span class="glow">
+					@if (@ViewBag.NewsModel.VideoUrlList.Count > 0)
+					{
+						<video id="main-video" style="" width="690" height="470" controls poster="@Url.Content(string.Format("{0}/imgs/zoom/690/470/{1}", @backendBaseURL, @ViewBag.NewsModel.VideoUrlList[0].PreviewPath)) ">
+							<source src="@backendBaseURL/Uploads/@ViewBag.NewsModel.VideoUrlList[0].Path">
+							Your browser does not support HTML5 video.
+						</video>
+						<img id="main-img" style="display:none" width="690" height="470" src="">
+					}
+					else if (@ViewBag.NewsModel.PicUrlList.Count > 0)
+					{
+						//PicUrlList
+						<video id="main-video" style="display:none" width="690" height="470" controls poster="">
+							<source src="">
+							Your browser does not support HTML5 video.
+						</video>
+						<img id="main-img" width="690" height="470" src="@Url.Content(string.Format("{0}/imgs/zoom/690/470/{1}", @backendBaseURL, ((@ViewBag.NewsModel.PicUrlList.Count > 0) ? @ViewBag.NewsModel.PicUrlList[0].Path : null)))" />
+					}
+				</span>
+			</ul>
+			<ul class="intxt3">
+				<li class="news3">
+					@if (!string.IsNullOrEmpty(ViewBag.NewsQrCode))
+					{
+						<img src="@ViewBag.NewsQrCode" width="110" height="110">
+					}
+				</li>
+				<li class="news2" style="height:400px;overflow-y: scroll; overflow-x: hidden;">
+					@{
+						//var Htmlstring = @System.Text.RegularExpressions.Regex.Replace(@ViewBag.NewsModel.ContentText, @"<((?!br)[^>]+)>", "");
+						//Htmlstring = @System.Text.RegularExpressions.Regex.Replace(Htmlstring, @"&nbsp;", "<br /><br />");
+					}
+
+
+
+					@Html.Raw(ViewBag.NewsModel.ContentText)
+
+
+
+				</li>
+			</ul>
+
+
+			@*<ul class="intxt4 scrollFrame">*@
+			<ul class="intxt4">
+				@foreach (var item in ViewBag.DataModel)
+				{
+					<div class="scroll-el" data-contentid="@item.ContentID">
+						<span class="title_07">
+							@string.Format("{0:yyyy/MM/dd}", item.ContentTime)
+							<br>
+							@Html.Raw(item.ContentName)
+						</span>
+						<span class="title_07">
+							@if (item.VideoUrlList.Count > 0)
+							{
+								<img class="glow" width="210" height="145" src="@Url.Content(string.Format("{0}/imgs/zoom/210/145/{1}", @backendBaseURL, @item.VideoUrlList[0].PreviewPath))" />
+							}
+							else
+							{
+								<img class="glow" width="210" height="145" src="@Url.Content(string.Format("{0}/imgs/zoom/210/145/{1}", @backendBaseURL, ((@item.PicUrlList.Count > 0) ? item.PicUrlList[0].Path : null)))" />
+							}
+						</span>
+					</div>
+				}
+			</ul>
+			<a style="display:none;" id="next" href="@Url.Content("~/News/ScrollNews?page=1")">next page?</a>
+		</div>
+	</div>
+	<!--右邊選單-->
+	<div class="rightbox">
+		<div class="div2">
+			<section class="main">
+				<div class="wrapper-demo">
+					<div class="dd wrapper-dropdown-5" tabindex="1" style="z-index:3" ;>
+						<div id="yearDropList" class="dd-text" data-value="">年度</div>
+						<ul class="dropdown">
+							<li data-value=""><a href="javascript:void(0)">年度</a></li>
+							@foreach (var item in ViewBag.SelectYearList)
+							{
+								<li data-value="@item.CategoryName"><a href="javascript:void(0)">@item.CategoryName</a></li>
+							}
+						</ul>
+					</div>
+				</div>
+			</section>
+			<section class="main">
+				<div class="wrapper-demo">
+					<div class="dd wrapper-dropdown-5" tabindex="1" style="z-index:2" ;>
+						<div id="monthDropList" class="dd-text" data-value="">月份</div>
+						<ul class="dropdown">
+							<li data-value=""><a href="javascript:void(0)">月份</a></li>
+							<li data-value="1"><a href="javascript:void(0)">一月</a></li>
+							<li data-value="2"><a href="javascript:void(0)">二月</a></li>
+							<li data-value="3"><a href="javascript:void(0)">三月</a></li>
+							<li data-value="4"><a href="javascript:void(0)">四月</a></li>
+							<li data-value="5"><a href="javascript:void(0)">五月</a></li>
+							<li data-value="6"><a href="javascript:void(0)">六月</a></li>
+							<li data-value="7"><a href="javascript:void(0)">七月</a></li>
+							<li data-value="8"><a href="javascript:void(0)">八月</a></li>
+							<li data-value="9"><a href="javascript:void(0)">九月</a></li>
+							<li data-value="10"><a href="javascript:void(0)">十月</a></li>
+							<li data-value="11"><a href="javascript:void(0)">十一月</a></li>
+							<li data-value="12"><a href="javascript:void(0)">十二月</a></li>
+						</ul>
+					</div>
+				</div>
+			</section>
+		</div>
+		<div>
+			<ul class="menu5"><input style="z-index:99999999999 !important;" name="textfield" type="text" class="textbox" id="keyWordInput" placeholder="輸入" size="10" maxlength="5"></ul>
+			<ul class="righttitle"><img src="~/Scripts/inform/images/inform/righttitle.png" width="210" height="55"></ul>
+			<ul class="btnright"><a id="submitBtn" href="javascript:void(0)">搜尋</a></ul>
+			<ul class="btnIcon"><a href="@Url.Content("~/SchoolDiary/Index")"></a></ul>
+		</div>
+		<!-- jQuery if needed -->
+		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+		<script type="text/javascript">
+			function DropDown(el) {
+				this.dd = el;
+				this.initEvents();
+			}
+			DropDown.prototype = {
+				initEvents: function () {
+					var obj = this;
+					obj.dd.on('click', function (event) {
+						$(this).toggleClass('active');
+						event.stopPropagation();
+					});
+				}
+			}
+			$(function () {
+				var dd = new DropDown($('.dd'));
+				$(document).click(function () {
+					// all dropdowns
+					$('.wrapper-dropdown-5').removeClass('active');
+				});
+			});
+		</script>
+	</div>
+</div>
+
+@using (Html.BeginForm("SearchNews", "News", null, FormMethod.Post, new { @id = "submitForm" }))
+{
+	<input type="hidden" id="keywordSearch" name="keywordSearch" />
+	<input type="hidden" id="yearSearch" name="yearSearch" />
+	<input type="hidden" id="monthSearch" name="monthSearch" />
+}
+
+
+@using (Html.BeginForm("GetNewsPartial", "News", null, FormMethod.Post, new { @id = "getNewsForm" }))
+{
+	<input type="hidden" id="contentid" name="contentid" />
+}

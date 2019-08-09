@@ -1,0 +1,228 @@
+﻿@{
+    ViewBag.Title = "校史館 - 資訊查詢 | 校園日誌";
+    string frontendBaseURL = System.Web.Configuration.WebConfigurationManager.AppSettings["website.frontend"];
+    string backendBaseURL = System.Web.Configuration.WebConfigurationManager.AppSettings["website.backend"];
+}
+
+@section scripts {
+    <!--[if lt IE 9]>
+        <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js">
+        </script>
+    <![endif]-->
+    <script type="text/javascript" src="~/Scripts/inform/js/modernizr.custom.79639.js"></script>
+    <script src="~/Scripts/infinite-scroll/jquery.infinitescroll.js"></script>
+    <script>
+        $(function () {
+            $('.scrollFrame').infinitescroll({
+                navSelector: "#next:last",
+                nextSelector: "a#next:last",
+                itemSelector: ".Search",
+                dataType: 'html',
+                path: function (index) {
+                    return "scrollSearchSchoolDiary?page=" + index;
+                }
+            }, function (newElements, data, url) {
+                //USE FOR PREPENDING
+                // $(newElements).css('background-color','#ffef00');
+                // $(this).prepend(newElements);
+                //
+                //END OF PREPENDING
+                // window.console && console.log('context: ',this);
+                // window.console && console.log('returned: ', newElements);
+            });
+            $(window).unbind('.infscr');
+            $('#next').click(function () {
+                jQuery('.scrollFrame').infinitescroll('retrieve');
+                return false;
+            });
+            triggerInfiniteScoll();
+            dropDonwList();
+
+            $('#submitBtn').click(function () {
+                submitForm();
+            });
+
+        });
+
+        function triggerInfiniteScoll() {
+            var $scrollFrame = $('.scrollFrame'),
+		        _height = $scrollFrame.height(),
+		        _scrollHeight = $scrollFrame.prop('scrollHeight'),
+		        _maxScrollHeight = _scrollHeight - _height - 20;
+            _least = 0, // 距離底部多少就可以, 0 表示得完全到底部
+
+            $('.scrollFrame').scroll(function () {
+                var $this = $(this);
+                // 如果高度已經達到指定的高度就啟用 $submit
+                if (_maxScrollHeight - $this.scrollTop() <= _least) {
+                    $('#next').click();
+                    _height = $scrollFrame.height();
+                    _scrollHeight = $scrollFrame.prop('scrollHeight');
+                    _maxScrollHeight = _scrollHeight - _height - 20;
+                }
+            });
+        }
+
+        function dropDonwList() {
+            $('.dropdown li').click(function () {
+                var txt = $(this).text();
+                console.log(txt);
+                var val = $(this).attr('data-value');
+                console.log(val);
+                $(this).parent('ul').siblings('.dd-text').text(txt);
+                $(this).parent('ul').siblings('.dd-text').attr('data-value', val);
+            });
+        }
+
+
+        function submitForm() {
+            if ($('#semDropList').attr('data-value') != "" || $('#yearDropList').attr('data-value') != "" || $('#keyWordInput').val() != "") {
+
+                $("#keywordSearch").val($('#semDropList').attr('data-value'));
+                $("#yearSearch").val($('#yearDropList').attr('data-value'));
+                $("#semSearch").val($('#keyWordInput').val());
+                document.forms["submitForm"].submit();
+            }
+            else
+                alert("請選擇搜尋條件！！");
+        } // SubmitFormDepart()
+    </script>
+}
+
+@section styles{
+    <link href="~/Scripts/inform/css/reset.css" rel="stylesheet" type="text/css">
+    <link href="~/scripts/inform/css/tzuchi.css" rel="stylesheet" type="text/css">
+    <link href="~/scripts/inform/css/style.css" rel="stylesheet" type="text/css" href="css/style.css" />
+    <noscript>
+        <link href="~/scripts/inform/css/noJS.css" rel="stylesheet" type="text/css" />
+    </noscript>
+}
+
+<div class="wbox1" style="width:1920px;">
+    <!--左邊標題-->
+    <div class="leftbox"><img src="~/Scripts/inform/images/inform/title_s1.png" width="134" height="750"></div>
+    <!--中間表格-->
+    <div class="centerbox">
+        <!--內文一-->
+        <div class="intxt5 scrollFrame">
+            <ul class="Search">
+                <span class="Seartxt"><a href="#">2014.06.17 .......................................................................樂齡大學結業式 </a></span>
+            </ul>
+            <ul class="Search">
+                <span class="Seartxt"><a href="#">2013.10.12 .......................................................................樂齡大學結業式 </a></span>
+            </ul>
+            <ul class="Search">
+                <span class="Seartxt"><a href="#">2012.10.15 .........................................................................樂齡大學成立 </a></span>
+            </ul>
+            <ul class="Search">
+                <span class="Seartxt"><a href="#">2014.06.17 .......................................................................樂齡大學結業式 </a></span>
+            </ul>
+            <ul class="Search">
+                <span class="Seartxt"><a href="#">2014.06.17 .......................................................................樂齡大學結業式 </a></span>
+            </ul>
+            <ul class="Search">
+                <span class="Seartxt"><a href="#">2013.10.12 .......................................................................樂齡大學結業式 </a></span>
+            </ul>
+            <ul class="Search">
+                <span class="Seartxt"><a href="#">2012.10.15 .........................................................................樂齡大學成立 </a></span>
+            </ul>
+            <ul class="Search">
+                <span class="Seartxt"><a href="#">2014.06.17 .......................................................................樂齡大學結業式 </a></span>
+            </ul>
+            <ul class="Search">
+                <span class="Seartxt"><a href="#">2014.06.17 .......................................................................樂齡大學結業式 </a></span>
+            </ul>
+            <ul class="Search">
+                <span class="Seartxt"><a href="#">2013.10.12 .......................................................................樂齡大學結業式 </a></span>
+            </ul>
+            <ul class="Search">
+                <span class="Seartxt"><a href="#">2012.10.15 .........................................................................樂齡大學成立 </a></span>
+            </ul>
+            <ul class="Search">
+                <span class="Seartxt"><a href="#">2014.06.17 .......................................................................樂齡大學結業式 </a></span>
+            </ul>
+        </div>
+        <a style="display:none;" id="next" href="http://localhost:2397/InfoInquiry/ScrollSearchSchoolDiary?page=1" >next page?</a>
+    </div>
+    <!--右邊選單-->
+    <div class="rightbox">
+        <div class="div2">
+            <section class="main">
+                <div class="wrapper-demo">
+                    <div id="" class="dd wrapper-dropdown-5" tabindex="1" style="z-index:3" ;>
+                        <div class="dd-text" id="yearDropList" data-value="">學年度</div>
+                        <ul class="dropdown">
+                            <li data-value="103"><a href="#">103年</a></li>
+                            <li data-value="103"><a href="#">102年</a></li>
+                            <li data-value="101"><a href="#">101年</a></li>
+                            <li data-value="100"><a href="#">100年</a></li>
+                            <li data-value="99"><a href="#">99年</a></li>
+                            <li data-value="98"><a href="#">98年</a></li>
+                            <li data-value="97"><a href="#">97年</a></li>
+                            <li data-value="96"><a href="#">96年</a></li>
+                            <li data-value="95"><a href="#">95年</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+            <section class="main">
+                <div class="wrapper-demo">
+                    <div id="" class="dd wrapper-dropdown-5" tabindex="1" style="z-index:2" ;>
+                        <div id="semDropList" class="dd-text" data-value="">學期</div>
+                        <ul class="dropdown" style="overflow-y:scroll;height:130px" ;>
+                            <li data-value="1s"><a href="#">上學期</a></li>
+                            <li data-value="2s"><a href="#">下學期</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+        </div>
+        <div>
+            <ul class="menu5">
+                <input style="z-index:999999999999999;" name="textfield" type="text" class="textbox" id="keyWordInput" value="輸入" size="10" maxlength="5">
+            </ul>
+            <ul class="righttitle"><img src="~/Scripts/inform/images/inform/righttitle.png" width="210" height="55"></ul>
+            <ul class="btnright"><a id="submitBtn" href="javascript:void(0)">搜尋</a></ul>
+            <ul class="btnIcon"><a href="inform.html"></a></ul>
+        </div>
+        <!-- jQuery if needed -->
+        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+        <script type="text/javascript">
+
+            function DropDown(el) {
+                this.dd = el;
+                this.initEvents();
+            }
+            DropDown.prototype = {
+                initEvents: function () {
+                    var obj = this;
+
+                    obj.dd.on('click', function (event) {
+                        $(this).toggleClass('active');
+                        event.stopPropagation();
+                    });
+                }
+            }
+
+            $(function () {
+                var dd = new DropDown($('.dd'));
+                $(document).click(function () {
+                    // all dropdowns
+                    $('.wrapper-dropdown-5').removeClass('active');
+                });
+            });
+
+        </script>
+    </div>
+
+
+</div>
+
+@using (Html.BeginForm("SearchSchoolDiary", "InfoInquiry", null, FormMethod.Post, new { @id = "submitForm" }))
+{
+    @Html.AntiForgeryToken()
+    <input type="hidden" id="keywordSearch" name="keywordSearch" />
+    <input type="hidden" id="yearSearch" name="yearSearch" />
+    <input type="hidden" id="semSearch" name="semSearch" />
+}
+

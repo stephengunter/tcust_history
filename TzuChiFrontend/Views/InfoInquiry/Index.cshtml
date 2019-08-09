@@ -1,0 +1,24 @@
+﻿@{
+    ViewBag.Title = "校史館 - 資訊查詢";
+    string frontendBaseURL = System.Web.Configuration.WebConfigurationManager.AppSettings["website.frontend"];
+    string backendBaseURL = System.Web.Configuration.WebConfigurationManager.AppSettings["website.backend"];
+}
+
+@section scripts {    
+}
+
+@section styles{    
+    <link href="~/Scripts/inform/css/reset.css" rel="stylesheet" type="text/css">    
+    <link href="~/Scripts/inform/css/tzuchi.css" rel="stylesheet" type="text/css">    
+}
+
+
+<div class="wbox">
+    <div class="leftbox" style="width:320px;"><img src="~/Scripts/inform/images/inform/title_s.png"></div>
+    <div class="content1">
+        <div class="btnIcon4"><a href="@Url.Content("~/InfoInquiry/GetNews")"></a></div>
+        <div class="btnIcon3"><a href="@Url.Content("~/InfoInquiry/GetYearBookList")"></a></div>
+        <div class="btnIcon2"><a href="@Url.Content("~/InfoInquiry/GetSchoolAblum")"></a></div>
+        <div class="btnIcon1"><a href="@Url.Content("~/InfoInquiry/GetSchoolDiaryList")"></a></div>
+    </div>
+</div>

@@ -1,0 +1,726 @@
+﻿
+@{
+    ViewBag.Title = "GetAllForFromPage";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section scripts {
+@*<script src="~/Scripts/jquery-1.10.2.js"></script>*@
+@*<script src="~/Scripts/jquery.multitouch.js"></script>
+<script src="~/Scripts/hammer.js-master/hammer.js"></script>
+<script src="~/Scripts/jquery.hammer.js"></script>*@
+<script src="~/Scripts/easeljs-0.6.0.min.js"></script>
+<script src="~/Scripts/tweenjs-0.4.0.min.js"></script>
+<script src="~/Scripts/movieclip-0.6.0.min.js"></script>
+<script src="~/Scripts/preloadjs-0.3.0.min.js"></script>
+@*<script type="text/javascript" src="~/Scripts/jquery-migrate-1.2.1.js"></script>*@
+<script src="~/Scripts/jquery-ui.js"></script>
+<script src="~/Scripts/right.js"></script>
+<script src="~/Scripts/left.js"></script>
+<script src="~/Scripts/slick/slick.js"></script>
+
+<script>
+    var nowLocation = 'Original';//最初位置&紀錄目前位置
+    var originalPicList = ['/Images/Founding/cont1btn1.png', '/Images/Founding/cont1btn2.png', '/Images/Founding/cont1btn3.png', '/Images/Founding/cont1btn4.png', '/Images/Founding/cont1btn5.png', '/Images/Founding/cont1btn6.png', '/Images/Founding/cont1btn7.png'];
+    var principalPicList = ['/Images/Founding/cont3btn1.png', '/Images/Founding/cont3btn2.png', '/Images/Founding/cont3btn3.png', '/Images/Founding/cont3btn4.png'];
+    var ceoPicList = ['/Images/Founding/cont2btn1.png', '/Images/Founding/cont2btn2.png', '/Images/Founding/cont2btn3.png', '/Images/Founding/cont2btn4.png'];
+    var menuList = ["Original", "CEO", "Principal"];
+    var DEFAULT_BTN = '<div><div class="BTN"><a href="#"><img  width="760" height="810"></a></div></div>';
+    var DEFAULT_BTN_IMG = '<div class="donotEffect"><div class="BTNImg"><img width="760" height="810"></div></div>';
+    var MOUSE_POSITION_X, MOUSE_POSITION_Y;//滑鼠點擊位置X,滑鼠點擊位置Y
+    var INTERFACE_CHAIRMAN = "/Founding/GetAllDirectors";//歷屆董事接口
+    var INTERFACE_DROPWIN = "/Founding/GetPartialView";//彈跳視窗partial
+    var arrowL = '  <div><ul class="arrowL"><a href="#"></a></ul></div>';//鍵頭左
+    var arrowR = '  <div><ul class="arrowR"><a href="#"></a></ul></div>';//鍵頭右
+    var rippleTimer;
+    var ripplerDisplay = false;
+    var contentData = [],chairmanData;
+
+    var canvas, stage, exportRoot;
+    var canvasRipple, stageRipple, exportRootRipple, timer, fps = 12;
+
+    $(document).ready(function () {
+        initBackgroundLeaf();
+        initBackgroundRipple();
+        init();//頁面初始化
+        //$('.menu > ul').hammer().on('tap', function (e) {
+        //    e.preventDefault();
+        //    console.log($(this));
+        //    $(this).click();
+        //});
+        //$('*').hammer().on('tap', function (e) {
+        //    e.preventDefault();
+        //    console.log($(this));
+        //    $(this).click();
+        //});
+
+    });
+
+    function initBackgroundRipple() {
+        canvasRipple = document.getElementById("canvasRipple");
+        imagesg = images || {};
+
+        var manifest = [
+          { src: "/Images/Founding/left/movieleft_00000.jpg", id: "movieleft_00000" },
+          { src: "/Images/Founding/left/movieleft_00001.jpg", id: "movieleft_00001" },
+          { src: "/Images/Founding/left/movieleft_00002.jpg", id: "movieleft_00002" },
+          { src: "/Images/Founding/left/movieleft_00003.jpg", id: "movieleft_00003" },
+          { src: "/Images/Founding/left/movieleft_00004.jpg", id: "movieleft_00004" },
+          { src: "/Images/Founding/left/movieleft_00005.jpg", id: "movieleft_00005" },
+          { src: "/Images/Founding/left/movieleft_00006.jpg", id: "movieleft_00006" },
+          { src: "/Images/Founding/left/movieleft_00007.jpg", id: "movieleft_00007" },
+          { src: "/Images/Founding/left/movieleft_00008.jpg", id: "movieleft_00008" },
+          { src: "/Images/Founding/left/movieleft_00009.jpg", id: "movieleft_00009" },
+          { src: "/Images/Founding/left/movieleft_00010.jpg", id: "movieleft_00010" },
+          { src: "/Images/Founding/left/movieleft_00011.jpg", id: "movieleft_00011" },
+          { src: "/Images/Founding/left/movieleft_00012.jpg", id: "movieleft_00012" },
+          { src: "/Images/Founding/left/movieleft_00013.jpg", id: "movieleft_00013" },
+          { src: "/Images/Founding/left/movieleft_00014.jpg", id: "movieleft_00014" },
+          { src: "/Images/Founding/left/movieleft_00015.jpg", id: "movieleft_00015" },
+          { src: "/Images/Founding/left/movieleft_00016.jpg", id: "movieleft_00016" },
+          { src: "/Images/Founding/left/movieleft_00017.jpg", id: "movieleft_00017" },
+          { src: "/Images/Founding/left/movieleft_00018.jpg", id: "movieleft_00018" },
+          { src: "/Images/Founding/left/movieleft_00019.jpg", id: "movieleft_00019" },
+          { src: "/Images/Founding/left/movieleft_00020.jpg", id: "movieleft_00020" },
+          { src: "/Images/Founding/left/movieleft_00021.jpg", id: "movieleft_00021" },
+          { src: "/Images/Founding/left/movieleft_00022.jpg", id: "movieleft_00022" },
+          { src: "/Images/Founding/left/movieleft_00023.jpg", id: "movieleft_00023" },
+          { src: "/Images/Founding/left/movieleft_00024.jpg", id: "movieleft_00024" },
+          { src: "/Images/Founding/left/movieleft_00025.jpg", id: "movieleft_00025" },
+          { src: "/Images/Founding/left/movieleft_00026.jpg", id: "movieleft_00026" },
+          { src: "/Images/Founding/left/movieleft_00027.jpg", id: "movieleft_00027" },
+          { src: "/Images/Founding/left/movieleft_00028.jpg", id: "movieleft_00028" },
+          { src: "/Images/Founding/left/movieleft_00029.jpg", id: "movieleft_00029" },
+          { src: "/Images/Founding/left/movieleft_00030.jpg", id: "movieleft_00030" },
+          { src: "/Images/Founding/left/movieleft_00031.jpg", id: "movieleft_00031" },
+          { src: "/Images/Founding/left/movieleft_00032.jpg", id: "movieleft_00032" },
+          { src: "/Images/Founding/left/movieleft_00033.jpg", id: "movieleft_00033" },
+          { src: "/Images/Founding/left/movieleft_00034.jpg", id: "movieleft_00034" },
+          { src: "/Images/Founding/left/movieleft_00035.jpg", id: "movieleft_00035" },
+          { src: "/Images/Founding/left/movieleft_00036.jpg", id: "movieleft_00036" },
+          { src: "/Images/Founding/left/movieleft_00037.jpg", id: "movieleft_00037" },
+          { src: "/Images/Founding/left/movieleft_00038.jpg", id: "movieleft_00038" },
+          { src: "/Images/Founding/left/movieleft_00039.jpg", id: "movieleft_00039" },
+          { src: "/Images/Founding/left/movieleft_00040.jpg", id: "movieleft_00040" },
+          { src: "/Images/Founding/left/movieleft_00041.jpg", id: "movieleft_00041" },
+          { src: "/Images/Founding/left/movieleft_00042.jpg", id: "movieleft_00042" },
+          { src: "/Images/Founding/left/movieleft_00043.jpg", id: "movieleft_00043" },
+          { src: "/Images/Founding/left/movieleft_00044.jpg", id: "movieleft_00044" },
+          { src: "/Images/Founding/left/movieleft_00045.jpg", id: "movieleft_00045" },
+          { src: "/Images/Founding/left/movieleft_00046.jpg", id: "movieleft_00046" },
+          { src: "/Images/Founding/left/movieleft_00047.jpg", id: "movieleft_00047" },
+          { src: "/Images/Founding/left/movieleft_00048.jpg", id: "movieleft_00048" },
+          { src: "/Images/Founding/left/movieleft_00049.jpg", id: "movieleft_00049" },
+          { src: "/Images/Founding/left/movieleft_00050.jpg", id: "movieleft_00050" },
+          { src: "/Images/Founding/left/movieleft_00051.jpg", id: "movieleft_00051" },
+          { src: "/Images/Founding/left/movieleft_00052.jpg", id: "movieleft_00052" },
+          { src: "/Images/Founding/left/movieleft_00053.jpg", id: "movieleft_00053" },
+          { src: "/Images/Founding/left/movieleft_00054.jpg", id: "movieleft_00054" },
+          { src: "/Images/Founding/left/movieleft_00055.jpg", id: "movieleft_00055" },
+          { src: "/Images/Founding/left/movieleft_00056.jpg", id: "movieleft_00056" },
+          { src: "/Images/Founding/left/movieleft_00057.jpg", id: "movieleft_00057" },
+          { src: "/Images/Founding/left/movieleft_00058.jpg", id: "movieleft_00058" },
+          { src: "/Images/Founding/left/movieleft_00059.jpg", id: "movieleft_00059" },
+          { src: "/Images/Founding/left/movieleft_00060.jpg", id: "movieleft_00060" },
+          { src: "/Images/Founding/left/movieleft_00061.jpg", id: "movieleft_00061" },
+          { src: "/Images/Founding/left/movieleft_00062.jpg", id: "movieleft_00062" },
+          { src: "/Images/Founding/left/movieleft_00063.jpg", id: "movieleft_00063" },
+          { src: "/Images/Founding/left/movieleft_00064.jpg", id: "movieleft_00064" },
+          { src: "/Images/Founding/left/movieleft_00065.jpg", id: "movieleft_00065" },
+          { src: "/Images/Founding/left/movieleft_00066.jpg", id: "movieleft_00066" },
+          { src: "/Images/Founding/left/movieleft_00067.jpg", id: "movieleft_00067" },
+          { src: "/Images/Founding/left/movieleft_00068.jpg", id: "movieleft_00068" },
+          { src: "/Images/Founding/left/movieleft_00069.jpg", id: "movieleft_00069" },
+          { src: "/Images/Founding/left/movieleft_00070.jpg", id: "movieleft_00070" },
+          { src: "/Images/Founding/left/movieleft_00071.jpg", id: "movieleft_00071" },
+          { src: "/Images/Founding/left/movieleft_00072.jpg", id: "movieleft_00072" },
+          { src: "/Images/Founding/left/movieleft_00073.jpg", id: "movieleft_00073" },
+          { src: "/Images/Founding/left/movieleft_00074.jpg", id: "movieleft_00074" },
+          { src: "/Images/Founding/left/movieleft_00075.jpg", id: "movieleft_00075" },
+          { src: "/Images/Founding/left/movieleft_00076.jpg", id: "movieleft_00076" },
+          { src: "/Images/Founding/left/movieleft_00077.jpg", id: "movieleft_00077" },
+          { src: "/Images/Founding/left/movieleft_00078.jpg", id: "movieleft_00078" },
+          { src: "/Images/Founding/left/movieleft_00079.jpg", id: "movieleft_00079" },
+          { src: "/Images/Founding/left/movieleft_00080.jpg", id: "movieleft_00080" },
+          { src: "/Images/Founding/left/movieleft_00081.jpg", id: "movieleft_00081" },
+          { src: "/Images/Founding/left/movieleft_00082.jpg", id: "movieleft_00082" },
+          { src: "/Images/Founding/left/movieleft_00083.jpg", id: "movieleft_00083" },
+          { src: "/Images/Founding/left/movieleft_00084.jpg", id: "movieleft_00084" },
+          { src: "/Images/Founding/left/movieleft_00085.jpg", id: "movieleft_00085" },
+          { src: "/Images/Founding/left/movieleft_00086.jpg", id: "movieleft_00086" },
+          { src: "/Images/Founding/left/movieleft_00087.jpg", id: "movieleft_00087" },
+          { src: "/Images/Founding/left/movieleft_00088.jpg", id: "movieleft_00088" },
+          { src: "/Images/Founding/left/movieleft_00089.jpg", id: "movieleft_00089" },
+          { src: "/Images/Founding/left/movieleft_00090.jpg", id: "movieleft_00090" },
+          { src: "/Images/Founding/left/movieleft_00091.jpg", id: "movieleft_00091" },
+          { src: "/Images/Founding/left/movieleft_00092.jpg", id: "movieleft_00092" },
+          { src: "/Images/Founding/left/movieleft_00093.jpg", id: "movieleft_00093" },
+          { src: "/Images/Founding/left/movieleft_00094.jpg", id: "movieleft_00094" },
+          { src: "/Images/Founding/left/movieleft_00095.jpg", id: "movieleft_00095" },
+          { src: "/Images/Founding/left/movieleft_00096.jpg", id: "movieleft_00096" },
+          { src: "/Images/Founding/left/movieleft_00097.jpg", id: "movieleft_00097" },
+          { src: "/Images/Founding/left/movieleft_00098.jpg", id: "movieleft_00098" },
+          { src: "/Images/Founding/left/movieleft_00099.jpg", id: "movieleft_00099" },
+          { src: "/Images/Founding/left/movieleft_00100.jpg", id: "movieleft_00100" },
+          { src: "/Images/Founding/left/movieleft_00101.jpg", id: "movieleft_00101" },
+          { src: "/Images/Founding/left/movieleft_00102.jpg", id: "movieleft_00102" },
+          { src: "/Images/Founding/left/movieleft_00103.jpg", id: "movieleft_00103" },
+          { src: "/Images/Founding/left/movieleft_00104.jpg", id: "movieleft_00104" },
+          { src: "/Images/Founding/left/movieleft_00105.jpg", id: "movieleft_00105" },
+          { src: "/Images/Founding/left/movieleft_00106.jpg", id: "movieleft_00106" },
+          { src: "/Images/Founding/left/movieleft_00107.jpg", id: "movieleft_00107" },
+          { src: "/Images/Founding/left/movieleft_00108.jpg", id: "movieleft_00108" },
+          { src: "/Images/Founding/left/movieleft_00109.jpg", id: "movieleft_00109" },
+          { src: "/Images/Founding/left/movieleft_00110.jpg", id: "movieleft_00110" },
+          { src: "/Images/Founding/left/movieleft_00111.jpg", id: "movieleft_00111" },
+          { src: "/Images/Founding/left/movieleft_00112.jpg", id: "movieleft_00112" },
+          { src: "/Images/Founding/left/movieleft_00113.jpg", id: "movieleft_00113" },
+          { src: "/Images/Founding/left/movieleft_00114.jpg", id: "movieleft_00114" },
+          { src: "/Images/Founding/left/movieleft_00115.jpg", id: "movieleft_00115" },
+          { src: "/Images/Founding/left/movieleft_00116.jpg", id: "movieleft_00116" },
+          { src: "/Images/Founding/left/movieleft_00117.jpg", id: "movieleft_00117" },
+          { src: "/Images/Founding/left/movieleft_00118.jpg", id: "movieleft_00118" },
+          { src: "/Images/Founding/left/movieleft_00119.jpg", id: "movieleft_00119" },
+          { src: "/Images/Founding/left/movieleft_00120.jpg", id: "movieleft_00120" },
+          { src: "/Images/Founding/left/movieleft_00121.jpg", id: "movieleft_00121" },
+          { src: "/Images/Founding/left/movieleft_00122.jpg", id: "movieleft_00122" },
+          { src: "/Images/Founding/left/movieleft_00123.jpg", id: "movieleft_00123" },
+          { src: "/Images/Founding/left/movieleft_00124.jpg", id: "movieleft_00124" },
+          { src: "/Images/Founding/left/movieleft_00125.jpg", id: "movieleft_00125" },
+          { src: "/Images/Founding/left/movieleft_00126.jpg", id: "movieleft_00126" },
+          { src: "/Images/Founding/left/movieleft_00127.jpg", id: "movieleft_00127" },
+          { src: "/Images/Founding/left/movieleft_00128.jpg", id: "movieleft_00128" },
+          { src: "/Images/Founding/left/movieleft_00129.jpg", id: "movieleft_00129" },
+          { src: "/Images/Founding/left/movieleft_00130.jpg", id: "movieleft_00130" },
+          { src: "/Images/Founding/left/movieleft_00131.jpg", id: "movieleft_00131" },
+          { src: "/Images/Founding/left/movieleft_00132.jpg", id: "movieleft_00132" },
+          { src: "/Images/Founding/left/movieleft_00133.jpg", id: "movieleft_00133" },
+          { src: "/Images/Founding/left/movieleft_00134.jpg", id: "movieleft_00134" },
+          { src: "/Images/Founding/left/movieleft_00135.jpg", id: "movieleft_00135" },
+          { src: "/Images/Founding/left/movieleft_00136.jpg", id: "movieleft_00136" },
+          { src: "/Images/Founding/left/movieleft_00137.jpg", id: "movieleft_00137" },
+          { src: "/Images/Founding/left/movieleft_00138.jpg", id: "movieleft_00138" },
+          { src: "/Images/Founding/left/movieleft_00139.jpg", id: "movieleft_00139" },
+          { src: "/Images/Founding/left/movieleft_00140.jpg", id: "movieleft_00140" },
+          { src: "/Images/Founding/left/movieleft_00141.jpg", id: "movieleft_00141" },
+          { src: "/Images/Founding/left/movieleft_00142.jpg", id: "movieleft_00142" },
+          { src: "/Images/Founding/left/movieleft_00143.jpg", id: "movieleft_00143" },
+          { src: "/Images/Founding/left/movieleft_00144.jpg", id: "movieleft_00144" },
+          { src: "/Images/Founding/left/movieleft_00145.jpg", id: "movieleft_00145" },
+          { src: "/Images/Founding/left/movieleft_00146.jpg", id: "movieleft_00146" },
+          { src: "/Images/Founding/left/movieleft_00147.jpg", id: "movieleft_00147" },
+          { src: "/Images/Founding/left/movieleft_00148.jpg", id: "movieleft_00148" },
+          { src: "/Images/Founding/left/movieleft_00149.jpg", id: "movieleft_00149" },
+          { src: "/Images/Founding/left/movieleft_00150.jpg", id: "movieleft_00150" },
+          { src: "/Images/Founding/left/movieleft_00151.jpg", id: "movieleft_00151" },
+          { src: "/Images/Founding/left/movieleft_00152.jpg", id: "movieleft_00152" },
+          { src: "/Images/Founding/left/movieleft_00153.jpg", id: "movieleft_00153" },
+          { src: "/Images/Founding/left/movieleft_00154.jpg", id: "movieleft_00154" },
+          { src: "/Images/Founding/left/movieleft_00155.jpg", id: "movieleft_00155" },
+          { src: "/Images/Founding/left/movieleft_00156.jpg", id: "movieleft_00156" },
+          { src: "/Images/Founding/left/movieleft_00157.jpg", id: "movieleft_00157" },
+          { src: "/Images/Founding/left/movieleft_00158.jpg", id: "movieleft_00158" },
+          { src: "/Images/Founding/left/movieleft_00159.jpg", id: "movieleft_00159" },
+          { src: "/Images/Founding/left/movieleft_00160.jpg", id: "movieleft_00160" },
+          { src: "/Images/Founding/left/movieleft_00161.jpg", id: "movieleft_00161" },
+          { src: "/Images/Founding/left/movieleft_00162.jpg", id: "movieleft_00162" },
+          { src: "/Images/Founding/left/movieleft_00163.jpg", id: "movieleft_00163" },
+          { src: "/Images/Founding/left/movieleft_00164.jpg", id: "movieleft_00164" },
+          { src: "/Images/Founding/left/movieleft_00165.jpg", id: "movieleft_00165" },
+          { src: "/Images/Founding/left/movieleft_00166.jpg", id: "movieleft_00166" },
+          { src: "/Images/Founding/left/movieleft_00167.jpg", id: "movieleft_00167" },
+          { src: "/Images/Founding/left/movieleft_00168.jpg", id: "movieleft_00168" },
+          { src: "/Images/Founding/left/movieleft_00169.jpg", id: "movieleft_00169" }
+        ];
+
+        var loader = new createjs.LoadQueue(false);
+        loader.addEventListener("fileload", handleFileLoad);
+        loader.addEventListener("complete", handleCompleteRipple);
+        loader.loadManifest(manifest);
+    }
+
+    function handleCompleteRipple() {
+        exportRootRipple = new lib.left();
+
+        stageRipple = new createjs.Stage(canvasRipple);
+        stageRipple.addChild(exportRootRipple);
+        stageRipple.update();
+
+        createjs.Ticker.setFPS(fps);
+        createjs.Ticker.addEventListener("tick", stageRipple);
+    }
+
+    function initBackgroundLeaf() {
+        canvas = document.getElementById("canvasLeaf");
+        images = images || {};
+        var manifest = [
+          { src: "/Images/Founding/right/leaf_layer_00000.jpg", id: "leaf_layer_00000" },
+          { src: "/Images/Founding/right/leaf_layer_00001.jpg", id: "leaf_layer_00001" },
+          { src: "/Images/Founding/right/leaf_layer_00002.jpg", id: "leaf_layer_00002" },
+          { src: "/Images/Founding/right/leaf_layer_00003.jpg", id: "leaf_layer_00003" },
+          { src: "/Images/Founding/right/leaf_layer_00004.jpg", id: "leaf_layer_00004" },
+          { src: "/Images/Founding/right/leaf_layer_00005.jpg", id: "leaf_layer_00005" },
+          { src: "/Images/Founding/right/leaf_layer_00006.jpg", id: "leaf_layer_00006" },
+          { src: "/Images/Founding/right/leaf_layer_00007.jpg", id: "leaf_layer_00007" },
+          { src: "/Images/Founding/right/leaf_layer_00008.jpg", id: "leaf_layer_00008" },
+          { src: "/Images/Founding/right/leaf_layer_00009.jpg", id: "leaf_layer_00009" },
+          { src: "/Images/Founding/right/leaf_layer_00010.jpg", id: "leaf_layer_00010" },
+          { src: "/Images/Founding/right/leaf_layer_00011.jpg", id: "leaf_layer_00011" },
+          { src: "/Images/Founding/right/leaf_layer_00012.jpg", id: "leaf_layer_00012" },
+          { src: "/Images/Founding/right/leaf_layer_00013.jpg", id: "leaf_layer_00013" },
+          { src: "/Images/Founding/right/leaf_layer_00014.jpg", id: "leaf_layer_00014" },
+          { src: "/Images/Founding/right/leaf_layer_00015.jpg", id: "leaf_layer_00015" },
+          { src: "/Images/Founding/right/leaf_layer_00016.jpg", id: "leaf_layer_00016" },
+          { src: "/Images/Founding/right/leaf_layer_00017.jpg", id: "leaf_layer_00017" },
+          { src: "/Images/Founding/right/leaf_layer_00018.jpg", id: "leaf_layer_00018" },
+          { src: "/Images/Founding/right/leaf_layer_00019.jpg", id: "leaf_layer_00019" },
+          { src: "/Images/Founding/right/leaf_layer_00020.jpg", id: "leaf_layer_00020" },
+          { src: "/Images/Founding/right/leaf_layer_00021.jpg", id: "leaf_layer_00021" },
+          { src: "/Images/Founding/right/leaf_layer_00022.jpg", id: "leaf_layer_00022" },
+          { src: "/Images/Founding/right/leaf_layer_00023.jpg", id: "leaf_layer_00023" },
+          { src: "/Images/Founding/right/leaf_layer_00024.jpg", id: "leaf_layer_00024" },
+          { src: "/Images/Founding/right/leaf_layer_00025.jpg", id: "leaf_layer_00025" },
+          { src: "/Images/Founding/right/leaf_layer_00026.jpg", id: "leaf_layer_00026" },
+          { src: "/Images/Founding/right/leaf_layer_00027.jpg", id: "leaf_layer_00027" },
+          { src: "/Images/Founding/right/leaf_layer_00028.jpg", id: "leaf_layer_00028" },
+          { src: "/Images/Founding/right/leaf_layer_00029.jpg", id: "leaf_layer_00029" },
+          { src: "/Images/Founding/right/leaf_layer_00030.jpg", id: "leaf_layer_00030" },
+          { src: "/Images/Founding/right/leaf_layer_00031.jpg", id: "leaf_layer_00031" },
+          { src: "/Images/Founding/right/leaf_layer_00032.jpg", id: "leaf_layer_00032" },
+          { src: "/Images/Founding/right/leaf_layer_00033.jpg", id: "leaf_layer_00033" },
+          { src: "/Images/Founding/right/leaf_layer_00034.jpg", id: "leaf_layer_00034" },
+          { src: "/Images/Founding/right/leaf_layer_00035.jpg", id: "leaf_layer_00035" },
+          { src: "/Images/Founding/right/leaf_layer_00036.jpg", id: "leaf_layer_00036" },
+          { src: "/Images/Founding/right/leaf_layer_00037.jpg", id: "leaf_layer_00037" },
+          { src: "/Images/Founding/right/leaf_layer_00038.jpg", id: "leaf_layer_00038" },
+          { src: "/Images/Founding/right/leaf_layer_00039.jpg", id: "leaf_layer_00039" },
+          { src: "/Images/Founding/right/leaf_layer_00040.jpg", id: "leaf_layer_00040" },
+          { src: "/Images/Founding/right/leaf_layer_00041.jpg", id: "leaf_layer_00041" },
+          { src: "/Images/Founding/right/leaf_layer_00042.jpg", id: "leaf_layer_00042" },
+          { src: "/Images/Founding/right/leaf_layer_00043.jpg", id: "leaf_layer_00043" },
+          { src: "/Images/Founding/right/leaf_layer_00044.jpg", id: "leaf_layer_00044" },
+          { src: "/Images/Founding/right/leaf_layer_00045.jpg", id: "leaf_layer_00045" },
+          { src: "/Images/Founding/right/leaf_layer_00046.jpg", id: "leaf_layer_00046" },
+          { src: "/Images/Founding/right/leaf_layer_00047.jpg", id: "leaf_layer_00047" },
+          { src: "/Images/Founding/right/leaf_layer_00048.jpg", id: "leaf_layer_00048" },
+          { src: "/Images/Founding/right/leaf_layer_00049.jpg", id: "leaf_layer_00049" },
+          { src: "/Images/Founding/right/leaf_layer_00050.jpg", id: "leaf_layer_00050" },
+          { src: "/Images/Founding/right/leaf_layer_00051.jpg", id: "leaf_layer_00051" },
+          { src: "/Images/Founding/right/leaf_layer_00052.jpg", id: "leaf_layer_00052" },
+          { src: "/Images/Founding/right/leaf_layer_00053.jpg", id: "leaf_layer_00053" },
+          { src: "/Images/Founding/right/leaf_layer_00054.jpg", id: "leaf_layer_00054" },
+          { src: "/Images/Founding/right/leaf_layer_00055.jpg", id: "leaf_layer_00055" },
+          { src: "/Images/Founding/right/leaf_layer_00056.jpg", id: "leaf_layer_00056" },
+          { src: "/Images/Founding/right/leaf_layer_00057.jpg", id: "leaf_layer_00057" },
+          { src: "/Images/Founding/right/leaf_layer_00058.jpg", id: "leaf_layer_00058" },
+          { src: "/Images/Founding/right/leaf_layer_00059.jpg", id: "leaf_layer_00059" },
+          { src: "/Images/Founding/right/leaf_layer_00060.jpg", id: "leaf_layer_00060" },
+          { src: "/Images/Founding/right/leaf_layer_00061.jpg", id: "leaf_layer_00061" },
+          { src: "/Images/Founding/right/leaf_layer_00062.jpg", id: "leaf_layer_00062" },
+          { src: "/Images/Founding/right/leaf_layer_00063.jpg", id: "leaf_layer_00063" },
+          { src: "/Images/Founding/right/leaf_layer_00064.jpg", id: "leaf_layer_00064" },
+          { src: "/Images/Founding/right/leaf_layer_00065.jpg", id: "leaf_layer_00065" },
+          { src: "/Images/Founding/right/leaf_layer_00066.jpg", id: "leaf_layer_00066" },
+          { src: "/Images/Founding/right/leaf_layer_00067.jpg", id: "leaf_layer_00067" },
+          { src: "/Images/Founding/right/leaf_layer_00068.jpg", id: "leaf_layer_00068" },
+          { src: "/Images/Founding/right/leaf_layer_00069.jpg", id: "leaf_layer_00069" },
+          { src: "/Images/Founding/right/leaf_layer_00070.jpg", id: "leaf_layer_00070" },
+          { src: "/Images/Founding/right/leaf_layer_00071.jpg", id: "leaf_layer_00071" },
+          { src: "/Images/Founding/right/leaf_layer_00072.jpg", id: "leaf_layer_00072" },
+          { src: "/Images/Founding/right/leaf_layer_00073.jpg", id: "leaf_layer_00073" },
+          { src: "/Images/Founding/right/leaf_layer_00074.jpg", id: "leaf_layer_00074" },
+          { src: "/Images/Founding/right/leaf_layer_00075.jpg", id: "leaf_layer_00075" },
+          { src: "/Images/Founding/right/leaf_layer_00076.jpg", id: "leaf_layer_00076" },
+          { src: "/Images/Founding/right/leaf_layer_00077.jpg", id: "leaf_layer_00077" },
+          { src: "/Images/Founding/right/leaf_layer_00078.jpg", id: "leaf_layer_00078" },
+          { src: "/Images/Founding/right/leaf_layer_00079.jpg", id: "leaf_layer_00079" },
+          { src: "/Images/Founding/right/leaf_layer_00080.jpg", id: "leaf_layer_00080" },
+          { src: "/Images/Founding/right/leaf_layer_00081.jpg", id: "leaf_layer_00081" },
+          { src: "/Images/Founding/right/leaf_layer_00082.jpg", id: "leaf_layer_00082" },
+          { src: "/Images/Founding/right/leaf_layer_00083.jpg", id: "leaf_layer_00083" },
+          { src: "/Images/Founding/right/leaf_layer_00084.jpg", id: "leaf_layer_00084" },
+          { src: "/Images/Founding/right/leaf_layer_00085.jpg", id: "leaf_layer_00085" },
+          { src: "/Images/Founding/right/leaf_layer_00086.jpg", id: "leaf_layer_00086" },
+          { src: "/Images/Founding/right/leaf_layer_00087.jpg", id: "leaf_layer_00087" },
+          { src: "/Images/Founding/right/leaf_layer_00088.jpg", id: "leaf_layer_00088" },
+          { src: "/Images/Founding/right/leaf_layer_00089.jpg", id: "leaf_layer_00089" },
+          { src: "/Images/Founding/right/leaf_layer_00090.jpg", id: "leaf_layer_00090" },
+          { src: "/Images/Founding/right/leaf_layer_00091.jpg", id: "leaf_layer_00091" },
+          { src: "/Images/Founding/right/leaf_layer_00092.jpg", id: "leaf_layer_00092" },
+          { src: "/Images/Founding/right/leaf_layer_00093.jpg", id: "leaf_layer_00093" },
+          { src: "/Images/Founding/right/leaf_layer_00094.jpg", id: "leaf_layer_00094" },
+          { src: "/Images/Founding/right/leaf_layer_00095.jpg", id: "leaf_layer_00095" },
+          { src: "/Images/Founding/right/leaf_layer_00096.jpg", id: "leaf_layer_00096" },
+          { src: "/Images/Founding/right/leaf_layer_00097.jpg", id: "leaf_layer_00097" },
+          { src: "/Images/Founding/right/leaf_layer_00098.jpg", id: "leaf_layer_00098" },
+          { src: "/Images/Founding/right/leaf_layer_00099.jpg", id: "leaf_layer_00099" }
+        ];
+
+        var loader = new createjs.LoadQueue(false);
+        loader.addEventListener("fileload", handleFileLoad);
+        loader.addEventListener("complete", handleComplete);
+        loader.loadManifest(manifest);
+
+    }
+
+    function handleFileLoad(evt) {
+        if (evt.item.type == "image") { images[evt.item.id] = evt.result; }
+    }
+
+    function handleComplete() {
+        exportRoot = new lib.right();
+
+        stage = new createjs.Stage(canvas);
+        stage.addChild(exportRoot);
+        stage.update();
+
+        createjs.Ticker.setFPS(fps);
+        createjs.Ticker.addEventListener("tick", stage);
+    }
+
+    function init() {
+        var queue = [];//temp ajax obj
+        for (var i = 0 ; i < 3 ; i++) {
+            queue.push($.ajax({
+                url: INTERFACE_DROPWIN,
+                data: 'menu=' + menuList[i],
+                type: 'GET',
+                datatype: 'html',
+            }));//load partial content
+        }
+        $.ajax({
+            url: INTERFACE_CHAIRMAN,
+            type: 'GET',
+            datatype: 'json',
+            success: function (jData) {
+                jData.sort(function (a, b) {
+                    return parseInt(a.StartYear) - parseInt(b.StartYear);
+                });
+                chairmanData = jData;
+            }
+        });
+
+        $.when.apply(window, queue).done(function () {
+            for (var i = 0 ; i < 3 ; i++) {
+                contentData.push(queue[i].responseText);//cache partial content
+            }
+            firstInit();//第一次轉入創校緣起頁面時的初始化
+            listEventInit();//設定清單點擊事件
+        });
+    }
+
+    function firstInit() {
+        setPicClickEvent();//設定圖片
+        setSlick(4, false);//設定slick
+        $('body').click(function () {//水波紋處理，點下去就展開影片，三秒後放靜圖
+            if (!ripplerDisplay) {
+                ripplerDisplay = true;
+                clearTimeout(rippleTimer);
+                $('.movLeft').toggle();
+                $('#canvasRipple').toggle();
+                rippleTimer = setTimeout(function () {
+                    $('.movLeft').toggle();
+                    $('#canvasRipple').toggle();
+                    ripplerDisplay = false;
+                }, 3000);
+            }
+        });
+    }
+
+
+    function listEventInit() {//旁邊清單事件
+
+        $('.menu > ul').click(function () {
+            var targetList = $(this);
+            var contBTNElement = $('.contBTN');
+            var rollerDiv = $('div[id*="rollerDiv"]');//卷軸元素，依照清單抽換
+            if (targetList.attr('id') === nowLocation) {
+                return;
+            }
+            nowLocation = targetList.attr('id');//紀錄目前未置，便於判斷是否要切換內容
+            hideDropWindow('All');//點選清單就隱藏所有彈跳視窗
+            contBTNElement.unslick();//清除slick效果以防萬一
+            contBTNElement.html('');//清除顯示內容
+            if (targetList.attr('id') === 'Original') {//創校緣起
+                setPicElement(contBTNElement, originalPicList.length);//設定放置圖片元素
+                setPic($('.contBTN img'), originalPicList);//將圖片路徑插入元素中
+                $('.contBTN').html(copyElementToSlide(originalPicList.length, 4, $('.contBTN').html()));
+            }
+            else if (targetList.attr('id') === 'Principal') {//校長
+                setPicElement(contBTNElement, principalPicList.length);//設定放置圖片元素
+                setPic($('.contBTN img'), principalPicList);//將圖片路徑插入元素中
+                $('.contBTN').html(copyElementToSlide(principalPicList.length, 4, $('.contBTN').html()));
+            }
+            else if (targetList.attr('id') === 'CEO') {//執行長
+                contBTNElement.append(DEFAULT_BTN_IMG);//設定放置圖片元素
+                setPicElement(contBTNElement, ceoPicList.length - 1);
+                setPic($('.contBTN img'), ceoPicList);//將圖片路徑插入元素中
+                $('.contBTN').html(copyElementToSlide(ceoPicList.length, 4, $('.contBTN').html()));
+            }
+            else {//歷屆董事
+                requestAndSetChairmanData(contBTNElement);//接收資料
+            }
+            if (targetList.attr('id') !== 'Chairman') {//只要不是點選歷屆董事，就要設定彈跳視窗事件
+                setPicClickEvent();
+                setSlickArrow();//先設定slick所需要的箭頭元素
+                setSlick(4, false);//設定slick
+            }
+            rollerDiv.attr('id', 'rollerDiv' + ($(this).index() + 1));
+
+        })
+    }
+
+    function setSlickArrow() {
+        if ($('.arrowL').length === 0) {
+            $('.menu').after(arrowL);
+        }
+        if ($('.arrowR').length === 0) {
+            $('div[id*="rollerDiv"]').append(arrowR);
+        }//slick要的箭頭
+    }
+
+    function setSlick(slideShow, isVariableWidth) {
+        $('.contBTN').slick({
+            slidesToShow: slideShow,
+            slidesToScroll: 1,
+            prevArrow: $('.arrowL'),
+            nextArrow: $('.arrowR'),
+            touchThreshold: 100,
+            infinite: true,
+            variableWidth: isVariableWidth
+        });//設定slick
+    }
+
+    function setPicElement(targetElement, picLength) {
+        for (var i = 0 ; i < picLength ; i++) {
+            targetElement.append(DEFAULT_BTN);
+        }//設定放置圖片的元素
+    }
+
+    function setPic(element, picList) {
+        for (var i = 0 ; i < picList.length ; i++) {
+            element.eq(i).attr('src', picList[i]);
+        }//設定圖片來源
+    }
+
+    function setPicClickEvent() {//設置圖片點擊事件
+        $('.contBTN div').mousedown(function (event) {//滑鼠在小圖片上按下後立刻記錄滑鼠位置
+            MOUSE_POSITION_X = event.pageX;
+            MOUSE_POSITION_Y = event.pageY;
+        });
+
+        $('.contBTN div').mouseup(function (event) {
+            if (MOUSE_POSITION_X === event.pageX && MOUSE_POSITION_Y === event.pageY) {//判斷是在移動圖片還是點擊圖片，點擊則往下執行，移動則返回
+                if ($(this).find('a').length === 0)//如果有BTNImg則不顯示任何彈跳視窗
+                    return;
+                var getPicSrc = $(this).find('img').attr('src');
+                if (IsLeft($(this).find('img'))) {//判斷被點擊圖片位置
+                    $('#LeftDiv').html('');
+                    getPicSrc = getPicSrc.split('/').pop().split('.')[0];
+                    var partialElement = $('<div/>').html(contentData[getMenuIndex(nowLocation)]).find('.' + getPicSrc).html();
+                    setPopWinContent('#LeftDiv', partialElement);
+                }
+                else {
+                    $('#RightDiv').html('');
+                    getPicSrc = getPicSrc.split('/').pop().split('.')[0];
+                    var partialElement = $('<div/>').html(contentData[getMenuIndex(nowLocation)]).find('.' + getPicSrc).html();
+                    setPopWinContent('#RightDiv', partialElement);
+                }
+            }
+        });//設定圖片事件
+    }
+
+    function getMenuIndex(location) {
+        for (var i = 0 ; i < menuList.length ; i++) {
+            if (menuList[i] === location) {
+                return i;
+            }
+        }
+    }
+
+    function setPopWinContent(typeWin, partialElement) {
+        $(typeWin).html(partialElement);
+        $(typeWin + ' .showContent').nextAll().hide();//除了第一個show class，先隱藏所有show class的內容
+        $(typeWin + ' .Button a').click(function () {//顯擊彈跳視窗button秀出應對內容
+            $(typeWin + ' .showContent').each(function () {//隱藏全部內容
+                $(this).hide();
+            });
+            $(typeWin + ' .showContent').eq($(this).parent().index() / 2).show();//秀出應對內容
+            if ($('audio').length !== 0) {
+                $('audio').trigger('pause');
+            }
+        });
+        $('.WINclose').click(function () {//設定X的關閉事件
+            $(this).parent().fadeOut();
+            if ($('audio').length !== 0) {
+                $('audio').trigger('pause');
+            }
+        });
+        $(typeWin).fadeIn();//準備完畢，秀出彈跳視窗
+    }
+
+    function requestAndSetChairmanData(targetContentElement) {
+        setChainManElement(targetContentElement, chairmanData);
+        setSlickArrow();//先設定slick所需要的箭頭元素
+        setSlick(8, true);//設定slick
+    }
+
+    function setChainManElement(targetElement, ajaxData) {
+        var htmlElement = '';
+        var isFirst = true;
+        for (var i = 0 ; i < ajaxData.length ; i++) {//列出屆數&起訖時間
+            var nameList = ajaxData[i]['NameList'];
+            htmlElement += '<div><div class="Cont4"><li class="C4title">' + ajaxData[i]['SessionNumber'] + '</li><li class="C4line"></li><li class="C4txt">';
+            for (var j = 0 ; j < nameList.length ; j++) {//列出董事名單
+                if (j % 15 == 0 && !isFirst) {//單列人數維持在15人
+                    htmlElement += '</li><li class="C6txt">';
+                }
+                htmlElement += nameList[j] + '<br>';
+                isFirst = false;
+            }
+            isFirst = true;
+            htmlElement += '</li></div></div>';
+        }
+        htmlElement = copyElementToSlide(ajaxData.length, 8, htmlElement);
+        targetElement.html(htmlElement);
+
+    }
+
+    function copyElementToSlide(objectLength, slideToShowLength, htmlElement) {
+        if (objectLength <= slideToShowLength) {//小於slide show 複製一份製造Slide效果
+            htmlElement += htmlElement;
+        }
+        return htmlElement;
+    }
+
+    function IsLeft(targetImg) {//判斷被點擊的圖片
+        var imgPositionX = targetImg.offset().left + $('.menu').width() + 30; //+30修正位置
+        var containerPosition = ($('.menu').width() + $('.contBTN').width() / 2);//容器位置
+        if (imgPositionX <= containerPosition) {
+            return true;//左邊
+        }
+        else {
+            return false;//右邊
+        }
+    }
+
+    function hideDropWindow(typeWindow) {
+        if (typeWindow === 'All') {
+            $('#LeftDiv').fadeOut();
+            $('#RightDiv').fadeOut();
+        }
+        else if (typeWindow === 'LeftDiv') {
+            $('#LeftDiv').fadeOut();
+        }
+        else if (typeWindow === 'RightDiv') {
+            $('#RightDiv').fadeOut();
+        }
+    }
+
+
+</script>
+}
+
+@section styles{
+<link rel="stylesheet" href="http://code.jquery.com/ui/1.11.1/themes/smoothness/jquery-ui.css">
+<link rel="stylesheet" type="text/css" href="~/Scripts/slick/slick.css" />
+<link href="~/Scripts/inform/css/reset.css" rel="stylesheet" type="text/css">
+<link href="~/Scripts/inform/css/big.css" rel="stylesheet" type="text/css">
+<style type="text/css">
+    #LeftDiv {
+        position: absolute;
+        width: 1350px;
+        height: 958px;
+        z-index: 100;
+        left: 390px;
+        top: 40px;
+        display: none;
+    }
+
+    #visible{
+        z-index:3;
+        position: absolute;
+        left:1175px;
+        top:620px;
+    }
+
+    #RightDiv {
+        position: absolute;
+        width: 1350px;
+        height: 958px;
+        z-index: 100;
+        right: 390px;
+        top: 40px;
+        display: none;
+    }
+    .Cont4{
+        width:390px;
+    }
+
+    .BTNImg{
+        margin-left:-30px;
+    }
+
+    .slick-slide{
+        width:394px;
+    }
+
+    .contbk{
+        top:1000px;
+    }
+
+    body{
+        overflow-x:hidden;
+        overflow-y:hidden;
+        zoom:1;
+    }
+    .subTitle{
+        font-size:40px;
+    }
+    .specialWord{
+        font-family:"華康新特明體","新細明體";
+    }
+        .Cont4{
+        width:390px;
+    }
+</style>
+}
+
+<body id="bodyTag">
+    <div id="LeftDiv" class="WINglow">
+    </div>
+
+
+    <div id="RightDiv" class="WINglow">
+    </div>
+    <!--卷軸框架-->
+    <div id="rollerDiv1">
+        <div class="menu">
+            <ul id="Original" class="menuD1"><a style="margin:0px 0px 25px 0px"></a></ul>
+            <ul id="CEO" class="menuD2"><a style="margin:0px 0px 25px 0px"></a></ul>
+            <ul id="Principal" class="menuD3"><a style="margin:0px 0px 25px 0px"></a></ul>
+            <ul id="Chairman" class="menuD4"><a></a></ul>
+        </div>
+        <div><ul class="arrowL"><a href="#"></a></ul></div>
+        <!--內容物-->
+        <div class="contBTN" style="overflow:hidden;">
+            <div class="BTN"><a href="#"><img src="~/Images/Founding/cont1btn1.png" width="760" height="810"></a></div>
+            <div class="BTN"><a href="#"><img src="~/Images/Founding/cont1btn2.png" width="760" height="810"></a></div>
+            <div class="BTN"><a href="#"><img src="~/Images/Founding/cont1btn3.png" width="760" height="810"></a></div>
+            <div class="BTN"><a href="#"><img src="~/Images/Founding/cont1btn4.png" width="760" height="810"></a></div>
+            <div class="BTN"><a href="#"><img src="~/Images/Founding/cont1btn5.png" width="760" height="810"></a></div>
+            <div class="BTN"><a href="#"><img src="~/Images/Founding/cont1btn6.png" width="760" height="810"></a></div>
+            <div class="BTN"><a href="#"><img src="~/Images/Founding/cont1btn7.png" width="760" height="810"></a></div>
+        </div>
+        <div><ul class="arrowR"><a href="#"></a></ul></div>
+    </div>
+    <div id="visible"><img src="~/Images/Founding/visible.jpg"></div>
+
+    <!--內頁框架-->
+    <div class="contbk">
+        <img class="movLeft" width="1200" height="540" src="~/Images/Founding/left/movieleft_00000.jpg" style="transform: scale(0.62,1);background-color:#ffffff;position:relative;bottom:5px; left:-360px;" />
+        <canvas id="canvasRipple" width="1200" height="540" style="background-color:#ffffff;position:relative;bottom:-540px; left:-720px;display:none;"></canvas>
+        <canvas id="canvasLeaf" width="1200" height="540" style="background-color:#ffffff;position:relative;bottom:-540px; right:0px;float:right"></canvas>
+    </div>
+
+</body>

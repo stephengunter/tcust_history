@@ -1,0 +1,26 @@
+﻿@model TzuChiClassLibrary.BO.PagenationModel
+@{
+    ViewBag.Title = "校史館 - 資訊查詢 | 校園日誌";
+    string frontendBaseURL = System.Web.Configuration.WebConfigurationManager.AppSettings["website.frontend"];
+    string backendBaseURL = System.Web.Configuration.WebConfigurationManager.AppSettings["website.backend"];
+}
+
+@if (ViewBag.DataModel.Count > 0)
+{
+    foreach (var item in ViewBag.DataModel)
+    {
+        int maxWordlength = 40; //不破版上限字38;
+        var splitChar = "";
+        var contentName = item.ContentName.Trim();
+        for (int i = 0; i < maxWordlength - contentName.Length; i++)
+        {
+            splitChar += "..";
+        }
+        <ul class="Search">
+            <span class="Seartxt">
+                <a href="@Url.Action("GetNews", "News", new { contentID = @item.ContentID })">@string.Format("{0:yyyy.MM.dd}", item.ContentTime) @splitChar@contentName</a>                
+            </span>
+        </ul>
+    }
+}
+

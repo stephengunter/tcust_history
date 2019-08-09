@@ -1,0 +1,98 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title</title>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    @Styles.Render("~/Content/css")
+    @Styles.Render("~/Scripts/jquery-ui/jquery-ui.css")
+    @Styles.Render("~/Scripts/uploadify/uploadify.css")
+
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+	<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    @Scripts.Render("~/bundles/modernizr")
+
+
+    
+</head>
+<body>
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                
+            </div>
+            <div class="navbar-collapse collapse">
+                @Html.Partial("_MenuPartial")
+                <ul class="nav navbar-nav navbar-right">
+                    @if (Request.IsAuthenticated) {<li>@Html.ActionLink("管理者", "List", "Admin")</li>}
+                    <li>@Html.Partial("_LoginPartial")</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="container body-content">
+        @RenderBody()
+        <hr />
+        <footer>
+            <p>&copy; @DateTime.Now.Year - 慈濟技術學院-校史館</p>
+        </footer>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false"></div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/jqueryui")
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/bootstrap")
+
+    @Scripts.Render("~/Scripts/jquery.tmpl.min.js")
+    @Scripts.Render("~/Scripts/tinymce/tinymce.min.js")
+
+    @*<script src="@Url.Content("~/Scripts/jquery.tmpl.min.js")"></script>
+    <script src="@Url.Content("~/Scripts/tinymce/tinymce.min.js")"></script>*@
+
+
+    <button id="open-custom-modal" type="button" style="display:none" data-toggle="modal" data-target="#custom-modal">Open Modal</button>
+    <div class="modal fade" id="custom-modal" role="dialog">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button id="close-custom-modal" type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title" id="custom-modal-title"></h4>
+                </div>
+                <div class="modal-body" id="custom-modal-content">
+                    
+                </div>
+               
+            </div>
+        </div>
+    </div>
+
+        <script>
+            
+            $(document).ready(function () {
+                tinymce.init({
+                    mode: "specific_textareas",
+                    editor_selector: "tinymce",
+                    height: "480",
+                });
+
+                $('.dropdown').mouseover(function () {
+                    $(this).addClass('open');
+                }).mouseout(function () {
+                    $(this).removeClass('open');
+                });
+
+                
+            });
+
+
+        </script>
+
+        @RenderSection("scripts", required: false)
+</body>
+</html>

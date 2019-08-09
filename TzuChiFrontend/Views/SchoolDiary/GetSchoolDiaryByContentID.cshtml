@@ -1,0 +1,568 @@
+﻿@using  TzuChiFrontend.Helper
+
+@{
+    ViewBag.Title = "校史館 - 資訊查詢 | 校園日誌";
+    string frontendBaseURL = System.Web.Configuration.WebConfigurationManager.AppSettings["website.frontend"];
+    string backendBaseURL = System.Web.Configuration.WebConfigurationManager.AppSettings["website.backend"];
+    string uploadBaseURL = System.Web.Configuration.WebConfigurationManager.AppSettings["upload.folder.name"];
+}
+
+@section scripts {
+    <script src="~/Scripts/imgDragforbidden.js"></script>
+    <script src="~/Scripts/hammer.js-master/hammer.js"></script>
+    <script type="text/javascript" src="~/Scripts/inform/js/modernizr.custom.79639.js"></script>
+    <script src="~/Scripts/slick/slick_h.js"></script>
+    <script>
+    $(function () {
+        @if (@ViewBag.DataModel.PicUrlList.Count <= 2)
+        {
+                <text>
+        $('.slider-for').slick({
+            slidesToShow: 1,
+            slidesToScroll: 1,
+            arrows: true,
+            slide: 'span',
+            fade: true,
+            onAfterChange: function () {
+                setImgInfo()
+            },
+        });
+
+        $('.slider-nav').slick({
+            infinite: true,
+            slidesToShow: 3,
+            slidesToScroll: 1,
+            dots: false,
+            arrows: false,
+            centerMode: false,
+            variableWidth: true,
+            focusOnSelect: true,
+            speed: 10,
+            onBeforeChange: function () {
+                focusFirstSlickActive();
+            }
+        });
+
+        $('.slider-nav img').click(function () {
+            $('.slider-for').slickGoTo($('.slider-nav img').index($(this)));
+        });
+        </text>
+        }
+        else {
+                <text>
+        $('.slider-for').slick({
+            slidesToShow: 1,
+            slidesToScroll: 1,
+            arrows: true,
+            slide: 'span',
+            fade: true,
+            asNavFor: '.slider-nav',
+            onAfterChange: function () {
+                setImgInfo()
+            },
+        });
+
+        $('.slider-nav').slick({
+            infinite: true,
+            slidesToShow: 3,
+            slidesToScroll: 1,
+            dots: false,
+            arrows: false,
+            centerMode: false,
+            variableWidth: true,
+            asNavFor: '.slider-for',
+            focusOnSelect: true,
+            speed: 10,
+            onAfterChange: function () {
+                focusFirstSlickActive();
+            }
+        });
+                </text>
+        }
+
+            focusFirstSlickActive();
+
+            dropDonwList();
+            $('#submitBtn').click(function () {
+                submitForm();
+            });
+
+            setImgInfo();
+
+
+            $('#prev').click(function () {
+                $('.slick-prev').click();
+            });
+
+            $('#next').click(function () {
+                $('.slick-next').click();
+            });
+
+            $('.wbox1').fadeIn();
+
+
+            //$('.glow-img').mouseover(function () {
+            //    $('.imgintxt1').attr('style', 'box-shadow: 2px  2px 16px rgba(0, 0, 0, 0.6);');
+            //});
+
+            //$('.glow-img').mouseout(function () {
+            //    $('.imgintxt1').attr('style', '');
+            //});
+
+            //$('.glow-img').mouseover(function () {
+
+            //});
+
+            //$('.glow-img').mouseout(function () {
+
+            //});
+
+
+
+        });
+
+        function back()
+        {
+            var scrollTop = '@Request.Params["scrollTop"]';
+            var yearSearch = '@Request.Params["yearSearch"]';
+            var semSearch = '@Request.Params["semSearch"]';
+            var keywordSearch = '@Request.Params["keywordSearch"]';
+            window.location = document.referrer.split("?")[0] + '?scrollTop=' + scrollTop + '&yearSearch=' + yearSearch + '&semSearch=' + semSearch + '&keywordSearch=' + keywordSearch;
+        }
+
+        function focusFirstSlickActive() {
+            $(".slick-active:eq(1)").removeClass("hollow");
+            $(".slick-active:gt(1)").addClass("hollow");
+        }
+
+
+        function setImgInfo() {
+            var info = $('.slider-for-el.slick-active').find('img').attr('data-info');
+            if (info != '') {
+                $('#picDiv1').show();
+                $('#picDiv1').text(info);
+            } else {
+                $('#picDiv1').hide();
+            }
+        }
+
+        function dropDonwList() {
+            $('.dropdown li').click(function () {
+
+                var txt = $(this).text();
+                var val = $(this).attr('data-value');
+                console.log(txt);
+                console.log(val);
+                $(this).parent('ul').siblings('.dd-text').text(txt);
+                $(this).parent('ul').siblings('.dd-text').attr('data-value', val);
+            });
+        }
+
+        function submitForm() {
+            $("#semSearch").val($('#semDropList').attr('data-value'));
+            $("#yearSearch").val($('#yearDropList').attr('data-value'));
+            $("#keywordSearch").val($('#keyWordInput').val());
+            document.forms["submitForm"].submit();
+        }
+
+
+    </script>
+}
+
+@section styles{
+    @*<link href="~/Content/slick_style.css" rel="stylesheet" type="text/css" />*@
+    <link href="~/Content/slick.css" rel="stylesheet" type="text/css">
+    <link href="~/Scripts/inform/css/reset.css" rel="stylesheet" type="text/css" />
+    <link href="~/Scripts/inform/css/tzuchi.css" rel="stylesheet" type="text/css" />
+    <link href="~/Scripts/inform/css/style.css" rel="stylesheet" type="text/css" />
+    <noscript>
+        <link href="~/Scripts/inform/css/noJS.css" rel="stylesheet" type="text/css" />
+    </noscript>
+
+    <style>
+        .shadow {
+            box-shadow: 2px 2px 16px rgba(0, 0, 0, 0.6);
+        }
+        
+        .slider-for {
+            margin-top:54px;
+            width: 582px;
+            height: 437px;
+        }
+
+        .title_05dalay {
+            height: 87px;
+            overflow: hidden;
+        }
+
+        .slider-nav {
+            width: 510px !important;
+            height: 124px;
+        }
+
+        .slick-prev {
+            display: none !important;
+        }
+
+        .slick-next {
+            display: none !important;
+        }
+
+        .news6 {
+            overflow: hidden;
+            word-break: break-all;
+
+            padding: 5px 5px 5px 5px;
+        }
+
+        .menu5 {
+            margin-top: 20px;
+        }
+
+        .qrcode {
+            margin-top: -5px;
+            margin-left: 900px;
+
+        }
+        .hollow {
+          opacity:0.5;
+        }
+    </style>
+    <style type="text/css">
+        #picDiv1 {
+            position: absolute;
+            font-family: "微軟正黑體", Arial;
+            font-weight: bold;
+            font-size: 24px;
+            text-align: left;
+            line-height: 36px;
+            background-color: #ffffff;
+            opacity: 0.8;
+            padding: 5px 5px 5px 5px;
+            margin: 56px 2px 2px 2px;
+            width: 579px;
+            height: 80px;
+            z-index: 4;
+            left: 918px;
+            top: 538px;
+            overflow: hidden;
+        }
+
+        #getDiv {
+            position: absolute;
+            width: 140px;
+            height: 60px;
+            top: 997px;
+            left: 1392px;
+            z-index: 7;
+        }
+
+        .newglow-img {
+        }
+
+        .intxt2 p {
+        
+          padding-top:15px;
+        }
+    </style>
+}
+
+<div class="wbox1" style="width:1920px;display:none">
+    <!--左邊標題-->
+    <div class="leftbox"><img src="~/Scripts/inform/images/inform/title_s1.png" width="134" height="750"></div>
+    <!--中間表格-->
+    <div class="centerbox">
+        <!--內文1-->
+        <div class="tztable1">
+            <ul class="title_01">
+                <li class="title_02">@string.Format("{0:yyyy}", ViewBag.DataModel.ContentTime)</li>
+                <li class="title_03">____________</li>
+                <li class="title_04">@string.Format("{0:MM.dd}", ViewBag.DataModel.ContentTime)</li>
+            </ul>
+            <ul class="title_05dalay">
+                @ViewBag.DataModel.ContentName
+            </ul>   
+            <ul>
+                <li class="intxt2">
+                    @if (!String.IsNullOrEmpty(ViewBag.DataModel.Author))
+                    {
+                        <p>@ViewBag.DataModel.Author</p>
+
+                    }
+                  
+
+                    @Html.Raw(ViewBag.DataModel.ContentText)
+
+
+                  
+                </li>
+            </ul>
+            <div id="picDiv1" style="display:none;"></div>
+            <ul class="imgintxt1 slider-for">
+                @if (@ViewBag.DataModel.PicUrlList.Count == 3 || @ViewBag.DataModel.PicUrlList.Count == 4)
+                {
+                    for (var i = 4; i >= @ViewBag.DataModel.PicUrlList.Count; i--)
+                    {
+                        foreach (var item in ViewBag.DataModel.PicUrlList)
+                        {
+
+
+                            string imageName = @item.FileName.Split('.')[0];
+                            <span class="slider-for-el">
+                                <div style="width:561px;height:437px;display: table-cell;  vertical-align: middle;" align="center">
+
+                                    @{double widthHeightRatio = 561.0 / 437.0;}
+                                    @{double imageRatio = Convert.ToDouble(item.ImageWidth) / Convert.ToDouble(item.ImageHeight);}
+
+                                    @if (widthHeightRatio > imageRatio)
+                                    {
+                                        <img height="437" style="box-shadow: 2px  2px 16px rgba(0, 0, 0, 0.6)" class="glow-img" data-info="@imageName" src="@Url.Content(string.Format("{0}/imgs/zooming/561/437/{1}", @backendBaseURL, @item.Path))" />
+                                    }
+                                    else
+                                    {
+                                        <img style="box-shadow: 2px  2px 16px rgba(0, 0, 0, 0.6)" class="glow-img" width="561" data-info="@imageName" src="@Url.Content(string.Format("{0}/imgs/zooming/561/437/{1}", @backendBaseURL, @item.Path))" />
+                                    }
+                                </div>
+                            </span>
+                        }
+                    }
+
+                 }
+                 else if (@ViewBag.DataModel.PicUrlList.Count <= 2)
+                 {
+                    foreach (var item in ViewBag.DataModel.PicUrlList)
+                    {
+
+
+                            string imageName = @item.FileName.Split('.')[0];
+                            <span class="slider-for-el">
+                                <div style="width:561px;height:437px;display: table-cell;  vertical-align: middle;" align="center">
+
+                                    @{double widthHeightRatio = 561.0 / 437.0;}
+                                    @{double imageRatio = Convert.ToDouble(item.ImageWidth) / Convert.ToDouble(item.ImageHeight);}
+
+                                    @if (widthHeightRatio > imageRatio)
+                                    {
+                                        <img height="437" style="box-shadow: 2px  2px 16px rgba(0, 0, 0, 0.6)" class="glow-img" data-info="@imageName" src="@Url.Content(string.Format("{0}/imgs/zooming/561/437/{1}", @backendBaseURL, @item.Path))" />
+                                    }
+                                    else
+                                    {
+                                        <img style="box-shadow: 2px  2px 16px rgba(0, 0, 0, 0.6)" class="glow-img" width="561" data-info="@imageName" src="@Url.Content(string.Format("{0}/imgs/zooming/561/437/{1}", @backendBaseURL, @item.Path))" />
+                                    }
+                                </div>
+                            </span>
+                     }
+                 }
+                 else
+                 {
+                    foreach (var item in ViewBag.DataModel.PicUrlList)
+                    {
+
+                        string imageName = @item.FileName.Split('.')[0];
+                        <span class="slider-for-el">
+                            <div style="width:561px;height:437px;display: table-cell;  vertical-align: middle;" align="center">
+
+                                @{double widthHeightRatio = 561.0 / 437.0;}
+                                @{double imageRatio = Convert.ToDouble(item.ImageWidth) / Convert.ToDouble(item.ImageHeight);}
+
+                                @if (widthHeightRatio > imageRatio)
+                                {
+                                    <img height="437" style="box-shadow: 2px  2px 16px rgba(0, 0, 0, 0.6)" class="glow-img" data-info="@imageName" src="@Url.Content(string.Format("{0}/imgs/zooming/561/437/{1}", @backendBaseURL, @item.Path))" />
+                                }
+                                else
+                                {
+                                    <img width="561"  style="box-shadow: 2px  2px 16px rgba(0, 0, 0, 0.6)" class="glow-img" data-info="@imageName" src="@Url.Content(string.Format("{0}/imgs/zooming/561/437/{1}", @backendBaseURL, @item.Path))" />
+                                }
+                            </div>
+                        </span>
+					}
+				 }
+            </ul>
+
+
+            <ul class="imgintxt2">
+                @if (@ViewBag.DataModel.PicUrlList.Count > 2)
+                {
+                    <li class="arrowl" style="margin-left:-5px;">
+                        <a id="prev" href="javascript:void(0)">
+                            <img src="~/Scripts/inform/images/inform/arrowl.png" width="20" height="27">
+                        </a>
+                    </li>
+                }
+                <li class="slider-nav" style="float:left;margin-left:10px;">
+                    @if (@ViewBag.DataModel.PicUrlList.Count == 3 || @ViewBag.DataModel.PicUrlList.Count == 4)
+                    {
+                        for (var i = 4; i >= @ViewBag.DataModel.PicUrlList.Count; i--)
+                        {
+
+                            foreach (var item in ViewBag.DataModel.PicUrlList)
+                            {
+                                <div class="newglow">
+                                    <div  style="display: table-cell; vertical-align: middle; align:center; width:170px ; height:130px" >
+                                        @{double widthHeightRatio = 172.0 / 124.0;}
+                                        @{double imageRatio = Convert.ToDouble(item.ImageWidth) / Convert.ToDouble(item.ImageHeight);}
+
+                                        @if (widthHeightRatio > imageRatio)
+                                        {
+                                            <img height="124" style="max-width:172px; text-align: center; margin-left: auto; margin-right: auto;" class="newglow-img" src="@Url.Content(string.Format("{0}/imgs/zooming/172/124/{1}", @backendBaseURL, @item.Path))" />
+                                        }
+                                        else
+                                        {
+                                            <img width="172" style="max-height:124px; text-align: center; margin-left: auto; margin-right: auto;" class="newglow-img" src="@Url.Content(string.Format("{0}/imgs/zooming/172/124/{1}", @backendBaseURL, @item.Path))" />
+                                        }
+                                    </div>
+                                </div>
+                                                    }
+                                                }
+                                            }
+                                            else if (@ViewBag.DataModel.PicUrlList.Count <= 2)
+                                            {
+
+                                                foreach (var item in ViewBag.DataModel.PicUrlList)
+                                                {
+                            <div class="newglow">
+                                <div  style="display: table-cell; vertical-align: middle; align:center; width:170px ; height:130px" >
+                                    @{double widthHeightRatio = 172.0 / 124.0;}
+                                    @{double imageRatio = Convert.ToDouble(item.ImageWidth) / Convert.ToDouble(item.ImageHeight);}
+
+                                    @if (widthHeightRatio > imageRatio)
+                                    {
+                                        <img height="124" style="max-width:172px; text-align: center; margin-left: auto; margin-right: auto;" class="newglow-img" src="@Url.Content(string.Format("{0}/imgs/zooming/172/124/{1}", @backendBaseURL, @item.Path))" />
+                                    }
+                                    else
+                                    {
+                                        <img width="172" style="max-height:124px; text-align: center; margin-left: auto; margin-right: auto;" class="newglow-img" src="@Url.Content(string.Format("{0}/imgs/zooming/172/124/{1}", @backendBaseURL, @item.Path))" />
+                                    }
+                                </div>
+                            </div>
+                                            }
+
+                                        }
+                                        else
+                                        {
+                                            foreach (var item in ViewBag.DataModel.PicUrlList)
+                                            {
+                            <div class="newglow">
+                                <div style="display:table-cell; vertical-align: middle; width:170px ; height:130px" align="center">
+                                    @{double widthHeightRatio = 172.0 / 124.0;}
+                                    @{double imageRatio = Convert.ToDouble(item.ImageWidth) / Convert.ToDouble(item.ImageHeight);}
+
+                                    @if (widthHeightRatio > imageRatio)
+                                    {
+                                        <img height="124" style="max-width:172px; text-align: center; margin-left: auto; margin-right: auto;" class="newglow-img" src="@Url.Content(string.Format("{0}/imgs/zooming/172/124/{1}", @backendBaseURL, @item.Path))" />
+                                    }
+                                    else
+                                    {
+                                        <img width="172" style="max-height:124px; text-align: center; margin-left: auto; margin-right: auto;" class="newglow-img" src="@Url.Content(string.Format("{0}/imgs/zooming/172/124/{1}", @backendBaseURL, @item.Path))" />
+                                    }
+                                </div>
+                            </div>
+                                            }
+
+                                        }
+                </li>
+                @if (@ViewBag.DataModel.PicUrlList.Count > 2)
+                {
+                    <div z-index="10" class="arrowl" style="float:right;margin-right:15px;margin-top:-10px">
+                        <a id="next" href="javascript:void(0)">
+                            <img src="~/Scripts/inform/images/inform/arrowr.png" width="20" height="27">
+                        </a>
+                    </div>
+                }
+            </ul>
+
+
+            <ul class="qrcode">
+
+				
+                @*@if (!String.IsNullOrEmpty(ViewBag.DataModel.RelatedLink))
+                {
+                    @Html.GenerateQrCode((string)ViewBag.DataModel.RelatedLink )
+                }*@
+
+              
+               
+                @*<img src="@ViewBag.SchoolDiaryQrCode" width="110" height="110">*@
+
+            </ul>
+        </div>
+        <div id="getDiv" class="gettxt2"><a href="javascript:back()">返回</a></div>
+    </div>
+    <!--右邊選單-->
+    <div class="rightbox">
+        <div class="div2">
+            <section class="main">
+                <div class="wrapper-demo">
+                    <div id="" class="dd wrapper-dropdown-5" tabindex="1" style="z-index:3" ;>
+                        <div class="dd-text" id="yearDropList" data-value="">學年度</div>
+                        <ul class="dropdown">
+                            <li data-value=""><a href="javascript:void(0)">學年度</a></li>
+                            @foreach (var item in ViewBag.SelectYearList)
+                            {
+                                <li data-value="@item.CategoryName"><a href="javascript:void(0)">@item.CategoryName</a></li>
+                            }
+                        </ul>
+                    </div>
+                </div>
+            </section>
+            <section class="main">
+                <div class="wrapper-demo">
+                    <div id="" class="dd wrapper-dropdown-5" tabindex="1" style="z-index:2" ;>
+                        <div id="semDropList" class="dd-text" data-value="">學期</div>
+                        <ul class="dropdown" style="overflow-y:scroll;height:130px" ;>
+                            <li data-value=""><a href="javascript:void(0)">學期</a></li>
+                            @foreach (var item in ViewBag.SelectTermList)
+                            {
+                                <li data-value="@item.CategoryName"><a href="javascript:void(0)">@item.CategoryName</a></li>
+                            }
+                        </ul>
+                    </div>
+                </div>
+            </section>
+        </div>
+        <div>
+            <ul class="menu5">
+                <input style="z-index:999999999999999;" name="textfield" type="text" class="textbox" id="keyWordInput" placeholder="輸入" size="10" maxlength="5">
+            </ul>
+            <ul class="righttitle"><img src="~/Scripts/inform/images/inform/righttitle.png" width="210" height="55"></ul>
+            <ul class="btnright"><a id="submitBtn" href="javascript:void(0)">搜尋</a></ul>
+            <ul class="btnIcon"><a href="@Url.Content("~/SchoolDiary/Index")"></a></ul>
+        </div>
+        <!-- jQuery if needed -->
+        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+        <script type="text/javascript">
+
+            function DropDown(el) {
+                this.dd = el;
+                this.initEvents();
+            }
+            DropDown.prototype = {
+                initEvents: function () {
+                    var obj = this;
+
+                    obj.dd.on('click', function (event) {
+                        $(this).toggleClass('active');
+                        event.stopPropagation();
+                    });
+                }
+            }
+
+            $(function () {
+                var dd = new DropDown($('.dd'));
+                $(document).click(function () {
+                    // all dropdowns
+                    $('.wrapper-dropdown-5').removeClass('active');
+                });
+            });
+
+        </script>
+    </div>
+</div>
+
+@*@using (Html.BeginForm("SearchSchoolDiary", "SchoolDiary", null, FormMethod.Post, new { @id = "submitForm" }))
+{
+   
+    <input type="hidden" id="keywordSearch" name="keywordSearch" />
+    <input type="hidden" id="yearSearch" name="yearSearch" />
+    <input type="hidden" id="semSearch" name="semSearch" />
+}*@

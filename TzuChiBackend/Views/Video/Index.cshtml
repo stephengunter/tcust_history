@@ -1,0 +1,347 @@
+﻿@model TzuChiBackend.ViewModels.VideoSearchForm
+
+@{
+	ViewBag.Title = "影片專區";
+
+}
+
+<style>
+    #select-type{
+     width:350px;   
+    }
+
+    #input-keyword{
+     width:350px;   
+    }
+</style>
+
+<h2>@ViewBag.Title</h2>
+
+
+<div class="form-inline">
+    @using (Html.BeginForm("Index", "Video", null, FormMethod.Post, new {id="form-search", @name = "searchForm" }))
+	{
+		<label class="control-label">分類</label>
+        @Html.DropDownListFor(m => m.CategoryId, Model.CategoryOptions, new { id = "select-type", @class = "form-control" })
+
+
+
+
+
+        <label class="control-label">檢索</label>
+        @Html.TextBoxFor(model => model.KeyWord, new { id = "input-keyword", @class = "form-control", @placeholder = "關鍵字" })
+
+        <input class="btn btn-success" id="btn-search" type="submit" value="搜索">
+	
+		<button id="btn-categories" class="btn btn-info" type="button">分類管理</button>
+
+	}
+</div>
+<div>
+    <label class="control-label">總筆數：(@Model.DataCount)</label>
+    <div class="btn-group">
+        <a id="btn-add" href="@Url.Action("Create")" class="btn btn-primary">
+            新增影片
+
+        </a>
+
+    </div>
+</div>
+
+
+<div style="padding-top:5px;">
+    <table id="table-posts" class="table">
+        <thead>
+            <tr style="background-color:#CCCCCC">
+                <th style="width:15%">
+
+                    
+
+                </th>
+                <th >
+                    標題
+                </th>
+				<th style="width:10%">
+					顯示順序
+					<button id="btn-edit-order" class="btn btn-success  btn-xs" title="存檔">
+						<span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span>
+					</button>
+				</th>
+                
+                
+                <th style="width:15%">
+                    最後更新
+                </th>
+
+
+                <th style="width:15%">
+                    &nbsp;
+                </th>
+            </tr>
+        </thead>
+        @if (Model.DataCount > 0)
+        {
+            <tbody>
+
+                @foreach (var item in Model.PagedViewResults)
+				{
+					
+                    <tr>
+                        <td>
+                            
+                            <img width="120" src="@item.ImageUrl">
+                        </td>
+                        <td> @item.Title </td>
+                        <td> 
+							<input type="hidden" class="post-id" value="@item.Id" />
+							<input class="form-control display-order" value="@item.DisplayOrder" />
+						</td>
+                       
+                        <td> @item.LastUpdate.ToString()</td>
+
+
+
+                        <td>
+
+
+                            <a href="@Url.Action("Edit",new { id=item.Id })" class="btn btn-primary  btn-sm btn-edit-video" title="編輯">
+                                <span class="glyphicon glyphicon-pencil"></span>
+                            </a>
+                            <button data-id="@item.Id" type="button" class="btn btn-danger btn-delete-video btn-sm" title="刪除">
+                                <span class="glyphicon glyphicon-trash"></span>
+                            </button>
+                         
+
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        }
+
+    </table>
+
+
+</div>
+
+
+
+@section Scripts {
+    <script src='@Url.Content("~/Scripts/jquery-ui/jquery-ui.js")'></script>
+    <link href="@Url.Content("~/Scripts/jquery-ui/jquery-ui.css")" rel="stylesheet">
+    <style type="text/css">
+        .auto-style1 {
+            font-size: small;
+        }
+
+        .auto-style2 {
+            text-align: center;
+        }
+
+        .auto-style3 {
+            font-size: small;
+            text-align: center;
+        }
+
+        .auto-style4 {
+            color: #FF6300;
+            font-size: medium;
+        }
+    </style>
+    <script type="text/javascript">
+
+		var dataCount = '@Model.DataCount';
+		function hasData() {
+			return parseInt(dataCount) > 0;
+		}
+
+        function isCategoryActive(sort)
+        {
+            sort = parseInt(sort);
+            return sort >= 0;
+        }
+		function categoryIndex(active) {
+
+            var url = '@Url.Action("Categories","Video")';
+            if (active) active = 1;
+            else active= -1
+            $.ajax({
+                type: "GET",
+                url: url,
+                data: { active },
+                dataType: 'html',
+                async: true,
+                success: function (data) {
+                    ShowCustomModal('影片分類', data)
+                },
+                error: function () {
+                    OnError();
+                }
+			});
+
+			let selected = $('#select-type').val();
+			url = '@Url.Action("CategoryOptions", "Video")';
+			$.ajax({
+				type: "GET",
+				url: url,
+				data: { selected: selected},
+				dataType: 'json',
+				async: true,
+				success: function (data) {
+					let html = '';
+					for (let i = 0; i < data.options.length; i++) {
+						item = data.options[i];
+						html += '<option value="' + item.Value + '" >' + item.Text + '</option>';
+					}
+
+					$('#select-type').html(html);
+
+				},
+				error: function () {
+					OnError();
+				}
+			});
+
+
+
+        }
+        function addCategory() {
+            var url = '@Url.Action("AddCategory","Video")';
+
+            $.ajax({
+                type: "GET",
+                url: url,
+                dataType: 'html',
+                async: true,
+                success: function (data) {
+                    SetCustomModalContent('新增影片分類', data);
+                },
+                error: function () {
+                    OnError();
+                }
+            });
+
+        }
+        function editCategory(id) {
+            var url = '@Url.Action("EditCategory","Video")';
+
+            $.ajax({
+                type: "GET",
+                url: url,
+                data:{id:id},
+                dataType: 'html',
+                async: true,
+                success: function (data) {
+                    SetCustomModalContent('編輯影片分類', data);
+                },
+                error: function () {
+                    OnError();
+                }
+            });
+		}
+
+		
+
+
+        function search() {
+            document.forms["searchForm"].submit();
+        }
+
+        function deleteVideo(id) {
+
+            swal({
+                title: "確定要刪除此影片嗎?",
+                icon: "warning",
+                buttons: true,
+                dangerMode: true,
+            })
+            .then((willDelete) => {
+                if (willDelete) {
+                    removeVideo(id);
+                }
+            });
+        }
+        function removeVideo(id) {
+            var url = '@Url.Action("Remove", "Video")';
+
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: { Id: id },
+                dataType: 'json',
+                success: function (result) {
+                    backToVideoIndex();
+                },
+                error: function () {
+                    OnError();
+                }
+            });
+        }
+
+		function backToVideoIndex() {
+			$('#form-search').submit();
+
+        }
+
+        $(document).ready(function () {
+            $('#select-type').change(function () {
+                search();
+            });
+            $('#btn-categories').click(function (e) {
+                e.preventDefault();
+                categoryIndex(true);
+            });
+
+
+            $(".btn-delete-video").click(function (e) {
+                e.preventDefault();
+                var id = $(this).data('id');
+
+                deleteVideo(id);
+			});
+
+
+
+			if (!hasData()) {
+
+				$('#btn-edit-order').hide();
+			}
+
+			$('#btn-edit-order').click(function (e) {
+				e.preventDefault();
+
+				let posts = [];
+
+				$('#table-posts > tbody  > tr').each(function () {
+					let id = $(this).find("input.post-id").val();
+					let order = $(this).find("input.display-order").val();
+
+					posts.push({
+						ContentID: id,
+						DisplayOrder: order
+					});
+				});
+
+				var url = '@Url.Action("UpdateOrder", "Video")';
+
+                $.ajax({
+                    type: "POST",
+                    url: url,
+                    data: { posts:posts },
+                    dataType: 'json',
+                    success: function (result) {
+						backToVideoIndex();
+                    },
+                    error: function () {
+                        OnError();
+                    }
+                });
+
+			});
+
+
+
+
+
+        });
+    </script>
+}

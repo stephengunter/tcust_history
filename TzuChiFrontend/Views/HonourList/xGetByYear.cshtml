@@ -1,0 +1,465 @@
+﻿@model List<TzuChiClassLibrary.BO.HonourListModel>
+@{
+    ViewBag.Title = "GetByYear";
+    string backend = System.Web.Configuration.WebConfigurationManager.AppSettings["upload.folder.name"];
+    string backendBaseURL = System.Web.Configuration.WebConfigurationManager.AppSettings["website.backend"];
+    
+}
+
+@section styles{
+    <link href="~/Content/slick.css" rel="stylesheet" />
+    <!-- Add fancyBox -->
+    <link rel="stylesheet" href="~/Scripts/fancybox/source/jquery.fancybox.css" type="text/css" media="screen" />
+  
+    <link href="~/Content/reset.css" rel="stylesheet" />
+    <link href="~/Content/tzuchi.css" rel="stylesheet" />
+    <style type="text/css">
+        #keyDiv1 {
+            position: absolute;
+            width: 308px;
+            height: 52px;
+            z-index: 99;
+            left: 1565px;
+            top: 25px;
+        }
+
+        #SliderDiv3 {
+            position: absolute;
+            width: 505px;
+            height: 1080px;
+            z-index: 40;
+            left: 0px;
+            visibility: visible;
+        }
+
+        #UpDiv {
+            position: absolute;
+            width: 70px;
+            height: 36px;
+            z-index: 51;
+            left: 168px;
+            top: 101px;
+        }
+
+        #DownDiv {
+            position: absolute;
+            width: 423px;
+            height: 56px;
+            z-index: 51;
+            left: 0px;
+            bottom: 0px;
+            background-image: url(/images/HonourList/Downdivbk.png);
+        }
+
+        #DailyDiv {
+            position: absolute;
+            width: 1450px;
+            height: 925px;
+            z-index: 30;
+            left: 318px;
+            top: 109px;
+        }
+        .draggable{
+            width:423px !important;
+        }
+        .yearUp1{
+            width:365px!important;
+        }
+        .arrowR{
+
+        }
+
+        video { 
+           width:1210px; 
+           
+           -webkit-background-size:cover; 
+           -moz-background-size:cover; 
+           -o-background-size:cover; 
+           background-size:cover; 
+        }
+
+        h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6{
+  	   font-family:"華康黑體","微軟正黑體";
+        }
+
+        .conversionYear {
+            font-size: 65px;
+            margin: -30px 0px 30px 0px;
+            padding: 50px 0px 0px 39px;
+        }
+
+        .inTxt2 {
+             font-size:22px;
+             line-height:35px;
+        
+        }
+
+    </style>
+}
+
+@section scripts{
+    <script src="~/Scripts/HonourList.js"></script>
+    <script src="~/Scripts/hammer.js-master/hammer.js"></script>
+    <script src="~/Scripts/jquery.hammer.js"></script>
+    <script src="~/Scripts/slick/slick_v_HonorList.js"></script>
+    <!-- Add fancyBox -->
+    <script src="@Url.Content("~/Scripts/fancybox/source/jquery.fancybox.js")"></script>
+   
+    <script>
+
+
+
+    var verticalPic;
+    var userTouchDistance = 0;
+    var picLength;
+
+    $(function (e) {
+        init();
+        arrowHandler();
+      
+
+        slickSlidePanend();
+    });
+
+
+    function init() {
+        verticalPic = $('.verticalPic');
+        picLength = $('div[class*="DailyNew"]').not(".slick-cloned").length;
+        slickHandler();
+
+        initView();
+
+        closeBackFrontPage();
+    }
+
+    function slickSlidePanend() {
+        if (picLength > 2)
+            $(".slick-slide").hammer().bind("panend", function (e) {
+                console.log(e.gesture.deltaY);
+                userTouchDistance = e.gesture.deltaY;
+
+               
+
+            });
+    }
+
+
+    function slickHandler() {
+        verticalPic.slick({
+            dots: false,
+            slidesToScroll: 2,
+            arrows: false,
+            centerMode: false,
+            dots: false,
+            vertical: true,
+            slidesToShow: 2,
+            infinite: true,
+            draggable: true,
+            onAfterChange: focusPicAndChangeContent,
+            swipe: true,
+            swipeToSlide: true,
+            touchMove: true,
+            variableWidth: true
+        });
+    }
+
+    function focusPicAndChangeContent(e) {
+        
+
+        var index = verticalPic.slickCurrentSlide();
+        index = parseInt(index, 10);
+        focusPic(index);
+        var className = "DailyNew" + index;
+        var contentID = $("." + className).not('div[class*=cloned]').attr("id");
+        getByContentID('@Url.Action("GetByContentID", "HonourList")', contentID);
+    }
+
+    function initView() {
+        var index = $("div[id='@ViewBag.contentID']")[0].className.split(" ")[0].replace("DailyNew", "");
+        index = parseInt(index, 10);
+
+        if (picLength > 2) {
+            verticalPic.slickGoTo(index);
+        } else {
+            focusPic(index);
+            getByContentID('@Url.Action("GetByContentID", "HonourList")', '@ViewBag.contentID');
+        }
+    }
+
+    function dailyNewClickHandler(id, terget) {
+        var index = terget.className.split(" ")[0].replace("DailyNew", "");
+        if (picLength > 2) {
+            verticalPic.slickGoTo(verticalPic.slickCurrentSlide() + 1);
+        } else {
+            focusPic(index);
+            var className = "DailyNew" + index;
+            var contentID = $("." + className).not('div[class*=cloned]').attr("id");
+            getByContentID('@Url.Action("GetByContentID", "HonourList")', contentID);
+        }
+    }
+
+    function focusPic(index) {
+        //var orgOpacity = $('.DailyNew' + index).css("opacity");
+        var orgOpacity = 0.600000023841858;
+        $('div[class*="DailyNew"]').css("opacity", orgOpacity);
+        $('.DailyNew' + index).css("opacity", 1);
+    }
+
+    function arrowHandler() {
+        $('.arrowU, .arrowD').click(function () {
+            if (picLength == 2) {
+                var $twoPic = $('div[class*="DailyNew"]');
+                var index = $twoPic.last().attr("class").substring(8, 9);
+                focusPic(index);
+                getByContentID('@Url.Action("GetByContentID", "HonourList")', $('.DailyNew' + index).attr("id"));
+                $twoPic.first().replaceWith($twoPic.last().clone());
+                $twoPic.last().replaceWith($twoPic.first().clone());
+            } else {
+                var index = parseInt(verticalPic.slickCurrentSlide(), 10);
+                var lastIndex = picLength -1;
+                console.log("目前index:" + index + "  " + "最後index:" + lastIndex);
+
+                switch(index){
+                    case 0 :
+                        $(this).attr('class') === 'arrowU' ? verticalPic.slickGoTo(lastIndex) : verticalPic.slickGoTo(1);
+                        break;
+                    case lastIndex :
+                        $(this).attr('class') === 'arrowU' ? verticalPic.slickGoTo(index - 1) : verticalPic.slickGoTo(0);
+                        break;
+                    default:
+                        $(this).attr('class') == 'arrowU' ? verticalPic.slickGoTo(index - 1) : verticalPic.slickGoTo(index + 1);
+                        break;
+                }
+                
+                console.log("改變過後index:" + verticalPic.slickCurrentSlide());
+            }
+        });
+    }
+
+    function nextOrPrev(arrowClass ,index){
+        arrowClass === 'arrowU' ? verticalPic.slickGoTo(index - 1) : verticalPic.slickGoTo(index + 1);
+    }
+
+    function closeBackFrontPage() {
+        $('.WINclose').click(function () {
+            var moveTo = $('.DailyTitle').html();
+            window.location = '@Url.Action("GetForFrontPage", "HonourList")?moveTo=' + moveTo;
+        });
+    }
+
+    function getByContentID(url, contentID) {
+
+        jQuery.ajax({
+            url: url,
+            type: "POST",
+            async: false,
+            cache: false,
+            data: { "contentID": contentID },
+            dataType: "json"
+        }).success(function (json) {
+            if (json != null)
+                HonourListDetailHandler(json);
+        });
+    }
+
+    function HonourListDetailHandler(json) {
+       
+        $('.inTxt1').html(json.ContentName);
+       
+        var content = '';
+        if (json.Author)
+        {
+            content +='<p>' + json.Author + '<p>';
+        }
+
+        content += json.ContentText;
+        $('.inTxt2').html(content);
+
+        var picUrlLenght = Object.keys(json.PicUrlList).length;
+        var videoUrlListLenght = Object.keys(json.VideoUrlList).length;
+        var element = "";
+        var videos = new Array();
+        for (var i = 0 ; i < videoUrlListLenght ; i++) {
+
+            element += '<li class="inTxtimg"><a href="#divForm' + i + '" class="fancybox" >' +
+                        '<img src="@backendBaseURL/imgs/zoom/220/135/' + json.VideoUrlList[i].PreviewPath + '" width="220" height="135" style="position: relative;"/>' +
+                        '<img src="/images/HonourList/video_cover_220_135.png" width="220" height="135"  style="position: relative ;z-index: 99; margin-top: -145px;"/>' +
+                        '<div id="divForm' + i + '" style="display:none">' +
+                        '<video controls poster="/Images/HonourList/blank.png' +
+                            '"   style="width:1200px ;background:transparent url(@backend' + json.VideoUrlList[i].PreviewPath + ') no-repeat 0 0; background-size:1210px auto;">' +
+                                '<source src="@backend' + json.VideoUrlList[i].Path + '">' +
+                'Your browser does not support HTML5 video </video></div></a></li>';
+        }
+
+        for (var i = 0 ; i < picUrlLenght ; i++) {
+            var displayStr = "";
+            var widthHeightRatio = 220 / 135;
+            var imageRatio = json.PicUrlList[i].ImageWidth / json.PicUrlList[i].ImageHeight;
+
+            if (widthHeightRatio > imageRatio){
+                displayStr = ' height="135" style="max-width:220px; text-align: center; margin-left: auto; margin-right: auto;" ';
+            }else{
+                displayStr = ' width="220" style="max-height:135px; text-align: center;" ';
+            }
+
+            //var pattern = new RegExp('.jpg', 'gi');
+            //var title = json.PicUrlList[i].FileName.replace(pattern, '');
+                
+            var title = '';
+            element += '<li class="inTxtimg">' +
+                    '<a href="@backend/' + json.PicUrlList[i].Path + '" class="fancybox" data-fancybox-group="gallery" title="' + title + '">' +
+                    '<div style="text-align:center; width:200px; height:135px;" >' +
+                    '<img src="@backend/' + json.PicUrlList[i].Path + '" ' + displayStr + '/></div></a></li>';
+        }
+
+        videos = document.getElementsByTagName('video');
+        for (var i = 0; i < videos.length ; i++) {
+            (function (n) {
+                videos[n].pause();
+                videos[n].childNodes[0].src = '';
+                videos[n].load();
+            })(i);
+        }
+
+        $('.inTxtR').html(element);
+
+        fancyboxHandler();
+    }
+
+    function removeVideo(element, index, array) {
+
+        console.log(element);
+
+    }
+
+    function fancyboxHandler() {
+        $(".fancybox").fancybox({
+            closeClick: false,
+            openEffect: 'none',
+            //minWidth: 1210,
+            //maxWidth: 1210,
+            scrolling: 'no',
+            closeEffect: 'none'
+        });
+    }
+
+
+
+    </script>
+}
+
+
+    <!--關鍵字-->
+<div id="keyDiv1">
+    @Html.Partial("_SearchPartial") 
+</div>
+
+@if (Model.Count > 2) {
+    <div id="UpDiv"><ul class="arrowU"><a href="#"></a></ul></div>
+    <div id="DownDiv"><ul class="arrowD"><a href="#"></a></ul></div>
+}
+
+
+<!--主畫面-->
+
+<div class="wbox">
+    <div id="SliderDiv3">
+        <div class="DailyDiv" style="overflow:hidden;">
+            @{
+                string conversionYear = "3000";
+                bool isConversionYear = false;
+                if (conversionYear.Equals(Request.QueryString["year"]))
+                {
+                    isConversionYear = true;
+                }
+            }
+            <div class="DailyTitle @(isConversionYear ? "conversionYear" : "")">@(isConversionYear ? "創校榮譽榜" : Request.QueryString["year"])</div>
+            @*
+                特效說明:
+                聚焦的新聞內文ul當下class為DailyUp3，div沒有style，且沒有向右箭頭(以下)。
+                <ul class="yearUp2"><li class="arrowUp"><a href="#"></a></li></ul>
+                失焦的新聞內文ul當下class為yearUp1，div的style="color:#000000; opacity:0.6;。
+            *@
+
+            <div class="verticalPic" id="container">
+            @foreach (TzuChiClassLibrary.BO.HonourListModel honourModel in Model)
+            {
+                string monthDay = @honourModel.ContentTime.ToString("MM.dd", System.Globalization.CultureInfo.InvariantCulture);
+                string imgPath = string.Empty;
+
+                
+                
+                <!--新聞內文樣式@(Model.IndexOf(honourModel))-->
+                <div class="DailyNew@(Model.IndexOf(honourModel))" onclick="dailyNewClickHandler(this.id ,this)"  id="@honourModel.ContentID" style="color:#000000; opacity:0.6;">
+                    <ul class="yearUp1"><li class="yearUp1txt">@(isConversionYear ? "" : monthDay)</li></ul>
+                    <ul class="yearUp2"><li class="arrowUp"><a href="#"></a></li></ul>
+
+                 
+                    @if (@honourModel.PicUrlList.Count > 0)
+                    {
+                        <ul class="NewImg" style="display:table-cell;  vertical-align: middle; float:none; " >
+                            @{double widthHeightRatio = 423.0 / 260.0;}
+                            @{double imageRatio = Convert.ToDouble(honourModel.PicUrlList[0].ImageWidth) / Convert.ToDouble(honourModel.PicUrlList[0].ImageHeight);}
+
+                            @if (widthHeightRatio > imageRatio)
+                            {
+                                <img height="260" style="max-width:423px; text-align: center; margin-left: auto; margin-right: auto;" src="@Url.Content(string.Format("{0}/{1}", backend, honourModel.PicUrlList[0].Path))">
+                            }
+                            else
+                            {
+                                <img width="423" style="max-height:260px; text-align: center;" src="@Url.Content(string.Format("{0}/{1}", backend, honourModel.PicUrlList[0].Path))">
+                            }
+                        </ul>
+                    }
+                    else
+                    {
+                        <ul class="NewImg"></ul>
+                    }
+
+                    <ul class="Newbk">
+                        <li class="Newtxt">
+                            @honourModel.ContentName
+                        </li>
+                    </ul>
+                </div>
+            }
+            </div>
+                <!--yearDiv End-->
+        </div>
+    </div>
+    <!--Daily Start-->
+    <div id="DailyDiv" class="WINglow">
+        <div>
+            <ul class="WINTitle">活動日誌</ul>
+            <ul class="WINTitle2">照片紀錄</ul>
+            <ul class="WINTitle3"><li class="WINclose"><a href="#"></a></li></ul>
+        </div>
+        <div class="WINin1">
+            <ul class="inTxtL">
+                <li class="inTxt1"></li>
+                <li class="inTxt2">
+                    </li>
+                <li></li>
+            </ul>
+        </div>
+        <div class="WINin2">
+            <ul class="inTxtR">
+                @*<a class="fancybox" href="@item.Path" data-fancybox-group="gallery" title="@item.Name">
+                    <img src="@item.Path" style="width:210px;padding-top:5px">
+                </a>*@
+
+
+                @*<li class="inTxtimg"><a href="#"><img src="images/news/news1.jpg" width="220" height="135"></a></li>
+                <li class="inTxtimg"><a href="#"><img src="images/news/news1.jpg" width="220" height="135"></a></li>
+                <li class="inTxtimg"><a href="#"><img src="images/news/news1.jpg" width="220" height="135"></a></li>
+                <li class="inTxtimg"><a href="#"><img src="images/news/news1.jpg" width="220" height="135"></a></li>
+                <li class="inTxtimg"><a href="#"><img src="images/news/news1.jpg" width="220" height="135"></a></li>
+                <li class="inTxtimg"><a href="#"><img src="images/news/news1.jpg" width="220" height="135"></a></li>
+                <li class="inTxtimg"><a href="#"><img src="images/news/news1.jpg" width="220" height="135"></a></li>
+                <li class="inTxtimg"><a href="#"><img src="images/news/news1.jpg" width="220" height="135"></a></li>*@
+            </ul>
+        </div>
+    </div>
+    <!--主畫面 End-->
+</div>
+

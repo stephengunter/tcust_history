@@ -1,0 +1,35 @@
+﻿@{
+    ViewBag.Title = "ScrollSearchSchoolDiary";
+}
+
+@section scripts {
+    <script>
+    $(function () {
+        console.log('term' + '@Model.Term');
+        console.log('year' + '@Model.Year');
+        console.log('keyword' + '@Model.KeyWord');
+    });
+    </script>
+
+}
+
+@if (ViewBag.DataModel.Count > 0)
+{
+    foreach (var item in ViewBag.DataModel)
+    {
+        int maxWordlength = 48; //不破版上限字38;
+        var splitChar = "";
+
+        for (int i = 0; i < maxWordlength - item.ContentName.Length; i++)
+        {
+            splitChar += "..";
+        }        
+        <ul class="Search">
+            <span class="Seartxt"><a href="@Url.Content("~/SchoolDiary/GetSchoolDiaryByContentID/" + item.ContentID)">@string.Format("{0:yyyy.MM.dd}", item.ContentTime) @splitChar@item.ContentName</a></span>
+        </ul>
+    }
+}
+
+
+
+

@@ -1,0 +1,150 @@
+﻿@{
+    String video = "video.folder.Mental.Video";
+    String img = "video.folder.Mental.Img";
+    string frontendRoot = System.Web.Configuration.WebConfigurationManager.AppSettings["website.frontend"];
+}
+@*<script type="text/javascript">
+    $(document).ready(function () {
+        if ($('#videobtn').length !== 0) {
+            $('#videobtn').click(function () {
+                $('#MvDiv').show();
+                $('#MvDiv1').show();
+            });
+        }
+        $('body').css('top', -(document.documentElement.scrollTop) + 'px').addClass('noscroll');
+        //翻頁特效
+        $('.flipbook').turn({
+            page: 2,
+            width: 1500,
+            height: 905,
+            elevation: 0,
+            gradients: true,
+            autoCenter: false,
+            when: {
+                start: function (event, pageObject, corner) {
+                    if (pageObject.next == 1)
+                        event.preventDefault();
+                },
+                turning: function (event, page, view) {
+                    if (page == 1)
+                        event.preventDefault();
+                }
+            }
+        });
+    });
+</script>*@
+<script type="text/javascript" src="@frontendRoot/Scripts/book/swfobject.js"></script>
+<script type="text/javascript">
+    // For version detection, set to min. required Flash Player version, or 0 (or 0.0.0), for no version detection.
+    var swfVersionStr = "15.0.0";
+    // To use express install, set to playerProductInstall.swf, otherwise the empty string.
+    var xiSwfUrlStr = "@frontendRoot/Scripts/book/playerProductInstall.swf";
+    var flashvars = { bookXml: "@frontendRoot/Scripts/book/book_culture_book10.xml" };
+    var params = {};
+    params.quality = "high";
+    params.bgcolor = "#111111";
+    params.allowscriptaccess = "sameDomain";
+    params.allowfullscreen = "true";
+    params.wmode = "transparent";
+    var attributes = {};
+    attributes.id = "TzuChiBook";
+    attributes.name = "TzuChiBook";
+    attributes.align = "middle";
+    swfobject.embedSWF(
+        "@frontendRoot/Scripts/book/TzuChiBook.swf", "flashContent",
+        "1629", "1000",
+        swfVersionStr, xiSwfUrlStr,
+        flashvars, params, attributes);
+    // JavaScript enabled so display the flashContent div in case it is not replaced with a swf object.
+    swfobject.createCSS("#flashContent", "display:block;text-align:left;");
+</script>
+
+<div id="bookDiv" class="bookbk">
+    <!-- 翻頁特效區域 -->
+    @*<div class="flipbook" style="left:36px;top:24px;">
+        <!-- 為了一開始顯示兩頁,這裡放一個空DIV -->
+        <div></div>
+        <!-- 以下放入各個頁面 -->
+        <div style="background-image:url(/Images/Humanistic/book3/page09.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book3/page10.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book3/page11.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book3/page12.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book3/page13.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book3/page14.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book3/page15.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book3/page16.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book3/page17.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book3/page18.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book3/page19.jpg)" width="750" height="905"></div>
+        <div style="background-image:url(/Images/Humanistic/book3/page20.jpg)" width="750" height="905"></div>
+    </div>*@
+    <div id="flashContent">
+        <p>
+            To view this page ensure that Adobe Flash Player version
+            15.0.0 or greater is installed.
+        </p>
+        <script type="text/javascript">
+            var pageHost = ((document.location.protocol == "https:") ? "https://" : "http://");
+            document.write("<a href='http://www.adobe.com/go/getflashplayer'><img src='"
+                            + pageHost + "www.adobe.com/images/shared/download_buttons/get_flash_player.gif' alt='Get Adobe Flash player' /></a>");
+        </script>
+    </div>
+
+    <noscript>
+        <object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" width="1629" height="1000" id="TzuChiBook">
+            <param name="movie" value="@frontendRoot/Scripts/book/TzuChiBook.swf" />
+            <param name="quality" value="high" />
+            <param name="bgcolor" value="#111111" />
+            <param name="allowScriptAccess" value="sameDomain" />
+            <param name="allowFullScreen" value="true" />
+            <param name="wmode" value="transparent" />
+            <param name=FlashVars value="bookXml=@frontendRoot/Scripts/book/book_culture_book10.xml" />
+            <!--[if !IE]>-->
+            <object type="application/x-shockwave-flash" data="@frontendRoot/Scripts/book/TzuChiBook.swf" width="1629" height="1000">
+                <param name="quality" value="high" />
+                <param name="bgcolor" value="#111111" />
+                <param name="allowScriptAccess" value="sameDomain" />
+                <param name="allowFullScreen" value="true" />
+                <param name="wmode" value="transparent" />
+                <param name=FlashVars value="bookXml=@frontendRoot/Scripts/book/book_culture_book10.xml" />
+                <!--<![endif]-->
+                <!--[if gte IE 6]>-->
+                <p>
+                    Either scripts and active content are not permitted to run or Adobe Flash Player version
+                    15.0.0 or greater is not installed.
+                </p>
+                <!--<![endif]-->
+                <a href="http://www.adobe.com/go/getflashplayer">
+                    <img src="http://www.adobe.com/images/shared/download_buttons/get_flash_player.gif" alt="Get Adobe Flash Player" />
+                </a>
+                <!--[if !IE]>-->
+            </object>
+            <!--<![endif]-->
+        </object>
+    </noscript>     
+</div>
+
+<!--上方主選單 Start-->
+<div class="cont3Div">
+    <div class="cbtnmenu">
+        <div style="float:left;display:block;width:220px; height:50px;">
+            <ul class="cbtn1"><a href="@Url.Action("BookPage", "Humanistic", new { path = "MentalPartial/_NoWordsPartial", videoKey = video, imgKey = img })">無語示教</a></ul><ul class="cbtnline"><img src="/Images/Humanistic/cbtnline4.png" width="220" height="5"></ul>
+        </div>
+        <div style="float:left;display:block;width:220px; height:50px;">
+            <ul class="cbtn1"><a href="@Url.Action("BookPage", "Humanistic", new { path = "MentalPartial/_TechnicalEduPartial", videoKey = video, imgKey = img })">技職唯一</a></ul><ul class="cbtnline"><img src="/Images/Humanistic/cbtnline2.png" width="220" height="5"></ul>
+        </div>
+        <div style="float:left;display:block;width:220px; height:50px;">
+            <ul class="cbtn1D">大愛長存</ul><ul class="cbtnline"><img src="/Images/Humanistic/cbtnline2D.png" width="220" height="5"></ul>
+        </div>
+        <div style="float:left;display:block;width:220px; height:50px;">
+            <ul class="cbtn1"><a href="@Url.Action("BookPage", "Humanistic", new { path = "MentalPartial/_StudentPartial", videoKey = video, imgKey = img })">學子感恩</a></ul><ul class="cbtnline"><img src="/Images/Humanistic/cbtnline5.png" width="250" height="5"></ul>
+        </div>
+        <!--影片按鈕-->
+        @if (ViewBag.Video != null && ViewBag.Video.Count != 0)
+        {
+            <div style="float:left;display:block;width:280px; height:50px;"></div>
+            <div id="videobtn" class="btn" style="float:left;display:block;width:100px; height:50px;"><a href="#"><img src="/Images/Humanistic/btn3.png" width="56" height="56" border="0"></a></div>
+        }
+    </div>
+</div>
+<!--上方主選單 End-->

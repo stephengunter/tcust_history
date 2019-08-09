@@ -1,0 +1,227 @@
+﻿@{
+    String video = "video.folder.HumanisticCourse.Video";
+    String img = "video.folder.HumanisticCourse.Img";
+}
+<script type="text/javascript">
+    $(document).ready(function () {
+        if ($('#videobtn').length !== 0) {
+            $('#videobtn').click(function () {
+                $('#MvDiv').show();
+                $('#MvDiv1').show();
+            });
+        }
+        $('#bookDiv').slick({
+            //prevArrow: $('.arrowL'),
+            //nextArrow: $('.arrowR'),
+            centerMode: true,
+            slidesToShow: 1,
+            centerPadding: '300px',
+            touchThreshold: 100,
+            infinite: false,
+            onAfterChange:adjustShadow,
+            onInit:adjustShadow
+        });
+    });
+</script>
+<style>
+
+    .slick-slide:not(.slick-center){
+        -webkit-transform: scale(0.8);
+        transform: scale(0.8);
+        opacity:0.5;
+    }
+    .slick-center{
+        -webkit-transform: scale(1);
+        transform: scale(1);
+        opacity:1;
+    }
+    #bookDiv {
+        margin-top: 100px;
+	height:800px;
+    }
+</style>
+
+@*<div class="arrowL" style="left:80px;position:absolute"><a href="#"></a></div>*@
+<div id="bookDiv">
+        <!--slider Strat-->
+    <div><img src="~/Images/Humanistic/book2/ServiceLearningSlideshow/slide1.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book2/ServiceLearningSlideshow/slide2.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book2/ServiceLearningSlideshow/slide3.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book2/ServiceLearningSlideshow/slide4.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book2/ServiceLearningSlideshow/slide5.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book2/ServiceLearningSlideshow/slide6.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book2/ServiceLearningSlideshow/slide7.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book2/ServiceLearningSlideshow/slide8.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book2/ServiceLearningSlideshow/slide9.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book2/ServiceLearningSlideshow/slide10.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book2/ServiceLearningSlideshow/slide11.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book2/ServiceLearningSlideshow/slide12.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book2/ServiceLearningSlideshow/slide13.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book2/ServiceLearningSlideshow/slide14.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book2/ServiceLearningSlideshow/slide15.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book2/ServiceLearningSlideshow/slide16.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book2/ServiceLearningSlideshow/slide17.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book2/ServiceLearningSlideshow/slide18.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book2/ServiceLearningSlideshow/slide19.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book2/ServiceLearningSlideshow/slide20.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book2/ServiceLearningSlideshow/slide21.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book2/ServiceLearningSlideshow/slide22.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book2/ServiceLearningSlideshow/slide23.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book2/ServiceLearningSlideshow/slide24.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book2/ServiceLearningSlideshow/slide25.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book2/ServiceLearningSlideshow/slide26.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book2/ServiceLearningSlideshow/slide27.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book2/ServiceLearningSlideshow/slide28.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book2/ServiceLearningSlideshow/slide29.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book2/ServiceLearningSlideshow/slide30.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book2/ServiceLearningSlideshow/slide31.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book2/ServiceLearningSlideshow/slide32.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book2/ServiceLearningSlideshow/slide33.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book2/ServiceLearningSlideshow/slide34.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book2/ServiceLearningSlideshow/slide35.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book2/ServiceLearningSlideshow/slide36.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book2/ServiceLearningSlideshow/slide37.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book2/ServiceLearningSlideshow/slide38.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book2/ServiceLearningSlideshow/slide39.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book2/ServiceLearningSlideshow/slide40.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book2/ServiceLearningSlideshow/slide41.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book2/ServiceLearningSlideshow/slide42.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book2/ServiceLearningSlideshow/slide43.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book2/ServiceLearningSlideshow/slide44.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book2/ServiceLearningSlideshow/slide45.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book2/ServiceLearningSlideshow/slide46.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book2/ServiceLearningSlideshow/slide47.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book2/ServiceLearningSlideshow/slide48.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book2/ServiceLearningSlideshow/slide49.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book2/ServiceLearningSlideshow/slide50.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book2/ServiceLearningSlideshow/slide51.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book2/ServiceLearningSlideshow/slide52.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book2/ServiceLearningSlideshow/slide53.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book2/ServiceLearningSlideshow/slide54.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book2/ServiceLearningSlideshow/slide55.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book2/ServiceLearningSlideshow/slide56.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book2/ServiceLearningSlideshow/slide57.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book2/ServiceLearningSlideshow/slide58.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book2/ServiceLearningSlideshow/slide59.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book2/ServiceLearningSlideshow/slide60.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book2/ServiceLearningSlideshow/slide61.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book2/ServiceLearningSlideshow/slide62.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book2/ServiceLearningSlideshow/slide63.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book2/ServiceLearningSlideshow/slide64.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book2/ServiceLearningSlideshow/slide65.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book2/ServiceLearningSlideshow/slide66.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book2/ServiceLearningSlideshow/slide67.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book2/ServiceLearningSlideshow/slide68.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book2/ServiceLearningSlideshow/slide69.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book2/ServiceLearningSlideshow/slide70.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book2/ServiceLearningSlideshow/slide71.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book2/ServiceLearningSlideshow/slide72.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book2/ServiceLearningSlideshow/slide73.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book2/ServiceLearningSlideshow/slide74.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book2/ServiceLearningSlideshow/slide75.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book2/ServiceLearningSlideshow/slide76.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book2/ServiceLearningSlideshow/slide77.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book2/ServiceLearningSlideshow/slide78.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book2/ServiceLearningSlideshow/slide79.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book2/ServiceLearningSlideshow/slide80.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book2/ServiceLearningSlideshow/slide81.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book2/ServiceLearningSlideshow/slide82.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book2/ServiceLearningSlideshow/slide83.jpg" width="950" height="635"></div>
+
+    <div><img src="~/Images/Humanistic/book2/ServiceLearningSlideshow/slide84.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book2/ServiceLearningSlideshow/slide85.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book2/ServiceLearningSlideshow/slide86.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book2/ServiceLearningSlideshow/slide87.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book2/ServiceLearningSlideshow/slide88.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book2/ServiceLearningSlideshow/slide89.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book2/ServiceLearningSlideshow/slide90.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book2/ServiceLearningSlideshow/slide91.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book2/ServiceLearningSlideshow/slide92.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book2/ServiceLearningSlideshow/slide93.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book2/ServiceLearningSlideshow/slide94.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book2/ServiceLearningSlideshow/slide95.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book2/ServiceLearningSlideshow/slide96.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book2/ServiceLearningSlideshow/slide97.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book2/ServiceLearningSlideshow/slide98.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book2/ServiceLearningSlideshow/slide99.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book2/ServiceLearningSlideshow/slide100.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book2/ServiceLearningSlideshow/slide101.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book2/ServiceLearningSlideshow/slide102.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book2/ServiceLearningSlideshow/slide103.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book2/ServiceLearningSlideshow/slide104.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book2/ServiceLearningSlideshow/slide105.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book2/ServiceLearningSlideshow/slide106.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book2/ServiceLearningSlideshow/slide107.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book2/ServiceLearningSlideshow/slide108.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book2/ServiceLearningSlideshow/slide109.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book2/ServiceLearningSlideshow/slide110.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book2/ServiceLearningSlideshow/slide111.jpg" width="950" height="635"></div>
+
+    <div><img src="~/Images/Humanistic/book2/ServiceLearningSlideshow/slide112.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book2/ServiceLearningSlideshow/slide113.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book2/ServiceLearningSlideshow/slide114.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book2/ServiceLearningSlideshow/slide115.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book2/ServiceLearningSlideshow/slide116.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book2/ServiceLearningSlideshow/slide117.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book2/ServiceLearningSlideshow/slide118.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book2/ServiceLearningSlideshow/slide119.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book2/ServiceLearningSlideshow/slide120.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book2/ServiceLearningSlideshow/slide121.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book2/ServiceLearningSlideshow/slide122.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book2/ServiceLearningSlideshow/slide123.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book2/ServiceLearningSlideshow/slide124.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book2/ServiceLearningSlideshow/slide125.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book2/ServiceLearningSlideshow/slide126.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book2/ServiceLearningSlideshow/slide127.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book2/ServiceLearningSlideshow/slide128.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book2/ServiceLearningSlideshow/slide129.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book2/ServiceLearningSlideshow/slide130.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book2/ServiceLearningSlideshow/slide131.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book2/ServiceLearningSlideshow/slide132.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book2/ServiceLearningSlideshow/slide133.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book2/ServiceLearningSlideshow/slide134.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book2/ServiceLearningSlideshow/slide135.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book2/ServiceLearningSlideshow/slide136.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book2/ServiceLearningSlideshow/slide137.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book2/ServiceLearningSlideshow/slide138.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book2/ServiceLearningSlideshow/slide139.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book2/ServiceLearningSlideshow/slide140.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book2/ServiceLearningSlideshow/slide141.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book2/ServiceLearningSlideshow/slide142.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book2/ServiceLearningSlideshow/slide143.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book2/ServiceLearningSlideshow/slide144.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book2/ServiceLearningSlideshow/slide145.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book2/ServiceLearningSlideshow/slide146.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book2/ServiceLearningSlideshow/slide147.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book2/ServiceLearningSlideshow/slide148.jpg" width="950" height="635"></div>
+        <!--slider End-->
+</div>
+@*<div class="arrowR" style="right:260px;position:absolute"><a href="#"></a></div>*@
+  
+    <!--上方主選單 Start-->
+    <div class="cont2Div">
+        <div class="cbtnmenu">
+            <div style="float:left;display:block;width:220px; height:50px;">
+                <ul class="cbtn1"><a href="@Url.Action("BookPage", "Humanistic", new { path = "HumanisticCoursePartial/_PioneerPartial", videoKey = video, imgKey = img })">慈濟首創</a></ul><ul class="cbtnline"><img src="/Images/Humanistic/cbtnline4.png" width="220" height="5"></ul>
+            </div>
+            <div style="float:left;display:block;width:220px; height:50px;">
+                <ul class="cbtn1"><a href="@Url.Action("BookPage", "Humanistic", new { path = "HumanisticCoursePartial/_CourseListPartial", videoKey = video, imgKey = img })">課表清單</a></ul><ul class="cbtnline"><img src="/Images/Humanistic/cbtnline2.png" width="220" height="5"></ul>
+            </div>
+            <div style="float:left;display:block;width:220px; height:50px;">
+                <ul class="cbtn1"><a href="@Url.Action("BookPage", "Humanistic", new { path = "HumanisticCoursePartial/_VolunteerPartial", videoKey = video, imgKey = img })">志工服務</a></ul><ul class="cbtnline"><img src="/Images/Humanistic/cbtnline2.png" width="220" height="5"></ul>
+            </div>
+            <div style="float:left;display:block;width:220px; height:50px;"><ul class="cbtn1D">服務學習</ul><ul class="cbtnline"><img src="/Images/Humanistic/cbtnline2D.png" width="220" height="5"></ul></div>
+            <div style="float:left;display:block;width:220px; height:50px;">
+                <ul class="cbtn1">
+                    <a href="@Url.Action("BookPage", "Humanistic", new { path = "HumanisticCoursePartial/_EnvironmentEduPartial", videoKey = video, imgKey = img })">環境教育</a>
+                </ul><ul class="cbtnline"><img src="/Images/Humanistic/cbtnline5.png" width="280" height="5"></ul>
+            </div>
+            <!--影片按鈕-->
+            @if (ViewBag.Video != null && ViewBag.Video.Count != 0)
+            {
+                <div style="float:left;display:block;width:280px; height:50px;"></div>
+                <div id="videobtn" class="btn" style="float:left;display:block;width:100px; height:50px;"><a href="#"><img src="/Images/Humanistic/btn3.png" width="56" height="56" border="0"></a></div>
+            }
+        </div>
+    </div>
+    <!--上方主選單 End-->

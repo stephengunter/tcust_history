@@ -1,0 +1,14 @@
+﻿@using (Html.BeginForm("SearchByKeyWord", "HonourList", FormMethod.Post, new { @name = "searchFrom" }))
+{
+    var placeStr = String.IsNullOrEmpty(@Request.Params["textfield"]) ? "關鍵字" : @Request.Params["textfield"];
+    
+    <ul class="menu5">
+        <input name="textfield" type="text" class="menu5" id="textfield" value="" placeholder="@placeStr" size="10">
+        <input name="nextPage" type="hidden" value="1">
+    </ul>
+    <ul class="btnright">
+        <a href="#" id="search">
+            搜尋
+        </a>
+    </ul>
+}

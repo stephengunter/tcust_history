@@ -1,0 +1,75 @@
+﻿<div class="swiper-slide">
+	<div id="SliderDiv@(Model.IndexOf(eachYearList) + 1)">
+		<div class="yearDiv" style="overflow:hidden;">
+
+			@{
+				int conversionYear = 3000;
+				bool isConversionYear = false;
+				if (eachYearList[0].ContentTime.Year == conversionYear)
+				{
+					isConversionYear = true;
+				}
+			}
+			<div class="yearTitle">@(isConversionYear ? "創校榮譽榜" : eachYearList[0].ContentTime.Year.ToString())</div>
+
+
+
+                                            @{int eventCount = @eachYearList.Count > 2 ? 2 : @eachYearList.Count;}
+
+                                            @for (var i = 0; i < eventCount; i++)
+                                            {
+                                                string monthDay = @eachYearList[i].ContentTime.ToString("MM.dd", System.Globalization.CultureInfo.InvariantCulture);
+                                                string imgPath = string.Empty;
+
+                                                <!--新聞內文樣式@(eachYearList.IndexOf(eachYearList[i]) + 1)-->
+			<div class="yearNew1" onclick="getByYear(@eachYearList[i].ContentTime.Year, '@eachYearList[i].ContentID')">
+				<ul class="yearUp1"><li class="yearUp1txt">@(isConversionYear ? "" : monthDay)</li></ul>
+				<ul class="yearUp2"><li class="arrowUp"><a href="#"></a></li></ul>
+
+				@if (@eachYearList[i].PicUrlList.Count > 0)
+				{
+					<ul class="NewImg" style="width:423px;height:260px;display: table-cell;  vertical-align: middle; float:none;" align="center">
+						@{double widthHeightRatio = 423.0 / 260.0;}
+						@{double imageRatio = Convert.ToDouble(eachYearList[i].PicUrlList[0].ImageWidth) / Convert.ToDouble(eachYearList[i].PicUrlList[0].ImageHeight);}
+
+						@if (widthHeightRatio > imageRatio)
+						{
+							<img height="260" style="max-width:423px; text-align: center; margin-left: auto; margin-right: auto;" src="@Url.Content(string.Format("{0}/{1}", backend, eachYearList[i].PicUrlList[0].Path))">
+						}
+						else
+						{
+							<img width="423" style="max-height:260px; text-align: center;" src="@Url.Content(string.Format("{0}/{1}", backend, eachYearList[i].PicUrlList[0].Path))">
+						}
+					</ul>
+							}
+							else
+							{
+								<ul class="NewImg" style="background-color:white"></ul>
+							}
+
+				<ul class="Newbk">
+					<li class="Newtxt">
+						@eachYearList[i].ContentName
+					</li>
+				</ul>
+			</div>
+							}
+
+@if (eachYearList.Count > 2)
+{
+	<div class="yearNew2">
+		<ul class="yearUp1"><li class="yearUp1txt">12.16</li></ul>
+		<ul class="yearUp2"><li class="arrowUp"><a href="#"></a></li></ul>
+		<ul class="NewImg" style="width:423px;height:260px;display: table-cell;  vertical-align: middle; float:none;" align="center">
+			<img height="260" style="max-width:423px; text-align: center; margin-left: auto; margin-right: auto;" src="@Url.Content(string.Format("~/Images/HonourList/third/{0}.png", eachYearList[0].ContentTime.Year))">
+		</ul>
+		<ul class="Newbk">
+			<li class="Newtxt">
+			</li>
+		</ul>
+	</div>
+}
+
+</div>
+</div>
+</div>

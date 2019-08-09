@@ -1,0 +1,86 @@
+﻿@model TzuChiBackend.ViewModels.PostEditForm
+@using Core.Extensions;
+<form id="form-add-top-post">
+    <div class="form-group">
+        <label>標題</label>
+        <input name="Title" type="text" class="form-control" value="@Model.Title" >
+       
+    </div>
+    <div class="form-group">
+        <label>摘要</label>
+        <textarea name="Summary" class="form-control" rows="6" cols="50">
+           @Model.Summary
+        </textarea>
+    </div>
+    
+    @if (!Model.MediaViewModels.IsNullOrEmpty())
+    {
+        string url = "http://203.64.34.2/imgs/zoom/300/300/";
+
+        <label>選擇封面圖</label>
+
+        foreach (var item in Model.MediaViewModels)
+        {
+             string src = url + item.Path;
+             <div class="form-check">
+                <label class="form-check-label">
+                    <input name="ratio-cover" class="form-check-input cover-select" type="radio" value="@item.Id">
+                    <img src="@src">
+
+                </label>
+
+                 &nbsp;&nbsp;
+                 @String.Format("( {0} x {1} )" , item.Width, item.Height)
+            </div>
+        }
+
+
+    }
+    <input type="hidden" id="CoverId" name="CoverId" value="@Model.CoverId" />
+    <input type="hidden"  name="Id" value="@Model.Id" />
+
+    <div style="padding-top:20px">
+        @*<button type="button" class="btn btn-warning">預覽</button> &nbsp;&nbsp;&nbsp;*@
+        <button type="submit" class="btn btn-success">存檔</button> 
+    </div>
+   
+</form>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        var cover = $('#CoverId').val();
+        $('.cover-select').each(function () {
+            if ($(this).val() == cover) {
+                $(this).attr('checked', true);
+            }
+            
+        })
+
+        $('input[type=radio][name=ratio-cover]').change(function () {
+            $('#CoverId').val(this.value);
+        });
+
+        $('#form-add-top-post').submit(function (e) {
+            e.preventDefault();
+            Id = $(this).find("input[name='Id']").val();
+            Title = $(this).find("input[name='Title']").val();
+            Summary = $(this).find("textarea[name='Summary']").val();
+            CoverId = $(this).find("input[name='CoverId']").val();
+           
+            var url = '@Url.Action("Update","Tops")';
+           
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: { Id: Id, Title: Title, Summary: Summary, CoverId, CoverId },
+                dataType: 'json',
+                success: function (result) {
+                    backToTopPostIndex();
+                },
+                error: function () {
+                    OnError();
+                }
+            });
+        });
+    });
+</script>

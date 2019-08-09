@@ -1,0 +1,14 @@
+﻿@model IEnumerable<TzuChiClassLibrary.BO.FileUploadModel>
+<div class="Mv1">
+    <video width="1150" height="850" autoplay controls poster="~/Images/TeachPhilosophy/withoutVideo.jpg"></video><!--<iframe src="http://www.youtube.com/embed/qgMk7OBeiGs" width="1150" height="850" frameborder="0" allowfullscreen></iframe>-->
+</div>
+<div class="Mvlist1" style="overflow-x:hidden;overflow-y:visible;">
+    @if (Model != null)
+    {
+        foreach (var video in Model)
+        {
+            <ul class="Mvtxt"><a href="#">@video.FileName</a></ul>
+            <ul class="Mvglow"><a href="#"><img src="@video.PreviewPath" data-video="@video.Path" width="235" height="165" border="0" /></a></ul>
+        }
+    }
+</div>

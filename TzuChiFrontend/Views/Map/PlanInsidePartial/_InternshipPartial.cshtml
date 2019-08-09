@@ -1,0 +1,222 @@
+﻿@*企業實習*@
+<link href="@Url.Content("~/Content/Map/reset.css")" rel="stylesheet" type="text/css">
+<link href="@Url.Content("~/Content/Map/big.css")" rel="stylesheet" type="text/css">
+<link rel="stylesheet" type="text/css" href="@Url.Content("~/Content/Map/style.css")" />
+<style type="text/css">
+    #gobkDiv1 {
+        position: absolute;
+        width: 1920px;
+        height: 70px;
+        z-index: 99;
+        left: 0px;
+        top: 980px;
+    }
+
+    #menuDiv1 {
+        position: absolute;
+        z-index: 40;
+        left: 1734px;
+        top: 0px;
+    }
+
+    #menuDiv2 {
+        position: absolute;
+        z-index: 38;
+        left: 1496px;
+        top: 0px;
+    }
+
+    #menuDiv3 {
+        position: absolute;
+        z-index: 36;
+    }
+
+    #menuDiv4 {
+        position: absolute;
+        z-index: 28;
+        left: 490px;
+        top: 247px;
+    }
+
+    #ball1 {
+        position: absolute;
+        width: 30px;
+        height: 30px;
+        z-index: 40;
+        left: -1290px;
+        top: -500px;
+    }
+
+    #ballTip1 {
+        position: absolute;
+        width: 220px;
+        height: 42px;
+        z-index: 34;
+        left: -1197px;
+        top: -416px;
+    }
+
+    #ballTip2 {
+	    position:absolute;
+	    width:350px;
+	    height:42px;
+	    z-index:34;
+            left: -821px;
+	    top: -428px;
+    }
+
+    #ballTip3{
+	    position:absolute;
+	    width:360px;
+	    height:42px;
+	    z-index:34;
+            left: -479px;
+	    top: -300px;
+    }
+
+    .ballAll {
+	    position:absolute;
+	    width:30px;
+	    height:30px;
+	    z-index:40;          
+    }
+
+    .WINsmall2 {
+        width: 400px;
+    }
+
+</style>
+<!--紅點對位區 Start-->
+<div id="ballTip1" class="ballTip">
+    <div class="Tip1"><a id="schoolName" href="javascript:popup()"><span class="agencies"></span></a></div>
+    <div class="Tip2"><img src="@Url.Content("~/Images/Map/balldown.png")" width="30" height="30"></div>
+</div>
+<div id="ball1"><a href="#"><img src="@Url.Content("~/Images/Map/ball.png")" width="30" height="30" border="0"></a></div>
+<!--紅點對位區 End-->
+<!--
+台灣地圖的中心點定位方式
+起始畫面 第一定位點 總寬度1920扣除第一層選單186除以2扣除258(台灣的一半)	  left: 609px;
+第二層選單 第二定位點 出現menuDiv2 再扣除第二選單的一半寬度119  	left: 490px;
+-->
+<div id="menuDiv4">
+    <img src="@Url.Content("~/Images/Map/tw.png")" width="516" height="586" border="0" usemap="#Map1">
+    <map name="Map1">
+        <area shape="poly" coords="53,230,70,230,92,272,63,342,28,358,4,337,7,299,21,261,32,247" href="#">
+        <area shape="poly" coords="245,356,205,488,228,516,217,577,92,367,118,279,137,284,175,270,291,303" href="#">
+        <area shape="poly" coords="236,132,292,85,383,154,326,271,290,301,175,265,138,282,121,275,104,269" href="#">
+        <area shape="poly" coords="437,0,499,32,515,71,478,121,457,161,408,157,384,149,296,82,319,47" href="#">
+        <area shape="poly" coords="389,154,454,166,455,186,302,441,233,511,209,490,251,350,331,268,388,155" href="#">
+    </map>
+</div>
+</div>
+<!--選單區-->
+<div id="menuDiv1" class="menubk">
+    <div class="mBtn" style="height:420px;">
+        <ul class="mBtn4"><a href="@Url.Action("PlanInside", "Map", new { categoryInsideID = TzuChiClassLibrary.BO.PlanInsideModel.CATEGORYQUTSIDEID_INDUSTRYCOOPERATION })"></a></ul>
+        <ul class="mBtn6"><a href="@Url.Action("PlanInside", "Map", new { categoryInsideID = TzuChiClassLibrary.BO.PlanInsideModel.CATEGORYQUTSIDEID_UNION })"></a></ul>
+        <ul class="mBtn5D"></ul>
+    </div>
+    <!--選單先選擇分區與所在地才會出現menuDiv2-->
+    <section class="main">
+        <div class="wrapper-demo">
+            <div id="dd" class="wrapper-dropdown-5 dd" tabindex="1" style="z-index:4">
+                <span id="menuDepart">系所</span>
+                <ul class="dropdown dropdown-depart">
+                    @foreach (var item in ViewBag.DepartList)
+                    {
+                        <li>
+                            <a href="javascript:void(0)">
+                                @item
+                            </a>
+                        </li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </section>
+    <section class="main" style="margin: -30px 0px 0px 0px;">
+        <div class="wrapper-demo">
+            <div id="dd" class="wrapper-dropdown-5 dd" tabindex="1" style="z-index:3" ;>
+                <span id="menuPartition">分區</span>
+                <ul class="dropdown dropdown-partition">
+                    @foreach (var item in ViewBag.PartitionList)
+                    {
+                        <li>
+                            <a href="javascript:void(0)" key="@item.CategoryID">
+                                @item.CategoryName
+                            </a>
+                        </li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </section>
+    <section class="main" style="margin: -30px 0px 0px 0px;">
+        <div class="wrapper-demo">
+            <div id="dd" class="wrapper-dropdown-5 dd" tabindex="1" style="z-index:2" ;>
+                <span id="menuSite">所在地</span>
+                    <ul class="dropdown dropdown-site">
+                        @foreach (var item in ViewBag.SiteList)
+                        {
+                            <li>
+                                <a href="javascript:void(0)" key="@item.CategoryID">
+                                    @item.CategoryName
+                                </a>
+                            </li>
+                        }
+                    </ul>
+            </div>
+        </div>
+    </section>
+    <ul class="btnright"><a href="javascript:search('@TzuChiClassLibrary.BO.PlanInsideModel.CATEGORYQUTSIDEID_INTERNSHIP')">搜尋</a></ul>
+</div>
+<!--選擇學校後 才會出現內文 menuDiv3-->
+<div id="menuDiv2" class="menu2bk">
+    <div class="arrowU"><a href="javascript:scrollUpMenu()"></a></div>
+    <!--學校分類 Start-->
+    <div class="menuBTN" id="menuBTN" style="overflow:hidden;margin-left:0px">
+        <div id="menuBlock" style="display:inline-block">
+            @foreach (var item in ViewBag.Data)
+            {
+                <div class="mBTN"><a href='javascript:coordinate("@item.ContentID")'>@item.Agencies</a></div>
+            }
+        </div>
+    </div>
+    <!--學校分類 End-->
+    <div class="arrowD"><a href="javascript:scrollDownMenu()"></a></div>
+</div>
+<!--content-->
+<div class="bk2Div">
+    <div class="Title1"><img src="@Url.Content("~/Images/Map/title2.png")" width="420" height="95"></div>
+    <div class="earthDiv" style="margin: 0px 0px 0px 0px;
+	padding: 0px 0px 0px 0px; opacity:0.2;">
+    </div>
+</div>
+<!-- 資料顯示 Start-->
+<div id="dataShow" style="display:none">
+    <div id="menuDiv3" class="TWmenu4bk">
+        <div class="TWWINup"><div class="WINclose"><a href="javascript:popupClose()"></a></div></div>
+        <div class="TWWINdown">
+            <div class="TWWINTitle" style="
+    margin-left:36px;width:600px; ">介 紹</div>
+            <div class="TWWINCont" style=" margin-left:36px;width:850px; height:800px; ">
+                所在地：<span id="categorySiteID"></span>
+                <span id="departmentTitle"><br>單   位：</span>
+                <span id="department"></span>
+                <span id="agenciesTitle"><br>實習單位名稱：</span>
+                <span id="agencies"></span><br>
+                <span id="descriptionTitle"><br>簡   介：<br></span>
+                <span id="description"></span>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 資料顯示 End-->
+<!-- 所有座標 Start-->
+@foreach (var item in ViewBag.Data)
+{
+    string pointX = item.Coordinate.PointX + "px";
+    string pointY = item.Coordinate.PointY + "px";
+    <div class="ballAll" style="left:@pointX ;top:@pointY "><a href="javascript:void(0)"><img src="@Url.Content("~/Images/Map/ball.png")" width="30" height="30" border="0"></a></div>
+}
+<!-- 所有座標 End-->

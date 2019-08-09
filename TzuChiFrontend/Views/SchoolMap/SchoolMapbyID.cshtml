@@ -1,0 +1,246 @@
+﻿@{
+    ViewBag.Title = "校史館 - 資訊查詢 | 校景相簿";
+}
+
+@section scripts {
+    <script src="~/Scripts/slick/slick_h.js"></script>
+<script src="~/Scripts/imgDragforbidden.js"></script>
+<script src="~/Scripts/hammer.js-master/hammer.js"></script>
+    <script>
+        $(function () {
+            setCenter();
+            iniRightSlick();
+            iniCenterSlick();
+
+            //$('#right-slick').find('.draggable').css('margin-top:-30px !important');
+
+            
+            $('.wbox1').fadeIn();
+
+        });
+
+        function setCenter() {
+            var mainWidth = $(".wbox1").width();
+            var centerWidht = $('#flowmask').width();
+            var setCenterW = mainWidth / 2 - centerWidht / 2;
+
+            var mainHeight = $(".wbox1").height();
+            var centerHeight = $('#flowmask').height();
+            var setCenterH = mainHeight / 2 - centerHeight / 2;
+            $('#flowmask').offset({
+                top: setCenterH,
+                left: setCenterW - '100'
+            });
+        }
+
+        function iniRightSlick() {
+            $('#right-slick').slick({
+                centerMode: true,
+                dots: false,
+                vertical: true,
+                slidesToShow: 1,
+                infinite: true,
+                arrows: true,
+                draggable: false
+            });
+
+            $('.picmenu2').click(function () {
+                $('.slick-prev').click();
+            });
+
+            $('.picmenu3').click(function () {
+                $('.slick-next').click();
+            });
+        }
+
+        function iniCenterSlick() {
+            $('#center-slick').slick({
+                centerMode: true,
+                infinite: true,
+                //centerPadding: '200px',
+                slidesToShow: 1,
+                arrows: false
+            });
+        }
+
+    </script>
+
+}
+
+@section styles{
+    <link href="~/Content/slick_style.css" rel="stylesheet" />
+    <link href="~/Content/slick.css" rel="stylesheet" />    
+    <link href="~/Scripts/inform/css/reset.css" rel="stylesheet" type="text/css">
+    <link href="~/Scripts/inform/css/tzuchi.css" rel="stylesheet" type="text/css">
+    <link href="~/Scripts/inform/css/inform.css" rel="stylesheet" type="text/css">
+    <link href="~/Scripts/inform/css/maptip.css" rel="stylesheet" type="text/css">
+
+    <style>
+
+        #right-slick {
+            margin-bottom :0px !important;
+            margin-top :0px !important;
+        }
+        .slick-slide:not(.slick-active) img {
+            
+            padding:5% 0 5% 0;
+            opacity: 0.5;
+        }
+
+        .slick-active {
+            /*width:950px !important;
+            height:643px !important;*/
+        }
+
+        img {
+            border: none !important;
+        }
+
+        .centerbox {
+            margin-top: 150px;
+        }
+
+        /*.slick-list.draggable {
+            margin-top: -30px !important;
+        }*/
+
+        .pic2menu9_none a {
+            cursor: pointer;
+            width: 102px;
+            height: 121px;
+            display: block;
+            float: left;
+            background-image: url();
+            background-position: 0px 134px;
+            padding: 0px 0px 0px 0px;
+            margin: 0px 0px 0px 28px;
+        }
+
+        .pic2menu10_none a {
+            cursor: pointer;
+            width: 102px;
+            height: 121px;
+            display: block;
+            float: left;
+            background-image: url();
+            background-position: 102px 134px;
+            padding: 0px 0px 0px 0px;
+            margin: 0px 0px 0px 0px;
+        }
+         #getDiv {
+            position: absolute;
+            width: 140px;
+            height: 60px;
+            top: 997px;
+            left: 1392px;
+            z-index: 7;
+        }
+       
+    </style>
+
+}
+
+<div class="wbox1">
+    <!--左邊標題-->
+    <div class="leftbox"><img src="~/Scripts/inform/images/inform/title_s2.png" width="134" height="750"></div>
+    <!--中間表格-->
+    <div class="centerbox" style="height:0  !important;margin:150px 0px 0px 50px">        
+        <div id="getDiv" class="gettxt2"><a href="~/SchoolMap/SchoolMapList">返回</a></div>
+        <div style="width:1050px;">
+            <div class="slider" id="center-slick" style="left:120px;">
+                @foreach (var imgUrl in ViewBag.MapList)
+                {
+                    <div class="">
+                        <h3>
+                            <img src="@Url.Content(@imgUrl)" width="950" height="635">
+                        </h3>
+                    </div>
+                    @*<div class="">
+                    <h3>
+                        <img src="~/Scripts/inform/images/picture/slide2.jpg" width="950" height="635">
+                    </h3>
+                </div>
+                <div class="">
+                    <h3>
+                        <img src="~/Scripts/inform/images/picture/slide3.jpg" width="950" height="635">
+                    </h3>
+                </div>
+                <div class="">
+                    <h3>
+                        <img src="~/Scripts/inform/images/picture/slide1.jpg" width="950" height="635">
+                    </h3>
+                </div>
+                <div class="">
+                    <h3>
+                        <img src="~/Scripts/inform/images/picture/slide2.jpg" width="950" height="635">
+                    </h3>
+                </div>
+                <div class="">
+                    <h3>
+                        <img src="~/Scripts/inform/images/picture/slide3.jpg" width="950" height="635">
+                    </h3>
+                </div>
+                <div class="">
+                    <h3>
+                        <img src="~/Scripts/inform/images/picture/slide1.jpg" width="950" height="635">
+                    </h3>
+                </div>
+                <div class="">
+                    <h3>
+                        <img src="~/Scripts/inform/images/picture/slide2.jpg" width="950" height="635">
+                    </h3>
+                </div>
+                <div class="">
+                    <h3>
+                        <img src="~/Scripts/inform/images/picture/slide3.jpg" width="950" height="635">
+                    </h3>
+                </div>*@
+                }
+            </div>
+        </div>
+
+
+    </div>
+    <!--右邊選單-->
+    <div class="rightbox" style="">
+        <div class="picmenu1">
+            <ul class="menu1"><img src="~/Scripts/inform/images/picture/menu_1.png" width="263" height="70"></ul>
+            <ul class="picmenu2"><a href="javascript:void(0)"></a></ul>
+            <ul class="picmenu4">
+                <div id="right-slick">
+                    @Html.Raw(ViewBag.MapSlick);
+                    @*<div class="slick-el">
+                        <li class="picmenu5"><a href="~/SchoolMap/SchoolMapById/1"></a></li>
+                        <li class="picmenu6"><a href="~/SchoolMap/SchoolMapById/2"></a></li>
+                        <li class="picmenu7"><a href="~/SchoolMap/SchoolMapById/3"></a></li>
+                        <li class="picmenu8"><a href="~/SchoolMap/SchoolMapById/4"></a></li>
+                        <li class="picmenu9"><a href="~/SchoolMap/SchoolMapById/5"></a></li>
+                        <li class="picmenu10"><a href="~/SchoolMap/SchoolMapById/6"></a></li>
+                    </div>
+                    <div class="slick-el">
+                        <li class="pic2menu5"><a href="~/SchoolMap/SchoolMapById/7"></a></li>
+                        <li class="pic2menu6"><a href="~/SchoolMap/SchoolMapById/8"></a></li>
+                        <li class="pic2menu7"><a href="~/SchoolMap/SchoolMapById/9"></a></li>
+                        <li class="pic2menu8"><a href="~/SchoolMap/SchoolMapById/10"></a></li>
+                        <li class="pic2menu9"><a href="~/SchoolMap/SchoolMapById/11"></a></li>
+                        <li class="pic2menu10"><a href="~/SchoolMap/SchoolMapById/12"></a></li>
+                    </div>
+                    <div class="slick-el">
+                        <li class="pic3menu5"><a href="~/SchoolMap/SchoolMapById/13"></a></li>
+                        <li class="pic3menu6"><a href="~/SchoolMap/SchoolMapById/14"></a></li>
+                        <li class="pic3menu7"><a href="~/SchoolMap/SchoolMapById/15"></a></li>
+                        <li class="pic3menu8"><a href="~/SchoolMap/SchoolMapById/16"></a></li>
+                        <li class="pic2menu9_none"><a href="javascript:void(0)"></a></li>
+                        <li class="pic2menu10_none"><a href="javascript:void(0)"></a></li>
+                    </div>*@
+                </div>
+            </ul>
+            <ul class="picmenu3"><a href="javascript:void(0)"></a></ul>
+            <div class="picmenu11" style="margin:80px 0px 0px 40px">
+                <ul class="btnIconp"><a href="@Url.Content("~/SchoolDiary/Index")"></a></ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+

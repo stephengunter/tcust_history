@@ -1,0 +1,230 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Data.OleDb;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Web;
+using System.Web.Caching;
+using System.Xml;
+using System.IO;
+using TzuChiClassLibrary.BO;
+using System.Data;
+using Microsoft.Win32;
+using TzuChiClassLibrary.DAL;
+using NLog;
+using NPOI.HSSF.UserModel;
+using NPOI.SS.UserModel;
+
+namespace TzuChiClassLibrary.Utils
+{
+    // 2015 11 03 Varus -> 上傳畢業紀念冊；歷屆董事時直接更新db
+    public class ExcelImportDb
+    {
+        private static Logger logger = LogManager.GetCurrentClassLogger();
+
+        public const string ClassBook = "畢業紀念冊";
+        public const string ClassBookFormat = "畢冊格式";
+        public const string Directors = "歷屆董事";
+
+        public const string TurnLeft = "左";
+        public const string TurnRight = "右";        
+
+        private HSSFWorkbook workbook;
+        private ISheet sheet;
+
+        //OpenFile
+        public Boolean OpenExcel()
+        {
+            string FilePath = System.Web.Configuration.WebConfigurationManager.AppSettings["FrontRootPath"]
+                + System.Web.Configuration.WebConfigurationManager.AppSettings["ClassBookPath"];
+            using (FileStream file = new FileStream(FilePath, FileMode.Open, FileAccess.Read))
+            {
+                workbook = new HSSFWorkbook(file);
+            }
+            return true;
+        }
+
+        //畢業紀念冊 
+        public Boolean ClassBookHandler()
+        {
+            IClassBookManagement gClassBookManagement = new ClassBookManagementImpl();
+            return gClassBookManagement.ResetClassBookData(ClassBookToModelList());
+        }
+
+        //歷屆董事
+        public Boolean DirectorsHandler()
+        {
+            IDirectorsManagement gDirectorsManagement = new DirectorsManagementImpl();
+            return gDirectorsManagement.ResetDirectorsData(DirectorsToModelList());
+        }
+
+        #region ToModelLists
+        private List<ClassBookModel> ClassBookToModelList()
+        {
+            #region 設好左右翻之Dictionary
+            Dictionary<string, string> dic = new Dictionary<string, string>();
+            sheet = workbook.GetSheet(ExcelCacheProcessing.ClassBookFormat);
+            for (int row = 1; row <= sheet.LastRowNum; row++)   
+            {
+                if (sheet.GetRow(row) != null) //null is when the row only contains empty cells 
+                {
+                    dic.Add(sheet.GetRow(row).GetCell(0).StringCellValue, sheet.GetRow(row).GetCell(1).StringCellValue); 
+                }
+            }
+
+           
+
+            
+            #endregion
+
+            #region 取得畢冊資料
+            sheet = workbook.GetSheet(ExcelCacheProcessing.ClassBook);
+            int count = sheet.LastRowNum + 1;       //從0開始，實際資料
+            string[][] data = new string[count][];
+            for (int row = 1; row < count; row++)   
+            {
+                //if (sheet.GetRow(row) != null) //null is when the row only contains empty cells 
+                {
+                    string[] tmp = new string[7];
+                    for (int i = 0; i < tmp.Length; i++) 
+                    {
+                        try
+                        {
+                            tmp[i] = sheet.GetRow(row).GetCell(i).ToString();
+                        }
+                        catch (Exception)
+                        {
+                            tmp[i] = string.Empty;
+                        }
+                    }
+                    data[row-1] = tmp;
+                }
+            }
+            #endregion
+           
+
+
+            #region 將資料倒入Model
+            List<ClassBookModel> result = new List<ClassBookModel>();
+            try
+            {
+                for (int i = 0; i < data.Length; i++)
+                {
+
+                    string[] tempArray = data[i];
+                    if (string.IsNullOrEmpty(tempArray[0])) break;   // 判斷是否為空列
+                    string[] sidArray = tempArray[3].Split(',');
+                    string[] nameArray = tempArray[4].Split(',');
+
+                    //0:學年度 1:科系 2:班級 3:學號 4:姓名 5:Image 6:Page
+                    if (sidArray.Length > 0)
+                    {
+                        for (int j = 0; j < sidArray.Length; j++)
+                        {
+                            string sid = sidArray[j];
+                            string name = nameArray[j];
+
+                            try
+                            {
+                                result.Add(GetClassBookModelFromRow(dic, tempArray, sid, name));
+                            }
+                            catch (Exception)
+                            {
+                                string msg = String.Format("畢業紀念册資料錯誤.(第 {0} 行)",i);
+                                throw new Exception("畢業紀念册資料錯誤.");
+                            }
+                            
+                        }
+                            
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+           
+               
+            
+
+            #endregion
+            return result; 
+        }
+
+        private ClassBookModel GetClassBookModelFromRow(Dictionary<string, string> dic , string[] row,string sid, string name)
+        {
+            var model = new ClassBookModel();
+           
+                model.ClassBookID = Guid.NewGuid().ToString();
+                model.AcademicYear = row[0];
+                model.Department = row[1];
+                model.Class = row[2];
+                model.StudentId = sid;
+                model.StudentName = name;
+                model.PictureUrl = row[5];
+                model.Page = row[6];
+                if (dic.ContainsKey(row[0]))
+                {
+                    if (dic[row[0]].Equals(ExcelImportDb.TurnLeft))
+                    {
+                        model.IsTurnLeft = true;
+                    }
+                    else if (dic[row[0]].Equals(ExcelImportDb.TurnRight))
+                    {
+                        model.IsTurnLeft = false;
+                    }
+                }
+           
+            return model;
+        }
+
+
+        private List<DirectorsModel> DirectorsToModelList()
+        {
+            #region 取得歷屆董事資料
+            sheet = workbook.GetSheet(ExcelCacheProcessing.Directors);
+            int count = sheet.LastRowNum + 1;       //從0開始，實際資料要補1
+            string[][] data = new string[count][];
+            for (int row = 0; row < count; row++)
+            {
+                //if (sheet.GetRow(row) != null) //null is when the row only contains empty cells 
+                {
+                    string[] tmp = new string[4];
+                    for (int i = 0; i < tmp.Length; i++)
+                    {
+                        try
+                        {
+                            tmp[i] = sheet.GetRow(row).GetCell(i).ToString();
+                        }
+                        catch (Exception)
+                        {
+                            tmp[i] = string.Empty;
+                        }
+                    }
+                    data[row] = tmp;
+                }
+            }
+            #endregion
+
+            List<DirectorsModel> result = new List<DirectorsModel>();
+
+            //0:屆數 1:啟始日期 2:結束日期 3:名單
+            for (int i = 0; i < data.Length; i++)
+            {
+                string[] temp = data[i];
+                DirectorsModel model = new DirectorsModel();
+                model.SessionNumber = temp[0];
+                model.StartYear = temp[1];
+                model.EndYear = temp[2];
+                model.Names = temp[3];
+                if (!string.IsNullOrEmpty(model.SessionNumber) && model.SessionNumber != "屆數")
+                {
+                    result.Add(model);
+                }
+            }
+            return result;
+        }        
+        #endregion
+    }
+}

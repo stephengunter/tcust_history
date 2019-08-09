@@ -1,0 +1,522 @@
+@charset "utf-8";
+/* CSS Document */	
+.informwrapper1 {
+	background-image:url(../images/inform/indexbk.jpg);
+	width: 100%;
+	height:1080px;
+	max-width: 1920px;
+	min-width: 780px;
+	overflow: hidden; 
+}
+
+.informwrapper {
+	background-image:url(../images/inform/bk.jpg);
+	width: 100%;
+	height:1080px;
+	max-width: 1920px;
+	min-width: 780px;
+	overflow: hidden; 
+}
+
+
+.sidebar1 {
+	float: left;
+	width: 20%;
+	padding: 0px;
+	text-align: center;
+}
+
+
+.content {
+	float: left;	
+	width: 60%;
+	text-align: center;
+}
+
+.inf4 {
+	float: left;	
+	width: 60%;
+	text-align: center;
+	padding:0px 0px 0px 0px;
+	margin:80px 0px 0px 0px;
+}
+
+.content1 {
+	float: left;	
+	width: 80%;
+	padding: 10px 0;
+	text-align: right;
+}
+
+.sidebar2 {
+	width: 20%;
+	float: left;
+	margin:0 auto;
+	padding: 0px 0;
+}
+
+.newside {
+	display:block;
+	border-radius: 10px;
+	width: 1020px;
+    height: 500px;
+	padding: 30px 10px 30px 10px;
+	margin: 120px 20px 20px 20px;
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=90)";
+     filter: alpha(opacity=90);
+     -moz-opacity: 0.90;
+     -khtml-opacity: 0.90;
+     opacity: 0.90;
+     -moz-box-shadow: 0px 0px 16px rgba(125, 125, 125, 0.65);
+     -webkit-box-shadow: 0px 0px 16px rgba(125, 125, 125, 0.65);
+     box-shadow: 0px 0px 16px 5px rgba(125, 125, 125, 0.65);
+}
+
+.newsimage {
+	display:block;
+	padding:5px 10px 5px 10px;
+	margin:2px 2px 2px 2px;
+}
+
+.news1 {
+	display:block;
+	font-family:"微軟正黑體", Arial;
+	font-weight:bold;
+	font-size:20px;
+	text-align: left;
+	line-height:30px;
+	width:550px;
+	padding:0px 0px 0px 0px;
+	margin:0px 10px 0px 10px;
+}
+
+.news2 {
+	display:block;
+	font-family:"微軟正黑體", Arial;
+	font-weight:bold;
+	font-size:28px;
+	text-align: left;
+	line-height:36px;
+	width:550px;
+	padding:5px 5px 5px 5px;
+	margin:2px 2px 2px 2px;
+}
+
+/*搜尋出現主標題*/
+
+.Search {
+	display:block;
+	border-radius: 10px;
+	width: 848px;
+	height: 30px;
+	padding: 10px 10px 10px 10px;
+	margin: 20px 20px 20px 100px;
+    background-color: #FFFFFF;
+	-moz-box-shadow: 0px 0px 10px rgba(125, 125, 125, 0.65);
+	-webkit-box-shadow: 0px 0px 10px rgba(125, 125, 125, 0.65);
+	box-shadow: 0px 0px 10px 3px rgba(125, 125, 125, 0.65);
+	text-align: center;
+}
+
+.Seaimage {
+	display:block;
+	width: 848px;;
+	height:80px;
+	text-align:left;
+	background-image:url(../images/inform/searchbar.png);
+	padding: 0px 0px 0px 0px;
+	margin: 180px 20px 20px 100px;
+}
+
+.Seaimagetxt {
+	font-family:"微軟正黑體", Arial;
+	font-weight:bold;
+	font-size:26px;
+	text-align:left;
+	line-height:60px;
+	padding:0px 0px 0px 70px;
+	margin:2px 2px 2px 2px;
+}
+
+.Seartxt {
+	font-family:"微軟正黑體", Arial;
+	font-weight:bold;
+	font-size:26px;
+	text-align: left;
+	line-height:32px;
+	padding:0px 0px 0px 0px;
+	margin:2px 2px 2px 2px;
+}
+
+/*資訊選單*/
+
+.informmenu {
+	display:block;
+	float: left;
+	margin:0 auto;
+	padding:0 auto;
+}
+
+.menu1 {
+	display:block;
+	float: left;
+	width:263px;
+	margin:0px 0px 0px 0px;
+	padding:0 auto;
+	text-align: center;
+}
+
+.newsmenu2 a{
+	display:block;
+	float: left;
+	cursor:pointer;
+	width:263px;
+	height:70px;
+	margin: 0px 0px 0px 0px;
+	margin: 0px 0px 0px 0px;
+	background-image:url(../images/news/menu_2.png);
+}
+
+.newsmenu2 a:hover {
+	background-image:url(../images/news/menu_3.png);
+}
+
+.newsmenu4 a{
+	cursor:pointer;
+	width:263px;
+	height:70px;
+	display:block;
+	float: left;
+	margin: 0px 0px 0px 0px;
+	margin: 0px 0px 0px 0px;
+	background-image:url(../images/news/menu_2_1.png);
+}
+
+.newsmenu4 a:hover {
+	background-image:url(../images/news/menu_3_1.png);
+}
+
+.menu2 a{
+	cursor:pointer;
+	width:263px;
+	height:70px;
+	display:block;
+	float: left;
+	margin: 0px 0px 0px 0px;
+	margin: 0px 0px 0px 0px;
+	background-image:url(../images/inform/menu_2.png);
+}
+
+.menu2 a:hover {
+	background-image:url(../images/inform/menu_3.png);
+}
+
+.menu4 a{
+	cursor:pointer;
+	width:263px;
+	height:70px;
+	display:block;
+	float: left;
+	margin: 0px 0px 0px 0px;
+	margin: 0px 0px 0px 0px;
+	background-image:url(../images/inform/menu_2_1.png);
+}
+
+.menu4 a:hover {
+	background-image:url(../images/inform/menu_3_1.png);
+}
+
+.menu3 a{
+	cursor:pointer;
+	width:263px;
+	height:40px;
+	display:block;
+	float: left;
+	margin: 0px 0px 0px 0px;
+	padding: 0px 0px 0px 0px;
+	background-image:url(../images/inform/menu_5.png);
+	font-family:"微軟正黑體", "新細明體", Arial;
+	font-size:27px;
+    font-weight: bold;
+	color: #5A5858;
+	text-align:center;
+	text-decoration:none;
+	line-height:38px;
+}
+
+.menu3 a:hover {
+	background-image:url(../images/inform/menu_6.png);
+	color:#FFFFFF;
+}
+
+
+
+.textbox { 
+	width:163px;  
+	height:60px;
+    background-color: transparent;  
+    border-style: solid;  
+    border-width: 0px 0px 0px 0px;  
+    border-color: darkred; 
+    outline:0; 
+	font-family:"微軟正黑體", "新細明體", Arial;
+	font-size:27px;
+    font-weight: bold;
+	color: #5A5858;
+	text-align:center;
+	text-decoration:none;
+	line-height:40px;
+  } 
+
+/*校園日誌*/
+
+.picmenu1 {
+	display:block;
+	float: left;
+	padding: 0px 0px 0px 0px;
+	margin: 80px 0px 0px -150px;
+}
+
+.picmenu2 a{
+	cursor:pointer;
+	width:263px;
+	height:30px;
+	display:block;
+	float: left;
+	background-image:url(../images/picture/menu_2.png);
+	background-position: 0px 0px;
+	padding: 0px 0px 0px 0px;
+	margin: 0px 0px 0px 0px;
+
+}
+
+.picmenu2 a:hover {
+	background-position: 0px 1px;
+}
+
+.picmenu3 a{
+	cursor:pointer;
+	width:263px;
+	height:30px;
+	display:block;
+	float: left;
+	background-image:url(../images/picture/menu_3.png);
+	background-position: 0px 0px;
+	padding: 0px 0px 0px 0px;
+	margin: 0px 0px 0px 0px;
+
+}
+
+.picmenu3 a:hover {
+	background-position: 0px -1px;
+}
+
+.picmenu4 {
+	width:263px;
+	height:425px;
+	display:block;
+	float: left;
+	background-image:url(../images/picture/menu_4.png);
+	padding: 0px 0px 0px 0px;
+	margin: 0px 0px 0px 0px;
+}
+
+.picmenu5 a{
+	cursor:pointer;
+	width:102px;
+	height:121px;
+	display:block;
+	float: left;
+	background-image:url(../images/picture/pic_btn.png);
+	background-position: 0px 0px;
+	padding: 0px 0px 0px 0px;
+	margin: 30px 0px 0px 28px;
+
+}
+
+.picmenu5 a:hover {
+	background-position: 0px 1px;
+}
+
+.picmenu6 a{
+	cursor:pointer;
+	width:102px;
+	height:121px;
+	display:block;
+	float: left;
+	background-image:url(../images/picture/pic_btn.png);
+	background-position: 102px 0px;
+	padding: 0px 0px 0px 0px;
+	margin: 30px 0px 0px 0px;
+
+}
+
+.picmenu6 a:hover {
+	background-position: 102px 1px;
+}
+
+.picmenu7 a{
+	cursor:pointer;
+	width:102px;
+	height:121px;
+	display:block;
+	float: left;
+	background-image:url(../images/picture/pic_btn.png);
+	background-position: 0px 258px;
+	padding: 0px 0px 0px 0px;
+	margin: 0px 0px 0px 28px;
+
+}
+
+.picmenu7 a:hover {
+	background-position: 0px -125px;
+}
+
+.picmenu8 a{
+	cursor:pointer;
+	width:102px;
+	height:121px;
+	display:block;
+	float: left;
+	background-image:url(../images/picture/pic_btn.png);
+	background-position: 102px 258px;
+	padding: 0px 0px 0px 0px;
+	margin: 0px 0px 0px 0px;
+}
+
+.picmenu8 a:hover {
+	background-position: 102px -125px;
+}
+
+.picmenu9 a{
+	cursor:pointer;
+	width:102px;
+	height:121px;
+	display:block;
+	float: left;
+	background-image:url(../images/picture/pic_btn.png);
+	background-position: 0px 134px;
+	padding: 0px 0px 0px 0px;
+	margin: 0px 0px 0px 28px;
+}
+
+.picmenu9 a:hover {
+	background-position: 0px -249px;
+}
+
+.picmenu10 a{
+	cursor:pointer;
+	width:102px;
+	height:121px;
+	display:block;
+	float: left;
+	background-image:url(../images/picture/pic_btn.png);
+	background-position: 102px 134px;
+	padding: 0px 0px 0px 0px;
+	margin: 0px 0px 0px 0px;
+}
+
+.picmenu10 a:hover {
+	background-position: 102px -249px;
+}
+
+.picmenu11 {
+	display:block;
+	float: left;
+	padding: 0px 0px 0px 0px;
+	margin: 100px 0px 0px 80px;
+}
+
+.btnIcon1 a{
+	cursor:pointer;
+	width:269px;
+	height:233px;
+	background-image:url(../images/inform/btnIcon.png);
+	background-position: 0px 0px;
+	display:block;
+	float: right;
+	position: relative;
+	margin: 20% 0px 10px 0px;
+	padding:0px 0px 0px 0px;
+}
+
+
+
+.btnIcon1 a:hover {
+	background-image:url(../images/inform/btnIcon.png);
+	background-position: 0px -233px;
+}
+
+/*大愛新聞*/
+
+.btnIcon2 a{
+	cursor:pointer;
+	width:269px;
+	height:233px;
+	background-image:url(../images/inform/btnIcon.png);
+	background-position: -269px 0px;
+	display:block;
+	float: right;
+	position: relative;
+	margin: 20% 0px 10px 0px;
+	padding:0px 0px 0px 0px;
+}
+
+.btnIcon2 a:hover {
+	background-image:url(../images/inform/btnIcon.png);
+	background-position: -269px -233px;
+}
+
+.glow {
+  display: inline-block;
+  -webkit-transition-duration: 0.3s;
+  transition-duration: 0.3s;
+  -webkit-transition-property: box-shadow;
+  transition-property: box-shadow;
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+  box-shadow: 0 0 1px rgba(0, 0, 0, 0);
+}
+.glow:hover, .glow:focus, .glow:active {
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.6);
+}
+
+/*畢業紀念冊*/
+
+.btnIcon3 a{
+	cursor:pointer;
+	width:269px;
+	height:233px;
+	background-image:url(../images/inform/btnIcon.png);
+	background-position: -538px 0px;
+	display:block;
+	float: right;
+	position: relative;
+	margin: 20% 0px 10px 0px;
+	padding:0px 0px 0px 0px;
+}
+
+.btnIcon3 a:hover {
+	background-image:url(../images/inform/btnIcon.png);
+	background-position: -538px -233px;
+}
+
+/*校園相簿*/
+
+.btnIcon4 a{
+	cursor:pointer;
+	width:269px;
+	height:233px;
+	background-image:url(../images/inform/btnIcon.png);
+	background-position: -807px 0px;
+	display:block;
+	float: right;
+	position: relative;
+	margin: 20% 120px 10px 5px;
+	padding:0px 0px 0px 0px;
+}
+
+.btnIcon4 a:hover {
+	background-image:url(../images/inform/btnIcon.png);
+	background-position: -807px -233px;
+}

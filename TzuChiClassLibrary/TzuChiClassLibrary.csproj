@@ -1,0 +1,182 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{86C7259B-6F59-47C9-AA79-C53ADD280D78}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>TzuChiClassLibrary</RootNamespace>
+    <AssemblyName>TzuChiClassLibrary</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EntityFramework">
+      <HintPath>..\packages\EntityFramework.6.1.1\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer">
+      <HintPath>..\packages\EntityFramework.6.1.1\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="Gma.QrCodeNet.Encoding">
+      <HintPath>..\packages\QrCode.Net.0.4.0.0\lib\net45\Gma.QrCodeNet.Encoding.dll</HintPath>
+    </Reference>
+    <Reference Include="ICSharpCode.SharpZipLib">
+      <HintPath>..\packages\NPOI.2.0.6\lib\net40\ICSharpCode.SharpZipLib.dll</HintPath>
+    </Reference>
+    <Reference Include="NLog">
+      <HintPath>..\packages\NLog.3.1.0.0\lib\net45\NLog.dll</HintPath>
+    </Reference>
+    <Reference Include="NlogTargetElmah">
+      <HintPath>..\packages\NlogTargetElmah.dll</HintPath>
+    </Reference>
+    <Reference Include="NPOI">
+      <HintPath>..\packages\NPOI.2.0.6\lib\net40\NPOI.dll</HintPath>
+    </Reference>
+    <Reference Include="NPOI.OOXML">
+      <HintPath>..\packages\NPOI.2.0.6\lib\net40\NPOI.OOXML.dll</HintPath>
+    </Reference>
+    <Reference Include="NPOI.OpenXml4Net">
+      <HintPath>..\packages\NPOI.2.0.6\lib\net40\NPOI.OpenXml4Net.dll</HintPath>
+    </Reference>
+    <Reference Include="NPOI.OpenXmlFormats">
+      <HintPath>..\packages\NPOI.2.0.6\lib\net40\NPOI.OpenXmlFormats.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="BO\AccountViewModel.cs" />
+    <Compile Include="BO\ActivitiesModel.cs" />
+    <Compile Include="BO\BasePost.cs" />
+    <Compile Include="BO\CategoryModel.cs" />
+    <Compile Include="BO\OriginEternalModel.cs" />
+    <Compile Include="BO\ClassNumberModel.cs" />
+    <Compile Include="BO\CoordinateModel.cs" />
+    <Compile Include="BO\DirectorsModel.cs" />
+    <Compile Include="BO\EducationCenterModel.cs" />
+    <Compile Include="BO\GenericModel.cs" />
+    <Compile Include="BO\GraduateModel.cs" />
+    <Compile Include="BO\HumanitiesModel.cs" />
+    <Compile Include="BO\ImageShowModel.cs" />
+    <Compile Include="BO\PlanInsideModel.cs" />
+    <Compile Include="BO\PlanOutsideModel.cs" />
+    <Compile Include="DAL\Impl\AccountViewManagementImpl.cs" />
+    <Compile Include="DAL\Impl\ActivitiesManagementImpl.cs" />
+    <Compile Include="DAL\Impl\AdminManagementImpl.cs" />
+    <Compile Include="DAL\Impl\CategoryManagementImpl.cs" />
+    <Compile Include="DAL\Impl\ClassBookManagementImpl.cs" />
+    <Compile Include="DAL\Impl\CoordinateManagementImpl.cs" />
+    <Compile Include="DAL\Impl\DirectorsManagementImpl.cs" />
+    <Compile Include="DAL\Impl\EducationCenterManagementImpl.cs" />
+    <Compile Include="DAL\Impl\EventCalendarManagementImpl.cs" />
+    <Compile Include="DAL\Impl\FileUploadManagementImpl.cs" />
+    <Compile Include="DAL\Impl\GraduateManagementImpl.cs" />
+    <Compile Include="DAL\Impl\HonourListManagementImpl.cs" />
+    <Compile Include="DAL\Impl\HumanitiesManagementImpl.cs" />
+    <Compile Include="DAL\Impl\ImageShowManagementImpl.cs" />
+    <Compile Include="DAL\Impl\NewsManagementImpl.cs" />
+    <Compile Include="DAL\Impl\PlanInsideManagementImpl.cs" />
+    <Compile Include="DAL\Impl\PlanOutsideManagementImpl.cs" />
+    <Compile Include="DAL\Impl\SchoolDiaryManagementImpl.cs" />
+    <Compile Include="DAL\Interface\IAccountViewManagement.cs" />
+    <Compile Include="DAL\Interface\IActivitiesManagement.cs" />
+    <Compile Include="DAL\Interface\IAdminManagement.cs" />
+    <Compile Include="DAL\Interface\ICategoryManagement.cs" />
+    <Compile Include="DAL\Interface\IClassBookManagement.cs" />
+    <Compile Include="DAL\Interface\ICoordinateManagement.cs" />
+    <Compile Include="DAL\Interface\IDirectorsManagement.cs" />
+    <Compile Include="DAL\Interface\IEducationCenterManagement.cs" />
+    <Compile Include="DAL\Interface\IEventCalendarManagement.cs" />
+    <Compile Include="DAL\Interface\IFileUploadManagement.cs" />
+    <Compile Include="DAL\Interface\IGraduateManagement.cs" />
+    <Compile Include="DAL\Interface\IHonourListManagement.cs" />
+    <Compile Include="DAL\Interface\IHumanitiesManagement.cs" />
+    <Compile Include="DAL\Interface\IImageShowManagement.cs" />
+    <Compile Include="DAL\Interface\INewsManagement.cs" />
+    <Compile Include="DAL\Interface\IPlanInsideManagement.cs" />
+    <Compile Include="DAL\Interface\IPlanOutsideManagement.cs" />
+    <Compile Include="DAL\Interface\ISchoolDiaryManagement.cs" />
+    <Compile Include="DAL\Mock\ActivitiesManagementMock.cs" />
+    <Compile Include="DAL\Mock\CategoryManagementMock.cs" />
+    <Compile Include="DAL\Mock\DirectorsManagementMock.cs" />
+    <Compile Include="DAL\Mock\EventCalendarManagementMock.cs" />
+    <Compile Include="DAL\Mock\FileUploadManagementMock.cs" />
+    <Compile Include="DAL\Mock\HonourListManagementMock.cs" />
+    <Compile Include="DAL\Mock\ImageShowManagementMock.cs" />
+    <Compile Include="DAL\Mock\NewsManagementMock.cs" />
+    <Compile Include="DAL\Mock\PlanInsideManagementMock.cs" />
+    <Compile Include="DAL\Mock\SchoolDiaryManagementMock.cs" />
+    <Compile Include="DAL\TzuChiContext.cs" />
+    <Compile Include="BO\AdminModel.cs" />
+    <Compile Include="BO\ClassBookModel.cs" />
+    <Compile Include="BO\EventCalendarModel.cs" />
+    <Compile Include="BO\FileUploadModel.cs" />
+    <Compile Include="BO\HonourListModel.cs" />
+    <Compile Include="BO\NewsModel.cs" />
+    <Compile Include="BO\PagenationModel.cs" />
+    <Compile Include="BO\SchoolDiaryModel.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Utils\ExcelImportDb.cs" />
+    <Compile Include="Utils\ExcelCacheProcessing.cs" />
+    <Compile Include="Utils\ImageResizer.cs" />
+    <Compile Include="Utils\QrCodeHelper.cs" />
+    <Compile Include="Utils\VideoProcessing.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+    <Content Include="NLog.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <None Include="NLog.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>此專案參照此電腦中缺少的  NuGet 套件。啟用「NuGet 套件還原」以便下載。如需詳細資訊，請參閱 http://go.microsoft.com/fwlink/?LinkID=322105。缺少的檔案為 {0}。</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('$(SolutionDir)\.nuget\NuGet.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\.nuget\NuGet.targets'))" />
+  </Target>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

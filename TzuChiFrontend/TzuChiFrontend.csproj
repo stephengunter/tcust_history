@@ -1,0 +1,485 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{BC8AFA12-10F7-4864-A0F6-ED59865066EA}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>TzuChiFrontend</RootNamespace>
+    <AssemblyName>TzuChiFrontend</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <MvcBuildViews>false</MvcBuildViews>
+    <UseIISExpress>true</UseIISExpress>
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
+    <UseGlobalApplicationHostFile />
+    <TargetFrameworkProfile />
+    <Use64BitIISExpress />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Core, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\MyClassLibrary\Core\bin\Debug\Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Elmah">
+      <HintPath>..\packages\elmah.corelibrary.1.2.2\lib\Elmah.dll</HintPath>
+    </Reference>
+    <Reference Include="Elmah.Mvc">
+      <HintPath>..\packages\Elmah.MVC.2.1.1\lib\net40\Elmah.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\EntityFramework.6.1.1\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\EntityFramework.6.1.1\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="NLog">
+      <HintPath>..\packages\NLog.3.1.0.0\lib\net45\NLog.dll</HintPath>
+    </Reference>
+    <Reference Include="NlogTargetElmah">
+      <HintPath>..\packages\NlogTargetElmah.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Abstractions" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.Helpers.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.Mvc, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Mvc.5.2.3\lib\net45\System.Web.Mvc.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Razor.3.2.3\lib\net45\System.Web.Razor.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.Routing" />
+    <Reference Include="System.Web.WebPages, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Deployment, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.Deployment.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.EnterpriseServices" />
+    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http">
+    </Reference>
+    <Reference Include="System.Net.Http.WebRequest">
+    </Reference>
+    <Reference Include="System.Web.Optimization">
+      <HintPath>..\packages\Microsoft.AspNet.Web.Optimization.1.1.3\lib\net40\System.Web.Optimization.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="WebGrease">
+      <Private>True</Private>
+      <HintPath>..\packages\WebGrease.1.5.2\lib\WebGrease.dll</HintPath>
+    </Reference>
+    <Reference Include="Antlr3.Runtime">
+      <Private>True</Private>
+      <HintPath>..\packages\Antlr.3.4.1.9004\lib\Antlr3.Runtime.dll</HintPath>
+    </Reference>
+    <Reference Include="zxing, Version=0.16.2.0, Culture=neutral, PublicKeyToken=4e88037ac681fe60, processorArchitecture=MSIL">
+      <HintPath>..\packages\ZXing.Net.0.16.2\lib\net45\zxing.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="zxing.presentation, Version=0.16.2.0, Culture=neutral, PublicKeyToken=4e88037ac681fe60, processorArchitecture=MSIL">
+      <HintPath>..\packages\ZXing.Net.0.16.2\lib\net45\zxing.presentation.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\packages\Newtonsoft.Json.5.0.6\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="App_Start\BundleConfig.cs" />
+    <Compile Include="App_Start\FilterConfig.cs" />
+    <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\ClassBookController.cs" />
+    <Compile Include="Controllers\EventCalendarController.cs" />
+    <Compile Include="Controllers\FileUtilityController.cs" />
+    <Compile Include="Controllers\FoundingController.cs" />
+    <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\HonourListController.cs" />
+    <Compile Include="Controllers\HumanisticController.cs" />
+    <Compile Include="Controllers\MapController.cs" />
+    <Compile Include="Controllers\NewsController.cs" />
+    <Compile Include="Controllers\SchoolDiaryController.cs" />
+    <Compile Include="Controllers\SchoolMapController.cs" />
+    <Compile Include="Controllers\TeachPhilosophyController.cs" />
+    <Compile Include="Controllers\TestController.cs" />
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="Helper\QRCode.cs" />
+    <Compile Include="Models\EBookViewModels.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_Readme\Elmah.txt" />
+    <Content Include="Content\ajax-loader.gif" />
+    <Content Include="Content\bootstrap.css" />
+    <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\ebook\big_TeachPhilosophy.css" />
+    <Content Include="Content\ebook\handheld.css" />
+    <Content Include="Content\ebook\myset.css" />
+    <Content Include="Content\ebook\preview.css" />
+    <Content Include="Content\ebook\reset.css" />
+    <Content Include="Content\ebook\style.css" />
+    <Content Include="Content\ebook\water.css" />
+    <Content Include="Content\ebook\wow_book.css" />
+    <Content Include="Content\fonts\vjs.svg" />
+    <Content Include="Content\jquery-ui.css" />
+    <Content Include="Content\Map\ball.css" />
+    <Content Include="Content\Map\big.css" />
+    <Content Include="Content\Map\noJS.css" />
+    <Content Include="Content\Map\reset.css" />
+    <Content Include="Content\Map\style.css" />
+    <Content Include="Content\Map\supersize.css" />
+    <Content Include="Content\Map\tzuchi.css" />
+    <Content Include="Content\Humanistic\big.css" />
+    <Content Include="Content\Humanistic\noJS.css" />
+    <Content Include="Content\Humanistic\reset.css" />
+    <Content Include="Content\Humanistic\style.css" />
+    <Content Include="Content\reset.css" />
+    <Content Include="Content\scroll.css" />
+    <Content Include="Content\slick.css" />
+    <Content Include="Content\slick_style.css" />
+    <Content Include="Content\tzuchi.css" />
+    <Content Include="Content\video-js.css" />
+    <Content Include="favicon.ico" />
+    <Content Include="fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="Global.asax" />
+    <Content Include="Content\Site.css" />
+    <Content Include="Scripts\bootstrap.js" />
+    <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="NLog.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="App_Data\Excel資料讀取格式.xlsx" />
+    <Content Include="Content\fonts\slick.woff" />
+    <Content Include="Content\fonts\vjs.eot" />
+    <Content Include="Content\fonts\vjs.woff" />
+    <Content Include="Content\fonts\slick.ttf" />
+    <None Include="NLog.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Properties\PublishProfiles\Default Settings %282%29.pubxml" />
+    <None Include="Properties\PublishProfiles\Default Settings %283%29.pubxml" />
+    <None Include="Properties\PublishProfiles\Default Settings %284%29.pubxml" />
+    <None Include="Properties\PublishProfiles\Default Settings.pubxml" />
+    <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
+    <None Include="Properties\PublishProfiles\frontTccn.pubxml" />
+    <Content Include="Scripts\cloud.js" />
+    <Content Include="Scripts\cloud.swf" />
+    <Content Include="Scripts\easeljs-0.7.1.min.js" />
+    <Content Include="Scripts\ebook\init.js" />
+    <Content Include="Scripts\hammer.js-master\src\hammer.prefix" />
+    <Content Include="Scripts\hammer.js-master\src\hammer.suffix" />
+    <Content Include="Scripts\imgDragforbidden.js" />
+    <None Include="Properties\PublishProfiles\HistoryFront.pubxml" />
+    <None Include="Properties\PublishProfiles\OfficialHistoryApp.pubxml" />
+    <None Include="Properties\PublishProfiles\tccn_front.pubxml" />
+    <None Include="Properties\PublishProfiles\test.pubxml" />
+    <None Include="Scripts\jquery-1.10.2.intellisense.js" />
+    <Content Include="Scripts\EventCalendar.js" />
+    <Content Include="Content\EventCalendar.css" />
+    <Content Include="Scripts\hammer.js-master\hammer.js" />
+    <Content Include="Scripts\hammer.js-master\hammer.min.js" />
+    <Content Include="Scripts\hammer.js-master\src\expose.js" />
+    <Content Include="Scripts\hammer.js-master\src\hammer.js" />
+    <Content Include="Scripts\hammer.js-master\src\input.js" />
+    <Content Include="Scripts\hammer.js-master\src\input\mouse.js" />
+    <Content Include="Scripts\hammer.js-master\src\input\pointerevent.js" />
+    <Content Include="Scripts\hammer.js-master\src\input\singletouch.js" />
+    <Content Include="Scripts\hammer.js-master\src\input\touch.js" />
+    <Content Include="Scripts\hammer.js-master\src\input\touchmouse.js" />
+    <Content Include="Scripts\hammer.js-master\src\manager.js" />
+    <Content Include="Scripts\hammer.js-master\src\recognizer.js" />
+    <Content Include="Scripts\hammer.js-master\src\recognizers\attribute.js" />
+    <Content Include="Scripts\hammer.js-master\src\recognizers\pan.js" />
+    <Content Include="Scripts\hammer.js-master\src\recognizers\pinch.js" />
+    <Content Include="Scripts\hammer.js-master\src\recognizers\press.js" />
+    <Content Include="Scripts\hammer.js-master\src\recognizers\rotate.js" />
+    <Content Include="Scripts\hammer.js-master\src\recognizers\swipe.js" />
+    <Content Include="Scripts\hammer.js-master\src\recognizers\tap.js" />
+    <Content Include="Scripts\hammer.js-master\src\touchaction.js" />
+    <Content Include="Scripts\hammer.js-master\src\utils.js" />
+    <Content Include="Scripts\jquery-1.10.2.js" />
+    <Content Include="Scripts\jquery-1.10.2.min.js" />
+    <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery-migrate-1.2.1.js" />
+    <Content Include="Scripts\jquery.cycle2.js" />
+    <Content Include="Scripts\jquery.hammer.js" />
+    <Content Include="Scripts\jquery.multitouch.js" />
+    <Content Include="Scripts\jquery.validate.js" />
+    <Content Include="Scripts\jquery.validate.min.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Scripts\js\app.js" />
+    <Content Include="Scripts\modernizr-2.6.2.js" />
+    <Content Include="Scripts\respond.js" />
+    <Content Include="Scripts\respond.min.js" />
+    <Content Include="Scripts\scroll.js" />
+    <Content Include="Scripts\slick.js" />
+    <Content Include="Scripts\slick\ajax-loader.gif" />
+    <Content Include="Scripts\slick\fonts\slick.svg" />
+    <Content Include="Scripts\slick\slick.css" />
+    <Content Include="Scripts\slick\slick.js" />
+    <Content Include="Scripts\slick\slick.min.js" />
+    <Content Include="Scripts\slick\slick_h.js" />
+    <Content Include="Scripts\slick\slick_style.css" />
+    <Content Include="Scripts\slick\slick_v_HonorList.js" />
+    <Content Include="Scripts\slick\slick_v.js" />
+    <Content Include="Scripts\turnjs4\extras\jGestures-license.txt" />
+    <Content Include="Scripts\turnjs4\extras\jgestures.min.js" />
+    <Content Include="Scripts\turnjs4\extras\jquery-ui-1.8.20.custom.min.js" />
+    <Content Include="Scripts\turnjs4\extras\jquery.min.1.7.js" />
+    <Content Include="Scripts\turnjs4\extras\jquery.mousewheel.min.js" />
+    <Content Include="Scripts\turnjs4\extras\modernizr.2.5.3.min.js" />
+    <Content Include="Scripts\turnjs4\lib\hash.js" />
+    <Content Include="Scripts\turnjs4\lib\scissor.js" />
+    <Content Include="Scripts\turnjs4\lib\scissor.min.js" />
+    <Content Include="Scripts\turnjs4\lib\turn.html4.js" />
+    <Content Include="Scripts\turnjs4\lib\turn.html4.min.js" />
+    <Content Include="Scripts\turnjs4\lib\turn.js" />
+    <Content Include="Scripts\turnjs4\lib\turn.min.js" />
+    <Content Include="Scripts\turnjs4\lib\zoom.js" />
+    <Content Include="Scripts\turnjs4\lib\zoom.min.js" />
+    <Content Include="Scripts\videojs\video-js.min.css" />
+    <Content Include="Scripts\videojs\video.min.js" />
+    <Content Include="Scripts\_references.js" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="Views\Web.config" />
+    <Content Include="Views\_ViewStart.cshtml" />
+    <Content Include="Views\Shared\Error.cshtml" />
+    <Content Include="Views\Shared\_Layout.cshtml" />
+    <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Scripts\jquery-1.10.2.min.map" />
+    <Content Include="Views\TeachPhilosophy\Index.cshtml" />
+    <Content Include="Views\Map\Index.cshtml" />
+    <Content Include="Views\HonourList\Index.cshtml" />
+    <Content Include="Views\Founding\Index.cshtml" />
+    <Content Include="Views\EventCalendar\Index.cshtml" />
+    <Content Include="Views\Shared\_Layout Empty.cshtml" />
+    <Content Include="Views\EventCalendar\TinyScrollbar.cshtml" />
+    <Content Include="Views\SchoolDiary\GetSchoolDiaryByContentID.cshtml" />
+    <Content Include="Views\SchoolDiary\ScrollSearchSchoolDiary.cshtml" />
+    <Content Include="Views\SchoolDiary\SearchSchoolDiary.cshtml" />
+    <Content Include="Views\News\GetNews.cshtml" />
+    <Content Include="Views\News\ScrollNews.cshtml" />
+    <Content Include="Views\News\SearchNews.cshtml" />
+    <Content Include="Views\News\ScrollSearchNews.cshtml" />
+    <Content Include="Views\SchoolDiary\Index.cshtml" />
+    <Content Include="Scripts\slick\config.rb" />
+    <Content Include="Scripts\slick\fonts\slick.eot" />
+    <Content Include="Scripts\slick\fonts\slick.ttf" />
+    <Content Include="Scripts\slick\fonts\slick.woff" />
+    <Content Include="Scripts\slick\slick.scss" />
+    <Content Include="Scripts\turnjs4\lib\compress.sh" />
+    <Content Include="Views\SchoolMap\SchoolMapbyID.cshtml" />
+    <Content Include="Views\SchoolMap\SchoolMapList.cshtml" />
+    <Content Include="Views\ClassBook\GetClassBookByContentID.cshtml" />
+    <Content Include="Views\ClassBook\GetClassBookList.cshtml" />
+    <Content Include="Views\ClassBook\ScrollSearchClassBook.cshtml" />
+    <Content Include="Views\ClassBook\SearchClassBook.cshtml" />
+    <Content Include="Views\Map\DepartIntro.cshtml" />
+    <Content Include="Views\Map\DepartPage.cshtml" />
+    <Content Include="Views\Map\PlanInside.cshtml" />
+    <Content Include="Views\Map\PlanOutside.cshtml" />
+    <Content Include="Views\Map\DepartEduPartial\_EducationCollegePartial.cshtml" />
+    <Content Include="Views\Map\DepartNursingPartial\_AlumniPartial.cshtml" />
+    <Content Include="Views\Map\PlanInsidePartial\_IndustryCooperationPartial.cshtml" />
+    <Content Include="Views\Map\PlanOutsidePartial\_DegreePartial.cshtml" />
+    <Content Include="Views\Map\DepartEduPartial\_EducationDepartPartial.cshtml" />
+    <Content Include="Views\Map\DepartEduPartial\_HistoryPartial.cshtml" />
+    <Content Include="Views\Map\DepartEduPartial\_PromotionCreditsPartial.cshtml" />
+    <Content Include="Views\Map\DepartNursingPartial\_BusinessPartial.cshtml" />
+    <Content Include="Views\Map\DepartNursingPartial\_HistoryPartial.cshtml" />
+    <Content Include="Views\Map\DepartNursingPartial\_HonourListPartial.cshtml" />
+    <Content Include="Views\Map\DepartNursingPartial\_PicPartial.cshtml" />
+    <Content Include="Views\Map\DepartNursingPartial\_SessionsPartial.cshtml" />
+    <Content Include="Views\Map\PlanInsidePartial\_InternshipPartial.cshtml" />
+    <Content Include="Views\Map\PlanInsidePartial\_UnionPartial.cshtml" />
+    <Content Include="Views\Map\PlanOutsidePartial\_IndustrycooperationPartial.cshtml" />
+    <Content Include="Views\Map\PlanOutsidePartial\_InternshipPartial.cshtml" />
+    <Content Include="Views\Map\PlanOutsidePartial\_OverseaPartial.cshtml" />
+    <Content Include="Views\Map\PlanOutsidePartial\_SisterPartial.cshtml" />
+    <Content Include="Views\Map\DepartEduPartial\_PromotionNonCreditsPartial.cshtml" />
+    <Content Include="Views\Map\DepartEduPartial\_PromotionCollegePartial.cshtml" />
+    <Content Include="Views\Map\DepartHealthPartial\_AlumniPartial.cshtml" />
+    <Content Include="Views\Map\DepartHealthPartial\_BusinessPartial.cshtml" />
+    <Content Include="Views\Map\DepartHealthPartial\_HistoryPartial.cshtml" />
+    <Content Include="Views\Map\DepartHealthPartial\_HonourListPartial.cshtml" />
+    <Content Include="Views\Map\DepartHealthPartial\_PicPartial.cshtml" />
+    <Content Include="Views\Map\DepartHealthPartial\_SessionsPartial.cshtml" />
+    <Content Include="Views\Map\DepartMedicalPartial\_AlumniPartial.cshtml" />
+    <Content Include="Views\Map\DepartMedicalPartial\_BusinessPartial.cshtml" />
+    <Content Include="Views\Map\DepartMedicalPartial\_HistoryPartial.cshtml" />
+    <Content Include="Views\Map\DepartMedicalPartial\_HonourListPartial.cshtml" />
+    <Content Include="Views\Map\DepartMedicalPartial\_PicPartial.cshtml" />
+    <Content Include="Views\Map\DepartMedicalPartial\_SessionsPartial.cshtml" />
+    <Content Include="Views\Map\PlanInsidePartial\_IndexPartial.cshtml" />
+    <Content Include="Views\Founding\_CEOPartialView.cshtml" />
+    <Content Include="Views\Founding\_OriginalPartialView.cshtml" />
+    <Content Include="Views\Founding\_PrincipalPartialView.cshtml" />
+    <Content Include="Views\Founding\GetAllForFrontPage.cshtml" />
+    <Content Include="Views\HonourList\_SearchPartial.cshtml" />
+    <Content Include="Views\HonourList\GetByYear.cshtml" />
+    <Content Include="Views\HonourList\GetForFrontPage.cshtml" />
+    <Content Include="Views\HonourList\SearchByKeyWord.cshtml" />
+    <Content Include="Views\TeachPhilosophy\_BodhiPartialView.cshtml" />
+    <Content Include="Views\TeachPhilosophy\_EducationIdeaPartialView.cshtml" />
+    <Content Include="Views\TeachPhilosophy\_FullEducationPartialView.cshtml" />
+    <Content Include="Views\TeachPhilosophy\_TzuChiAnthropogeographPartialView.cshtml" />
+    <Content Include="Views\TeachPhilosophy\_TzuChiCharityPartialView.cshtml" />
+    <Content Include="Views\TeachPhilosophy\_SelffishSeekingPartialView.cshtml" />
+    <Content Include="Views\TeachPhilosophy\_TzuChiDonatePartialView.cshtml" />
+    <Content Include="Views\TeachPhilosophy\_TzuChiECOPartialView.cshtml" />
+    <Content Include="Views\TeachPhilosophy\_TzuChiEducationPartialView.cshtml" />
+    <Content Include="Views\TeachPhilosophy\_TzuChiMedicalPartialView.cshtml" />
+    <Content Include="Views\TeachPhilosophy\_TzuChiReliefPartialView.cshtml" />
+    <Content Include="Views\TeachPhilosophy\_TzuChiVolunteerPartialView.cshtml" />
+    <Content Include="Views\TeachPhilosophy\_TzuChiWorldPartialView.cshtml" />
+    <Content Include="Views\TeachPhilosophy\TeachPhilosophy.cshtml" />
+    <Content Include="Views\TeachPhilosophy\TzuChiWorld.cshtml" />
+    <Content Include="Views\SchoolDiary\GetSchoolDiaryList.cshtml" />
+    <Content Include="Views\Test\Index.cshtml" />
+    <Content Include="Views\Test\Idea.cshtml" />
+    <Content Include="Views\Test\TzuChiWorld.cshtml" />
+    <Content Include="Views\Test\_MenuIdea.cshtml" />
+    <Content Include="Views\Test\_Book.cshtml" />
+    <Content Include="Views\Test\_MenuWorld.cshtml" />
+    <Content Include="Views\Test\World.cshtml" />
+    <Content Include="Views\Test\_Video.cshtml" />
+    <Content Include="Views\SchoolDiary\List.cshtml" />
+    <Content Include="Views\SchoolDiary\test.cshtml" />
+    <Content Include="Views\HonourList\List.cshtml" />
+    <Content Include="Views\HonourList\Test.cshtml" />
+    <Content Include="Views\HonourList\xtest.cshtml" />
+    <Content Include="Views\HonourList\details.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Scripts\contentFlow\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="packages.config" />
+    <None Include="Project_Readme.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\TzuChiBackend\TzuChiBackend.csproj">
+      <Project>{c8ae87bc-2c27-4343-95d2-431f7ee81fc9}</Project>
+      <Name>TzuChiBackend</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TzuChiClassLibrary\TzuChiClassLibrary.csproj">
+      <Project>{86c7259b-6f59-47c9-aa79-c53add280d78}</Project>
+      <Name>TzuChiClassLibrary</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <Target Name="MvcBuildViews" AfterTargets="AfterBuild" Condition="'$(MvcBuildViews)'=='true'">
+    <AspNetCompiler VirtualPath="temp" PhysicalPath="$(WebProjectOutputDir)" />
+  </Target>
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>True</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>2397</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost:2397/</IISUrl>
+          <OverrideIISAppRootUrl>True</OverrideIISAppRootUrl>
+          <IISAppRootUrl>http://localhost:2397/</IISAppRootUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>此專案參照此電腦中缺少的  NuGet 套件。啟用「NuGet 套件還原」以便下載。如需詳細資訊，請參閱 http://go.microsoft.com/fwlink/?LinkID=322105。缺少的檔案為 {0}。</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('$(SolutionDir)\.nuget\NuGet.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\.nuget\NuGet.targets'))" />
+  </Target>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target> -->
+</Project>

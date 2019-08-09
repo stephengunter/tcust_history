@@ -1,0 +1,119 @@
+﻿<!--選單區-->
+<div id="menuDiv1" class="menubk">
+    <div class="mBtn">
+        <ul class="mBtn1"><a href="@Url.Action("PlanOutside", "Map", new { categoryOutsideID = TzuChiClassLibrary.BO.PlanOutsideModel.CATEGORYQUTSIDEID_SISTER })"></a></ul>
+        <ul class="mBtn2"><a href="@Url.Action("PlanOutside", "Map", new { categoryOutsideID = TzuChiClassLibrary.BO.PlanOutsideModel.CATEGORYQUTSIDEID_DEGREE })"></a></ul>
+        <ul class="mBtn3D"></ul>
+        <ul class="mBtn4"><a href="@Url.Action("PlanOutside", "Map", new { categoryOutsideID = TzuChiClassLibrary.BO.PlanOutsideModel.CATEGORYQUTSIDEID_INDUSTRYCOOPERATION })"></a></ul>
+        <ul class="mBtn5"><a href="@Url.Action("PlanOutside", "Map", new { categoryOutsideID = TzuChiClassLibrary.BO.PlanOutsideModel.CATEGORYQUTSIDEID_INTERNSHIP })"></a></ul>
+    </div>
+    <!--選單先選擇國家所在地才會出現menuDiv2-->
+     <section class="main">
+        <div class="wrapper-demo">
+            <div id="dd" class="wrapper-dropdown-5 dd" tabindex="1" style="z-index:3;margin-top:15px;">
+                <span id="menuShow">所在地</span>
+                <ul class="dropdown dropdown-country">
+                    @foreach (var item in ViewBag.SearchList)
+                    {
+                        <li>
+                            <a href="javascript:void(0)" key="@item.Key">
+                                @item.Value
+                            </a>
+                        </li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </section>
+    <section class="main" style="margin: -30px 0px 0px 0px;">
+        <div class="wrapper-demo">
+            <div id="dd" class="wrapper-dropdown-5 dd" tabindex="1" style="z-index:2;margin-top:40px;">
+                <span id="menuYear">年度</span>
+                <ul class="dropdown dropdown-year">
+                    @foreach (var item in ViewBag.YearList)
+                    {
+                        <li>
+                            <a href="javascript:void(0)" key="@item">
+                                @item
+                            </a>
+                        </li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </section>
+    <ul class="btnright"><a href="javascript:search('@TzuChiClassLibrary.BO.PlanOutsideModel.CATEGORYQUTSIDEID_OVERSEA')">搜尋</a></ul>
+</div>
+<!--選擇學校後 才會出現內文 menuDiv3-->
+<div id="menuDiv2" class="menu2bk">
+    <div class="arrowU"><a href="javascript:scrollUpMenu()"></a></div>
+    <!--學校分類 Start-->
+    <div class="menuBTN" id="menuBTN" style="overflow:hidden;margin-left:0px">
+        <div id="menuBlock" style="display:inline-block">
+            @foreach (var item in ViewBag.Data)
+            {
+                <div class="mBTN"><a href='javascript:coordinate("@item.ContentID")'>@item.ContentName</a></div>
+            }
+        </div>
+    </div>
+    <!--學校分類 End-->
+    <div class="arrowD"><a href="javascript:scrollDownMenu()"></a></div>
+</div>
+<!-- 資料顯示 Start-->
+<div id="dataShow" style="display:none">
+    <div id="menuDiv3" class="menu3bk">
+        <div class="WINup">
+            <div class="WINclose">
+                <a href="javascript:popupClose()"></a>
+            </div>
+        </div>
+        <div class="WINdown">
+            <div class="WINbkL">
+                <div class="WINTitle">相  簿</div>
+                <div id="picDiv1"></div>
+                <div style="float:left;width:735px;height:550px;">
+                    <img id="picShow" src="" border="0" class="WINglow1">
+                </div>
+                <div class="WINsmall">
+                    <div class="arrowL"><a href="#"></a></div>
+                    <div class="WINsmall2" style="overflow:hidden;">
+                    </div>
+                    <div class="arrowR"><a href="#"></a></div>
+                </div>
+            </div>
+            <div class="WINbkR">
+                <div class="WINTitle">活動介紹</div>
+                <div class="WINCont" style="overflow-x: hidden; overflow-y:visible;">
+                    所 在 地：<span id="categoryCountryID"></span><br>
+                    活動名稱：<span class="contentName"></span><br>
+                    <span id="contentTimeTitle">交流日期：</span>
+                    <span id="contentTime"></span>
+                    <span id="endTimeTilde">~</span>
+                    <span id="endTime"></span> 
+                    <span id="categoryDepartmentIDTitle"><br>交流單位：</span>
+                    <span id="categoryDepartmentID"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 資料顯示 End-->
+<!--紅點對位區 Start-->
+<div id="ballTip1" class="ballTip">
+    <span class="Tip1">
+        <a id="schoolName" href="javascript:popup()"><span class="contentName"></span></a>
+    </span>
+    <span class="Tip2">
+        <img src="@Url.Content("~/Images/Map/balldown.png")" width="30" height="30">
+    </span>
+</div>
+<div id="ball1"><a href="javascript:void(0)"><img src="@Url.Content("~/Images/Map/ball.png")" width="30" height="30" border="0"></a></div>
+<!--紅點對位區 End-->
+<!-- 所有座標 Start-->
+@foreach (var item in ViewBag.Data)
+{
+    string pointX = item.Coordinate.PointX + "px";
+    string pointY = item.Coordinate.PointY + "px";
+    <div class="ballAll" style="left:@pointX ;top:@pointY "><a href="javascript:void(0)"><img src="@Url.Content("~/Images/Map/ball.png")" width="30" height="30" border="0"></a></div>
+}
+<!-- 所有座標 End-->

@@ -1,0 +1,442 @@
+﻿
+@{
+    ViewBag.Title = "GetAllForFromPage";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section scripts {
+<script src="~/Scripts/tweenjs-0.4.0.min.js"></script>
+<script src="~/Scripts/jquery-1.10.2.js"></script>
+<script type="text/javascript" src="~/Scripts/jquery-migrate-1.2.1.js"></script>
+<script src="~/Scripts/jquery-ui-1.11.1.js"></script>
+<script type="text/javascript" src="/Scripts/easeljs-0.7.1.min.js"></script>
+<script src="/Scripts/preloadjs-NEXT.min.js"></script>
+<script src="~/Scripts/slick/slick.js"></script>
+
+<script>
+    var nowLocation = 'Original';//最初位置&紀錄目前位置
+    var originalPicList = ['/Images/Founding/cont1btn1.png', '/Images/Founding/cont1btn2.png', '/Images/Founding/cont1btn3.png', '/Images/Founding/cont1btn4.png', '/Images/Founding/cont1btn5.png', '/Images/Founding/cont1btn6.png', '/Images/Founding/cont1btn7.png'];
+    var principalPicList = ['/Images/Founding/cont3btn1.png', '/Images/Founding/cont3btn2.png', '/Images/Founding/cont3btn3.png', '/Images/Founding/cont3btn4.png'];
+    var ceoPicList = ['/Images/Founding/cont2btn1.png', '/Images/Founding/cont2btn2.png', '/Images/Founding/cont2btn3.png', '/Images/Founding/cont2btn4.png'];
+
+    var DEFAULT_BTN = '<div><div class="BTN"><a href="#"><img  width="760" height="810"></a></div></div>';
+    var DEFAULT_BTN_IMG = '<div class="donotEffect"><div class="BTNImg"><img width="760" height="810"></div></div>';
+    var MOUSE_POSITION_X,MOUSE_POSITION_Y;//滑鼠點擊位置X,滑鼠點擊位置Y
+    var INTERFACE_CHAIRMAN = "/Founding/GetAllDirectors";//歷屆董事接口
+    var INTERFACE_DROPWIN = "/Founding/GetPartialView";//彈跳視窗partial
+    var arrowL = '  <div><ul class="arrowL"><a href="#"></a></ul></div>';//鍵頭左
+    var arrowR = '  <div><ul class="arrowR"><a href="#"></a></ul></div>';//鍵頭右
+    var leaf, ripple, nowFrame = 0, isLock = false, timer;
+    var ajaxReqObj;//索取excel名單的ajax
+    var contentData = [];
+    var menuList = ["Original", "CEO", "Principal"];
+
+    var canvas, stage, exportRoot;
+    var canvasRipple, stageRipple, exportRootRipple, timer, fps = 12;
+
+    $(document).ready(function () {
+        initCanvas();
+        init();//頁面初始化
+    });
+
+
+    function initCanvas() {
+        stage = new createjs.Stage("testCanvas");
+
+        manifest = [
+			{ src: "/Images/Founding/right/leaf.jpg", id: "leaf" },
+			{ src: "/Images/Founding/left/ripple.jpg", id: "ripple" }
+        ];
+
+        loader = new createjs.LoadQueue(false);
+        loader.addEventListener("complete", handleComplete);
+        loader.loadManifest(manifest);
+
+    }
+
+    function handleComplete() {
+        var data = new createjs.SpriteSheet({
+            "images": [loader.getResult("ripple")],
+            "frames": { "regX": 0, "height": 542, "count": 170, "regY": 0, "width": 1202 }
+        });
+        ripple = new createjs.Sprite(data);
+        ripple.setTransform(0, -30, 1, 1);
+        ripple.framerate = 0;
+
+        data = new createjs.SpriteSheet({
+            "images": [loader.getResult("leaf")],
+            "frames": { "regX": 0, "height": 542, "count": 170, "regY": 0, "width": 1202 },
+            "animations": { "run": [0, 99, 1] }
+        });
+        leaf = new createjs.Sprite(data, "run");
+        leaf.setTransform(2640, -30, 1, 1);
+        leaf.framerate = 0;
+
+        stage.addChild(ripple);
+        stage.addChild(leaf);
+
+        //createjs.Ticker.timingMode = createjs.Ticker.RAF;
+        createjs.Ticker.addEventListener("tick", tick);
+        createjs.Ticker.setPaused(true);
+    }
+
+    function tick(event) {
+        if (!event.paused) {
+            ripple.gotoAndPlay(nowFrame);
+            nowFrame++;
+            nowFrame = nowFrame % 170;
+        }
+        else {
+            ripple.gotoAndPlay(nowFrame);
+        }
+        stage.update(event);
+    }
+
+    function init() {
+            $.ajax({
+                url: INTERFACE_DROPWIN,
+                data: 'menu=' + menuList[0],
+                type: 'GET',
+
+                datatype: 'html',
+                success: function (jData) {
+                    contentData.push(jData);
+                },
+                complete: function () {
+                    $.ajax({
+                        url: INTERFACE_DROPWIN,
+                        data: 'menu=' + menuList[1],
+                        type: 'GET',
+
+                        datatype: 'html',
+                        success: function (jData) {
+                            contentData.push(jData);
+                        },
+                        complete: function () {
+                            $.ajax({
+                                url: INTERFACE_DROPWIN,
+                                data: 'menu=' + menuList[2],
+                                type: 'GET',
+
+                                datatype: 'html',
+                                success: function (jData) {
+                                    contentData.push(jData);
+                                },
+                                complete: function () {
+                                            firstInit();//第一次轉入創校緣起頁面時的初始化
+                                            listEventInit();//設定清單點擊事件
+                                }
+                            });
+                        }
+                    });
+                }
+            });
+
+
+    }
+
+    function firstInit() {
+        setPicClickEvent();//設定圖片
+        setSlick(4, false);//設定slick
+        $('body').click(function () {//水波紋處理，點下去就展開影片，三秒後放靜圖
+            if (!isLock) {
+                isLock = true;
+                createjs.Ticker.setPaused(false);
+                clearTimeout(timer);
+                timer = setTimeout(function () {
+                    createjs.Ticker.setPaused(true);
+                    isLock = !isLock;
+                }, 3000);
+            }
+        });
+    }
+
+    function listEventInit() {//旁邊清單事件
+
+        $('.menu > ul').click(function () {
+            var targetList = $(this);
+            var contBTNElement = $('.contBTN');
+            var rollerDiv = $('div[id*="rollerDiv"]');//卷軸元素，依照清單抽換
+            if (targetList.attr('id') === nowLocation) {
+                return;
+            }
+            if (ajaxReqObj !== undefined) {
+                ajaxReqObj.abort();
+            }
+            nowLocation = targetList.attr('id');//紀錄目前未置，便於判斷是否要切換內容
+            hideDropWindow('All');//點選清單就隱藏所有彈跳視窗
+            contBTNElement.unslick();//清除slick效果以防萬一
+            contBTNElement.html('');//清除顯示內容
+            if (targetList.attr('id') === 'Original') {//創校緣起
+                setPicElement(contBTNElement, originalPicList.length);//設定放置圖片元素
+                setPic($('.contBTN img'), originalPicList);//將圖片路徑插入元素中
+                $('.contBTN').html(copyElementToSlide(originalPicList.length, 4, $('.contBTN').html()));
+            }
+            else if (targetList.attr('id') === 'Principal') {//校長
+                setPicElement(contBTNElement, principalPicList.length);//設定放置圖片元素
+                setPic($('.contBTN img'), principalPicList);//將圖片路徑插入元素中
+                $('.contBTN').html(copyElementToSlide(principalPicList.length, 4, $('.contBTN').html()));
+            }
+            else if (targetList.attr('id') === 'CEO') {//執行長
+                contBTNElement.append(DEFAULT_BTN_IMG);//設定放置圖片元素
+                setPicElement(contBTNElement, ceoPicList.length - 1);
+                setPic($('.contBTN img'), ceoPicList);//將圖片路徑插入元素中
+                $('.contBTN').html(copyElementToSlide(ceoPicList.length, 4, $('.contBTN').html()));
+            }
+            else {//歷屆董事
+                requestAndSetChairmanData(contBTNElement);//接收資料
+            }
+            if (targetList.attr('id') !== 'Chairman') {//只要不是點選歷屆董事，就要設定彈跳視窗事件
+                setPicClickEvent();
+                setSlickArrow();//先設定slick所需要的箭頭元素
+                setSlick(4, false);//設定slick
+            }
+            rollerDiv.attr('id', 'rollerDiv' + ($(this).index() + 1));
+
+        })
+    }
+
+    function setSlickArrow() {
+        if ($('.arrowL').length === 0) {
+            $('.menu').after(arrowL);
+        }
+        if ($('.arrowR').length === 0) {
+            $('div[id*="rollerDiv"]').append(arrowR);
+        }//slick要的箭頭
+    }
+
+    function setSlick(slideShow, isVariableWidth) {
+        $('.contBTN').slick({
+            slidesToShow: slideShow,
+            slidesToScroll: 1,
+            prevArrow: $('.arrowL'),
+            nextArrow: $('.arrowR'),
+            touchThreshold: 100,
+            infinite: true,
+            variableWidth: isVariableWidth
+        });//設定slick
+    }
+
+    function setPicElement(targetElement, picLength) {
+        for (var i = 0 ; i < picLength ; i++) {
+            targetElement.append(DEFAULT_BTN);
+        }//設定放置圖片的元素
+    }
+
+    function setPic(element, picList) {
+        for (var i = 0 ; i < picList.length ; i++) {
+            element.eq(i).attr('src', picList[i]);
+        }//設定圖片來源
+    }
+
+    function setPicClickEvent() {//設置圖片點擊事件
+        $('.contBTN div').mousedown(function (event) {//滑鼠在小圖片上按下後立刻記錄滑鼠位置
+            MOUSE_POSITION_X = event.pageX;
+            MOUSE_POSITION_Y = event.pageY;
+        });
+
+        $('.contBTN div').mouseup(function (event) {
+            if (MOUSE_POSITION_X === event.pageX && MOUSE_POSITION_Y === event.pageY) {//判斷是在移動圖片還是點擊圖片，點擊則往下執行，移動則返回
+                if ($(this).find('a').length === 0)//如果有BTNImg則不顯示任何彈跳視窗
+                    return;
+                var getPicSrc = $(this).find('img').attr('src');
+                if (IsLeft($(this).find('img'))) {//判斷被點擊圖片位置
+                    $('#LeftDiv').html('');
+                    getPicSrc = getPicSrc.split('/').pop().split('.')[0];
+                    var partialElement = $('<div/>').html(contentData[getMenuIndex(nowLocation)]).find('.' + getPicSrc).html();
+                    setPopWinContent('#LeftDiv', partialElement);
+                }
+                else {
+                    $('#RightDiv').html('');
+                    getPicSrc = getPicSrc.split('/').pop().split('.')[0];
+                    var partialElement = $('<div/>').html(contentData[getMenuIndex(nowLocation)]).find('.' + getPicSrc).html();
+                    setPopWinContent('#RightDiv', partialElement);
+                }
+            }
+        });//設定圖片事件
+    }
+
+    function getMenuIndex(location) {
+        for (var i = 0 ; i < menuList.length ; i++) {
+            if (menuList[i] === location) {
+                return i;
+            }
+        }
+    }
+
+    function setPopWinContent(typeWin, partialElement) {
+        $(typeWin).html(partialElement);
+        $(typeWin + ' .showContent').nextAll().hide();//除了第一個show class，先隱藏所有show class的內容
+        $(typeWin + ' .Button a').click(function () {//顯擊彈跳視窗button秀出應對內容
+            $(typeWin + ' .showContent').each(function () {//隱藏全部內容
+                $(this).hide();
+            });
+            $(typeWin + ' .showContent').eq($(this).parent().index() / 2).show();//秀出應對內容
+            if ($('audio').length !== 0) {
+                $('audio').trigger('pause');
+            }
+        });
+        $('.WINclose').click(function () {//設定X的關閉事件
+            $(this).parent().fadeOut();
+            if ($('audio').length !== 0) {
+                $('audio').trigger('pause');
+            }
+        });
+        $(typeWin).fadeIn();//準備完畢，秀出彈跳視窗
+    }
+
+    function requestAndSetChairmanData(targetContentElement) {
+        var ajaxData;
+        ajaxReqObj = $.ajax({
+            url: INTERFACE_CHAIRMAN,
+            type: 'GET',
+            datatype: 'json',
+            success: function (jData) {
+                jData.sort(function (a, b) {
+                    return parseInt(a.StartYear) - parseInt(b.StartYear);
+                });
+                ajaxData = jData;
+            },
+            complete: function() {
+                setChainManElement(targetContentElement, ajaxData);
+                setSlickArrow();//先設定slick所需要的箭頭元素
+                setSlick(8, true);//設定slick
+            }
+        });
+    }
+
+    function setChainManElement(targetElement, ajaxData) {
+        var htmlElement = '';
+        var isFirst = true;
+        for (var i = 0 ; i < ajaxData.length ; i++) {//列出屆數&起訖時間
+            var nameList = ajaxData[i]['NameList'];
+            htmlElement += '<div><div class="Cont4"><li class="C4title">' + ajaxData[i]['SessionNumber'] + '</li><li class="C4line"></li><li class="C4txt">';
+            for (var j = 0 ; j < nameList.length ; j++) {//列出董事名單
+                if (j % 15 == 0 && !isFirst) {//單列人數維持在15人
+                    htmlElement += '</li><li class="C6txt">';
+                }
+                htmlElement += nameList[j] + '<br>';
+                isFirst = false;
+            }
+            isFirst = true;
+            htmlElement += '</li></div></div>';
+        }
+        htmlElement = copyElementToSlide(ajaxData.length, 8, htmlElement);
+        targetElement.html(htmlElement);
+
+    }
+
+    function copyElementToSlide(objectLength, slideToShowLength, htmlElement) {
+        if (objectLength <= slideToShowLength) {//小於slide show 複製一份製造Slide效果
+            htmlElement += htmlElement;
+        }
+        return htmlElement;
+    }
+
+    function IsLeft(targetImg) {//判斷被點擊的圖片
+        var imgPositionX = targetImg.offset().left + $('.menu').width() + 30; //+30修正位置
+        var containerPosition = ($('.menu').width() + $('.contBTN').width() / 2);//容器位置
+        if (imgPositionX <= containerPosition) {
+            return true;//左邊
+        }
+        else {
+            return false;//右邊
+        }
+    }
+
+    function hideDropWindow(typeWindow) {
+        if (typeWindow === 'All') {
+            $('#LeftDiv').fadeOut();
+            $('#RightDiv').fadeOut();
+        }
+        else if (typeWindow === 'LeftDiv') {
+            $('#LeftDiv').fadeOut();
+        }
+        else if (typeWindow === 'RightDiv') {
+            $('#RightDiv').fadeOut();
+        }
+    }
+
+
+</script>
+}
+
+@section styles{
+<link rel="stylesheet" href="http://code.jquery.com/ui/1.11.1/themes/smoothness/jquery-ui.css">
+<link rel="stylesheet" type="text/css" href="~/Scripts/slick/slick.css" />
+<link href="~/Scripts/inform/css/reset.css" rel="stylesheet" type="text/css">
+<link href="~/Scripts/inform/css/big.css" rel="stylesheet" type="text/css">
+<style type="text/css">
+    #LeftDiv {
+        position: absolute;
+        width: 1350px;
+        height: 958px;
+        z-index: 100;
+        left: 390px;
+        top: 40px;
+        display: none;
+    }
+
+    #visible{
+        z-index:3;
+        position: absolute;
+        left:1175px;
+        top:620px;
+    }
+
+    #RightDiv {
+        position: absolute;
+        width: 1350px;
+        height: 958px;
+        z-index: 100;
+        right: 390px;
+        top: 40px;
+        display: none;
+    }
+    .Cont4{
+        width:390px;
+    }
+
+    .BTNImg{
+        margin-left:-30px;
+    }
+
+    .slick-slide{
+        width:394px;
+    }
+
+</style>
+}
+    <div id="LeftDiv" class="WINglow">
+    </div>
+
+
+    <div id="RightDiv" class="WINglow">
+    </div>
+    <!--卷軸框架-->
+    <div id="rollerDiv1">
+        <div class="menu">
+            <ul id="Original" class="menuD1"><a></a></ul>
+            <ul id="CEO" class="menuD2"><a></a></ul>
+            <ul id="Principal" class="menuD3"><a></a></ul>
+            <ul id="Chairman" class="menuD4"><a></a></ul>
+        </div>
+        <div><ul class="arrowL"><a href="#"></a></ul></div>
+        <!--內容物-->
+        <div class="contBTN" style="overflow:hidden;">
+            <div class="BTN"><a href="#"><img src="~/Images/Founding/cont1btn1.png" width="760" height="810"></a></div>
+            <div class="BTN"><a href="#"><img src="~/Images/Founding/cont1btn2.png" width="760" height="810"></a></div>
+            <div class="BTN"><a href="#"><img src="~/Images/Founding/cont1btn3.png" width="760" height="810"></a></div>
+            <div class="BTN"><a href="#"><img src="~/Images/Founding/cont1btn4.png" width="760" height="810"></a></div>
+            <div class="BTN"><a href="#"><img src="~/Images/Founding/cont1btn5.png" width="760" height="810"></a></div>
+            <div class="BTN"><a href="#"><img src="~/Images/Founding/cont1btn6.png" width="760" height="810"></a></div>
+            <div class="BTN"><a href="#"><img src="~/Images/Founding/cont1btn7.png" width="760" height="810"></a></div>
+        </div>
+        <div><ul class="arrowR"><a href="#"></a></ul></div>
+    </div>
+    <div id="visible"><img src="~/Images/Founding/visible.jpg"></div>
+    <!--內頁框架-->
+    <div class="contbk">
+ 
+        <canvas id="testCanvas" width="3840" height="510" style="overflow:hidden;margin-top:570px"></canvas>
+    </div>

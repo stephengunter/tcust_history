@@ -1,0 +1,195 @@
+﻿@model TzuChiBackend.ViewModels.VideoCategorySearchForm
+@using Core.Extensions;
+
+
+<div id="search-options" class="form-inline">
+    <div class="form-group">
+        <label>狀態</label>
+        <input type="radio" name="CategoryStatus" value="1"> 公開
+        <input type="radio" name="CategoryStatus" value="0"> 隱藏
+    </div>
+
+    <input type="hidden" id="is-active" value="@Model.Active" />
+</div>
+
+
+
+<div>
+    <label class="control-label">總筆數：(@Model.DataCount)</label>
+    <div class="btn-group">
+        <button id="btn-add-category" type="button" class="btn btn-primary">
+            新增
+
+        </button>
+
+
+
+    </div>
+</div>
+
+
+<div style="padding-top:5px;">
+    <table id="table-categories" class="table">
+        <thead>
+            <tr style="background-color:#CCCCCC">
+                
+                <th>
+                    名稱
+                </th>
+                
+				<th style="width:18%">
+					顯示順序
+					<button id="btn-edit-category-order" class="btn btn-success  btn-xs" title="存檔">
+						<span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span>
+					</button>
+				</th>
+                <th>
+                    狀態
+                </th>
+              
+                <th style="width:10%">
+                    最後更新
+                </th>
+
+
+                <th style="width:15%">
+                    &nbsp;
+                </th>
+            </tr>
+        </thead>
+        @if (Model.DataCount > 0)
+        {
+            <tbody>
+
+                @foreach (var item in Model.ViewResultList)
+                {
+                    <tr>
+                        
+                        <td> @item.Name </td>
+						<td>
+							<input type="hidden" class="category-id" value="@item.Id" />
+							<input class="form-control display-order" value="@item.Sort" />
+						</td>
+                        <td> @item.ActiveText </td>
+                        <td> @item.LastUpdated.ToString("yyyy/MM/dd") </td>
+
+
+
+                        <td>
+
+
+                            <button data-id="@item.Id" class="btn btn-primary  btn-sm btn-edit-category" title="編輯">
+                                <span class="glyphicon glyphicon-pencil"></span>
+                            </button>
+                           
+                          
+
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        }
+
+    </table>
+
+
+</div>
+
+
+<script type="text/javascript">
+	var categoriesCount = '@Model.DataCount';
+	function hasCategories() {
+		return parseInt(categoriesCount) > 0;
+	}
+
+	function isActive() {
+		let status = parseInt($('#is-active').val());
+
+		let active = true;
+		if (status < 0) active = false
+
+		return active;
+	}
+
+	function initCategories() {
+		let active = isActive();
+        $('#search-options input[type=radio][name=CategoryStatus]').each(function () {
+            if ($(this).val() == '1') {
+                $(this).prop("checked", active)
+            } else {
+                $(this).prop("checked", !active)
+            }
+
+        });
+	}
+
+	function updateCategoryOrder(categories) {
+			var url = '@Url.Action("UpdateCategoryOrder", "Video")';
+
+			$.ajax({
+				type: "POST",
+				url: url,
+				data: { categories: categories },
+				dataType: 'json',
+				success: function (result) {
+					let active = isActive();
+					categoryIndex(active);
+				},
+				error: function () {
+					OnError();
+				}
+			});
+            
+		}
+
+    $(document).ready(function () {
+
+        initCategories();
+
+        $('#search-options input[type=radio][name=CategoryStatus]').change(function () {
+            let active = isTrue($(this).val());
+            categoryIndex(active);
+        });
+
+        $('#btn-add-category').click(function () {
+            addCategory();
+        });
+
+        $(".btn-edit-category").click(function (e) {
+            e.preventDefault();
+            var id = $(this).data('id');
+            editCategory(id);
+
+		});
+
+		if (!hasCategories()) {
+
+			$('#btn-edit-category-order').hide();
+		}
+
+		$('#btn-edit-category-order').click(function (e) {
+			e.preventDefault();
+
+			let categories = [];
+
+			$('#table-categories > tbody  > tr').each(function () {
+				let id = $(this).find("input.category-id").val();
+				let order = $(this).find("input.display-order").val();
+
+				categories.push({
+					Id: id,
+					Sort: order
+				});
+			});
+
+			updateCategoryOrder(categories);
+
+		});
+
+
+
+
+
+
+	});
+</script>

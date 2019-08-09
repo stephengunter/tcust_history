@@ -1,0 +1,399 @@
+﻿
+@{
+    ViewBag.Title = "BookPage";
+}
+
+@section scripts{
+<script src="~/Scripts/jquery-1.10.2.js"></script>
+<script type="text/javascript" src="~/Scripts/jquery-migrate-1.2.1.js"></script>
+<script src="~/Scripts/slick/slick.js"></script>
+<script src="~/Scripts/easeljs-0.6.0.min.js"></script>
+<script src="~/Scripts/tweenjs-0.4.0.min.js"></script>
+<script src="~/Scripts/movieclip-0.6.0.min.js"></script>
+<script src="~/Scripts/preloadjs-0.3.0.min.js"></script>
+<script src="/Scripts/leaf.js"></script>
+<script>
+    var turnBackTimer;
+    var TIME_TO_TURN_BACK = 300000;
+    var POSITION_X, POSITION_Y;
+    $(document).ready(function () {
+        init();
+
+        $('.btn').mousedown(function (e) {
+            POSITION_X = e.pageX;
+            POSITION_Y = e.pageY;
+        })
+
+        $('.btn').mouseup(function (e) {
+            if (e.pageX === POSITION_X && e.pageY === POSITION_Y) {
+                window.location.href = $(this).attr('data-href');
+            }
+        });
+
+        turnBackTimer = setTimeout(function () {
+            window.location.href = '@Url.Content("Index")';
+        }, TIME_TO_TURN_BACK);
+
+        $('body').click(function () {
+            clearTimeout(turnBackTimer);
+            turnBackTimer = setTimeout(function () {
+                window.location.href = '@Url.Content("Index")';
+            }, TIME_TO_TURN_BACK);
+        });
+        $('.bookDiv').slick({
+            prevArrow: $('.arrowL'),
+            nextArrow: $('.arrowR'),
+            slidesToShow: 3,
+            slidesToScroll: 1,
+            centerMode: true,
+            touchThreshold: 100,
+            onAfterChange: function () {
+                if ($('.slick-center').find('.btn').hasClass('purple')) {
+                    $('#TitleDiv').find('img').attr('src', '/Images/Humanistic/booktitle1.png');
+                }
+                else {
+                    $('#TitleDiv').find('img').attr('src', '/Images/Humanistic/booktitle2.png');
+                }
+            }
+        });
+    });
+
+    var canvas, stage, exportRoot;
+
+    function init() {
+        canvas = document.getElementById("canvas");
+        images = images || {};
+
+        var manifest = [
+            { src: "/Images/Humanistic/leaf/Leaves_L_00000.png", id: "Leaves_L_00000" },
+            { src: "/Images/Humanistic/leaf/Leaves_L_00001.png", id: "Leaves_L_00001" },
+            { src: "/Images/Humanistic/leaf/Leaves_L_00002.png", id: "Leaves_L_00002" },
+            { src: "/Images/Humanistic/leaf/Leaves_L_00003.png", id: "Leaves_L_00003" },
+            { src: "/Images/Humanistic/leaf/Leaves_L_00004.png", id: "Leaves_L_00004" },
+            { src: "/Images/Humanistic/leaf/Leaves_L_00005.png", id: "Leaves_L_00005" },
+            { src: "/Images/Humanistic/leaf/Leaves_L_00006.png", id: "Leaves_L_00006" },
+            { src: "/Images/Humanistic/leaf/Leaves_L_00007.png", id: "Leaves_L_00007" },
+            { src: "/Images/Humanistic/leaf/Leaves_L_00008.png", id: "Leaves_L_00008" },
+            { src: "/Images/Humanistic/leaf/Leaves_L_00009.png", id: "Leaves_L_00009" },
+            { src: "/Images/Humanistic/leaf/Leaves_L_00010.png", id: "Leaves_L_00010" },
+            { src: "/Images/Humanistic/leaf/Leaves_L_00011.png", id: "Leaves_L_00011" },
+            { src: "/Images/Humanistic/leaf/Leaves_L_00012.png", id: "Leaves_L_00012" },
+            { src: "/Images/Humanistic/leaf/Leaves_L_00013.png", id: "Leaves_L_00013" },
+            { src: "/Images/Humanistic/leaf/Leaves_L_00014.png", id: "Leaves_L_00014" },
+            { src: "/Images/Humanistic/leaf/Leaves_L_00015.png", id: "Leaves_L_00015" },
+            { src: "/Images/Humanistic/leaf/Leaves_L_00016.png", id: "Leaves_L_00016" },
+            { src: "/Images/Humanistic/leaf/Leaves_L_00017.png", id: "Leaves_L_00017" },
+            { src: "/Images/Humanistic/leaf/Leaves_L_00018.png", id: "Leaves_L_00018" },
+            { src: "/Images/Humanistic/leaf/Leaves_L_00019.png", id: "Leaves_L_00019" },
+            { src: "/Images/Humanistic/leaf/Leaves_L_00020.png", id: "Leaves_L_00020" },
+            { src: "/Images/Humanistic/leaf/Leaves_L_00021.png", id: "Leaves_L_00021" },
+            { src: "/Images/Humanistic/leaf/Leaves_L_00022.png", id: "Leaves_L_00022" },
+            { src: "/Images/Humanistic/leaf/Leaves_L_00023.png", id: "Leaves_L_00023" },
+            { src: "/Images/Humanistic/leaf/Leaves_L_00024.png", id: "Leaves_L_00024" },
+            { src: "/Images/Humanistic/leaf/Leaves_L_00025.png", id: "Leaves_L_00025" },
+            { src: "/Images/Humanistic/leaf/Leaves_L_00026.png", id: "Leaves_L_00026" },
+            { src: "/Images/Humanistic/leaf/Leaves_L_00027.png", id: "Leaves_L_00027" },
+            { src: "/Images/Humanistic/leaf/Leaves_L_00028.png", id: "Leaves_L_00028" },
+            { src: "/Images/Humanistic/leaf/Leaves_L_00029.png", id: "Leaves_L_00029" },
+            { src: "/Images/Humanistic/leaf/Leaves_L_00030.png", id: "Leaves_L_00030" },
+            { src: "/Images/Humanistic/leaf/Leaves_L_00031.png", id: "Leaves_L_00031" },
+            { src: "/Images/Humanistic/leaf/Leaves_L_00032.png", id: "Leaves_L_00032" },
+            { src: "/Images/Humanistic/leaf/Leaves_L_00033.png", id: "Leaves_L_00033" },
+            { src: "/Images/Humanistic/leaf/Leaves_L_00034.png", id: "Leaves_L_00034" },
+            { src: "/Images/Humanistic/leaf/Leaves_L_00035.png", id: "Leaves_L_00035" },
+            { src: "/Images/Humanistic/leaf/Leaves_L_00036.png", id: "Leaves_L_00036" },
+            { src: "/Images/Humanistic/leaf/Leaves_L_00037.png", id: "Leaves_L_00037" },
+            { src: "/Images/Humanistic/leaf/Leaves_L_00038.png", id: "Leaves_L_00038" },
+            { src: "/Images/Humanistic/leaf/Leaves_L_00039.png", id: "Leaves_L_00039" },
+            { src: "/Images/Humanistic/leaf/Leaves_L_00040.png", id: "Leaves_L_00040" },
+            { src: "/Images/Humanistic/leaf/Leaves_L_00041.png", id: "Leaves_L_00041" },
+            { src: "/Images/Humanistic/leaf/Leaves_L_00042.png", id: "Leaves_L_00042" },
+            { src: "/Images/Humanistic/leaf/Leaves_L_00043.png", id: "Leaves_L_00043" },
+            { src: "/Images/Humanistic/leaf/Leaves_L_00044.png", id: "Leaves_L_00044" },
+            { src: "/Images/Humanistic/leaf/Leaves_L_00045.png", id: "Leaves_L_00045" },
+            { src: "/Images/Humanistic/leaf/Leaves_L_00046.png", id: "Leaves_L_00046" },
+            { src: "/Images/Humanistic/leaf/Leaves_L_00047.png", id: "Leaves_L_00047" },
+            { src: "/Images/Humanistic/leaf/Leaves_L_00048.png", id: "Leaves_L_00048" },
+            { src: "/Images/Humanistic/leaf/Leaves_L_00049.png", id: "Leaves_L_00049" },
+            { src: "/Images/Humanistic/leaf/Leaves_L_00050.png", id: "Leaves_L_00050" },
+            { src: "/Images/Humanistic/leaf/Leaves_L_00051.png", id: "Leaves_L_00051" },
+            { src: "/Images/Humanistic/leaf/Leaves_L_00052.png", id: "Leaves_L_00052" },
+            { src: "/Images/Humanistic/leaf/Leaves_L_00053.png", id: "Leaves_L_00053" },
+            { src: "/Images/Humanistic/leaf/Leaves_L_00054.png", id: "Leaves_L_00054" },
+            { src: "/Images/Humanistic/leaf/Leaves_L_00055.png", id: "Leaves_L_00055" },
+            { src: "/Images/Humanistic/leaf/Leaves_L_00056.png", id: "Leaves_L_00056" },
+            { src: "/Images/Humanistic/leaf/Leaves_L_00057.png", id: "Leaves_L_00057" },
+            { src: "/Images/Humanistic/leaf/Leaves_L_00058.png", id: "Leaves_L_00058" },
+            { src: "/Images/Humanistic/leaf/Leaves_L_00059.png", id: "Leaves_L_00059" },
+            { src: "/Images/Humanistic/leaf/Leaves_L_00060.png", id: "Leaves_L_00060" },
+            { src: "/Images/Humanistic/leaf/Leaves_L_00061.png", id: "Leaves_L_00061" },
+            { src: "/Images/Humanistic/leaf/Leaves_L_00062.png", id: "Leaves_L_00062" },
+            { src: "/Images/Humanistic/leaf/Leaves_L_00063.png", id: "Leaves_L_00063" },
+            { src: "/Images/Humanistic/leaf/Leaves_L_00064.png", id: "Leaves_L_00064" },
+            { src: "/Images/Humanistic/leaf/Leaves_L_00065.png", id: "Leaves_L_00065" },
+            { src: "/Images/Humanistic/leaf/Leaves_L_00066.png", id: "Leaves_L_00066" },
+            { src: "/Images/Humanistic/leaf/Leaves_L_00067.png", id: "Leaves_L_00067" },
+            { src: "/Images/Humanistic/leaf/Leaves_L_00068.png", id: "Leaves_L_00068" },
+            { src: "/Images/Humanistic/leaf/Leaves_L_00069.png", id: "Leaves_L_00069" },
+            { src: "/Images/Humanistic/leaf/Leaves_L_00070.png", id: "Leaves_L_00070" },
+            { src: "/Images/Humanistic/leaf/Leaves_L_00071.png", id: "Leaves_L_00071" },
+            { src: "/Images/Humanistic/leaf/Leaves_L_00072.png", id: "Leaves_L_00072" },
+            { src: "/Images/Humanistic/leaf/Leaves_L_00073.png", id: "Leaves_L_00073" },
+            { src: "/Images/Humanistic/leaf/Leaves_L_00074.png", id: "Leaves_L_00074" },
+            { src: "/Images/Humanistic/leaf/Leaves_L_00075.png", id: "Leaves_L_00075" },
+            { src: "/Images/Humanistic/leaf/Leaves_L_00076.png", id: "Leaves_L_00076" },
+            { src: "/Images/Humanistic/leaf/Leaves_L_00077.png", id: "Leaves_L_00077" },
+            { src: "/Images/Humanistic/leaf/Leaves_L_00078.png", id: "Leaves_L_00078" },
+            { src: "/Images/Humanistic/leaf/Leaves_L_00079.png", id: "Leaves_L_00079" },
+            { src: "/Images/Humanistic/leaf/Leaves_L_00080.png", id: "Leaves_L_00080" },
+            { src: "/Images/Humanistic/leaf/Leaves_L_00081.png", id: "Leaves_L_00081" },
+            { src: "/Images/Humanistic/leaf/Leaves_L_00082.png", id: "Leaves_L_00082" },
+            { src: "/Images/Humanistic/leaf/Leaves_L_00083.png", id: "Leaves_L_00083" },
+            { src: "/Images/Humanistic/leaf/Leaves_L_00084.png", id: "Leaves_L_00084" },
+            { src: "/Images/Humanistic/leaf/Leaves_L_00085.png", id: "Leaves_L_00085" },
+            { src: "/Images/Humanistic/leaf/Leaves_L_00086.png", id: "Leaves_L_00086" },
+            { src: "/Images/Humanistic/leaf/Leaves_L_00087.png", id: "Leaves_L_00087" },
+            { src: "/Images/Humanistic/leaf/Leaves_L_00088.png", id: "Leaves_L_00088" },
+            { src: "/Images/Humanistic/leaf/Leaves_L_00089.png", id: "Leaves_L_00089" },
+            { src: "/Images/Humanistic/leaf/Leaves_L_00090.png", id: "Leaves_L_00090" },
+            { src: "/Images/Humanistic/leaf/Leaves_L_00091.png", id: "Leaves_L_00091" },
+            { src: "/Images/Humanistic/leaf/Leaves_L_00092.png", id: "Leaves_L_00092" },
+            { src: "/Images/Humanistic/leaf/Leaves_L_00093.png", id: "Leaves_L_00093" },
+            { src: "/Images/Humanistic/leaf/Leaves_L_00094.png", id: "Leaves_L_00094" },
+            { src: "/Images/Humanistic/leaf/Leaves_L_00095.png", id: "Leaves_L_00095" },
+            { src: "/Images/Humanistic/leaf/Leaves_L_00096.png", id: "Leaves_L_00096" },
+            { src: "/Images/Humanistic/leaf/Leaves_L_00097.png", id: "Leaves_L_00097" },
+            { src: "/Images/Humanistic/leaf/Leaves_L_00098.png", id: "Leaves_L_00098" },
+            { src: "/Images/Humanistic/leaf/Leaves_L_00099.png", id: "Leaves_L_00099" },
+            { src: "/Images/Humanistic/leaf/leaves_R_00000.png", id: "leaves_R_00000" },
+            { src: "/Images/Humanistic/leaf/leaves_R_00001.png", id: "leaves_R_00001" },
+            { src: "/Images/Humanistic/leaf/leaves_R_00002.png", id: "leaves_R_00002" },
+            { src: "/Images/Humanistic/leaf/leaves_R_00003.png", id: "leaves_R_00003" },
+            { src: "/Images/Humanistic/leaf/leaves_R_00004.png", id: "leaves_R_00004" },
+            { src: "/Images/Humanistic/leaf/leaves_R_00005.png", id: "leaves_R_00005" },
+            { src: "/Images/Humanistic/leaf/leaves_R_00006.png", id: "leaves_R_00006" },
+            { src: "/Images/Humanistic/leaf/leaves_R_00007.png", id: "leaves_R_00007" },
+            { src: "/Images/Humanistic/leaf/leaves_R_00008.png", id: "leaves_R_00008" },
+            { src: "/Images/Humanistic/leaf/leaves_R_00009.png", id: "leaves_R_00009" },
+            { src: "/Images/Humanistic/leaf/leaves_R_00010.png", id: "leaves_R_00010" },
+            { src: "/Images/Humanistic/leaf/leaves_R_00011.png", id: "leaves_R_00011" },
+            { src: "/Images/Humanistic/leaf/leaves_R_00012.png", id: "leaves_R_00012" },
+            { src: "/Images/Humanistic/leaf/leaves_R_00013.png", id: "leaves_R_00013" },
+            { src: "/Images/Humanistic/leaf/leaves_R_00014.png", id: "leaves_R_00014" },
+            { src: "/Images/Humanistic/leaf/leaves_R_00015.png", id: "leaves_R_00015" },
+            { src: "/Images/Humanistic/leaf/leaves_R_00016.png", id: "leaves_R_00016" },
+            { src: "/Images/Humanistic/leaf/leaves_R_00017.png", id: "leaves_R_00017" },
+            { src: "/Images/Humanistic/leaf/leaves_R_00018.png", id: "leaves_R_00018" },
+            { src: "/Images/Humanistic/leaf/leaves_R_00019.png", id: "leaves_R_00019" },
+            { src: "/Images/Humanistic/leaf/leaves_R_00020.png", id: "leaves_R_00020" },
+            { src: "/Images/Humanistic/leaf/leaves_R_00021.png", id: "leaves_R_00021" },
+            { src: "/Images/Humanistic/leaf/leaves_R_00022.png", id: "leaves_R_00022" },
+            { src: "/Images/Humanistic/leaf/leaves_R_00023.png", id: "leaves_R_00023" },
+            { src: "/Images/Humanistic/leaf/leaves_R_00024.png", id: "leaves_R_00024" },
+            { src: "/Images/Humanistic/leaf/leaves_R_00025.png", id: "leaves_R_00025" },
+            { src: "/Images/Humanistic/leaf/leaves_R_00026.png", id: "leaves_R_00026" },
+            { src: "/Images/Humanistic/leaf/leaves_R_00027.png", id: "leaves_R_00027" },
+            { src: "/Images/Humanistic/leaf/leaves_R_00028.png", id: "leaves_R_00028" },
+            { src: "/Images/Humanistic/leaf/leaves_R_00029.png", id: "leaves_R_00029" },
+            { src: "/Images/Humanistic/leaf/leaves_R_00030.png", id: "leaves_R_00030" },
+            { src: "/Images/Humanistic/leaf/leaves_R_00031.png", id: "leaves_R_00031" },
+            { src: "/Images/Humanistic/leaf/leaves_R_00032.png", id: "leaves_R_00032" },
+            { src: "/Images/Humanistic/leaf/leaves_R_00033.png", id: "leaves_R_00033" },
+            { src: "/Images/Humanistic/leaf/leaves_R_00034.png", id: "leaves_R_00034" },
+            { src: "/Images/Humanistic/leaf/leaves_R_00035.png", id: "leaves_R_00035" },
+            { src: "/Images/Humanistic/leaf/leaves_R_00036.png", id: "leaves_R_00036" },
+            { src: "/Images/Humanistic/leaf/leaves_R_00037.png", id: "leaves_R_00037" },
+            { src: "/Images/Humanistic/leaf/leaves_R_00038.png", id: "leaves_R_00038" },
+            { src: "/Images/Humanistic/leaf/leaves_R_00039.png", id: "leaves_R_00039" },
+            { src: "/Images/Humanistic/leaf/leaves_R_00040.png", id: "leaves_R_00040" },
+            { src: "/Images/Humanistic/leaf/leaves_R_00041.png", id: "leaves_R_00041" },
+            { src: "/Images/Humanistic/leaf/leaves_R_00042.png", id: "leaves_R_00042" },
+            { src: "/Images/Humanistic/leaf/leaves_R_00043.png", id: "leaves_R_00043" },
+            { src: "/Images/Humanistic/leaf/leaves_R_00044.png", id: "leaves_R_00044" },
+            { src: "/Images/Humanistic/leaf/leaves_R_00045.png", id: "leaves_R_00045" },
+            { src: "/Images/Humanistic/leaf/leaves_R_00046.png", id: "leaves_R_00046" },
+            { src: "/Images/Humanistic/leaf/leaves_R_00047.png", id: "leaves_R_00047" },
+            { src: "/Images/Humanistic/leaf/leaves_R_00048.png", id: "leaves_R_00048" },
+            { src: "/Images/Humanistic/leaf/leaves_R_00049.png", id: "leaves_R_00049" },
+            { src: "/Images/Humanistic/leaf/leaves_R_00050.png", id: "leaves_R_00050" },
+            { src: "/Images/Humanistic/leaf/leaves_R_00051.png", id: "leaves_R_00051" },
+            { src: "/Images/Humanistic/leaf/leaves_R_00052.png", id: "leaves_R_00052" },
+            { src: "/Images/Humanistic/leaf/leaves_R_00053.png", id: "leaves_R_00053" },
+            { src: "/Images/Humanistic/leaf/leaves_R_00054.png", id: "leaves_R_00054" },
+            { src: "/Images/Humanistic/leaf/leaves_R_00055.png", id: "leaves_R_00055" },
+            { src: "/Images/Humanistic/leaf/leaves_R_00056.png", id: "leaves_R_00056" },
+            { src: "/Images/Humanistic/leaf/leaves_R_00057.png", id: "leaves_R_00057" },
+            { src: "/Images/Humanistic/leaf/leaves_R_00058.png", id: "leaves_R_00058" },
+            { src: "/Images/Humanistic/leaf/leaves_R_00059.png", id: "leaves_R_00059" },
+            { src: "/Images/Humanistic/leaf/leaves_R_00060.png", id: "leaves_R_00060" },
+            { src: "/Images/Humanistic/leaf/leaves_R_00061.png", id: "leaves_R_00061" },
+            { src: "/Images/Humanistic/leaf/leaves_R_00062.png", id: "leaves_R_00062" },
+            { src: "/Images/Humanistic/leaf/leaves_R_00063.png", id: "leaves_R_00063" },
+            { src: "/Images/Humanistic/leaf/leaves_R_00064.png", id: "leaves_R_00064" },
+            { src: "/Images/Humanistic/leaf/leaves_R_00065.png", id: "leaves_R_00065" },
+            { src: "/Images/Humanistic/leaf/leaves_R_00066.png", id: "leaves_R_00066" },
+            { src: "/Images/Humanistic/leaf/leaves_R_00067.png", id: "leaves_R_00067" },
+            { src: "/Images/Humanistic/leaf/leaves_R_00068.png", id: "leaves_R_00068" },
+            { src: "/Images/Humanistic/leaf/leaves_R_00069.png", id: "leaves_R_00069" },
+            { src: "/Images/Humanistic/leaf/leaves_R_00070.png", id: "leaves_R_00070" },
+            { src: "/Images/Humanistic/leaf/leaves_R_00071.png", id: "leaves_R_00071" },
+            { src: "/Images/Humanistic/leaf/leaves_R_00072.png", id: "leaves_R_00072" },
+            { src: "/Images/Humanistic/leaf/leaves_R_00073.png", id: "leaves_R_00073" },
+            { src: "/Images/Humanistic/leaf/leaves_R_00074.png", id: "leaves_R_00074" },
+            { src: "/Images/Humanistic/leaf/leaves_R_00075.png", id: "leaves_R_00075" },
+            { src: "/Images/Humanistic/leaf/leaves_R_00076.png", id: "leaves_R_00076" },
+            { src: "/Images/Humanistic/leaf/leaves_R_00077.png", id: "leaves_R_00077" },
+            { src: "/Images/Humanistic/leaf/leaves_R_00078.png", id: "leaves_R_00078" },
+            { src: "/Images/Humanistic/leaf/leaves_R_00079.png", id: "leaves_R_00079" },
+            { src: "/Images/Humanistic/leaf/leaves_R_00080.png", id: "leaves_R_00080" },
+            { src: "/Images/Humanistic/leaf/leaves_R_00081.png", id: "leaves_R_00081" },
+            { src: "/Images/Humanistic/leaf/leaves_R_00082.png", id: "leaves_R_00082" },
+            { src: "/Images/Humanistic/leaf/leaves_R_00083.png", id: "leaves_R_00083" },
+            { src: "/Images/Humanistic/leaf/leaves_R_00084.png", id: "leaves_R_00084" },
+            { src: "/Images/Humanistic/leaf/leaves_R_00085.png", id: "leaves_R_00085" },
+            { src: "/Images/Humanistic/leaf/leaves_R_00086.png", id: "leaves_R_00086" },
+            { src: "/Images/Humanistic/leaf/leaves_R_00087.png", id: "leaves_R_00087" },
+            { src: "/Images/Humanistic/leaf/leaves_R_00088.png", id: "leaves_R_00088" },
+            { src: "/Images/Humanistic/leaf/leaves_R_00089.png", id: "leaves_R_00089" },
+            { src: "/Images/Humanistic/leaf/leaves_R_00090.png", id: "leaves_R_00090" },
+            { src: "/Images/Humanistic/leaf/leaves_R_00091.png", id: "leaves_R_00091" },
+            { src: "/Images/Humanistic/leaf/leaves_R_00092.png", id: "leaves_R_00092" },
+            { src: "/Images/Humanistic/leaf/leaves_R_00093.png", id: "leaves_R_00093" },
+            { src: "/Images/Humanistic/leaf/leaves_R_00094.png", id: "leaves_R_00094" },
+            { src: "/Images/Humanistic/leaf/leaves_R_00095.png", id: "leaves_R_00095" },
+            { src: "/Images/Humanistic/leaf/leaves_R_00096.png", id: "leaves_R_00096" },
+            { src: "/Images/Humanistic/leaf/leaves_R_00097.png", id: "leaves_R_00097" },
+            { src: "/Images/Humanistic/leaf/leaves_R_00098.png", id: "leaves_R_00098" },
+            { src: "/Images/Humanistic/leaf/leaves_R_00099.png", id: "leaves_R_00099" }
+        ];
+
+        var loader = new createjs.LoadQueue(false);
+        loader.addEventListener("fileload", handleFileLoad);
+        loader.addEventListener("complete", handleComplete);
+        loader.loadManifest(manifest);
+    }
+
+    function handleFileLoad(evt) {
+        if (evt.item.type == "image") { images[evt.item.id] = evt.result; }
+    }
+
+    function handleComplete() {
+        exportRoot = new lib.leaf();
+
+        stage = new createjs.Stage(canvas);
+        stage.addChild(exportRoot);
+        stage.update();
+
+        createjs.Ticker.setFPS(24);
+        createjs.Ticker.addEventListener("tick", stage);
+    }
+</script>
+}
+
+@section styles{
+<link href="~/Content/Humanistic/reset.css" rel="stylesheet" type="text/css">
+<link href="~/Content/Humanistic/big.css" rel="stylesheet" type="text/css">
+<link rel="stylesheet" type="text/css" href="~/Scripts/slick/slick.css" />
+<style type="text/css">
+    .slick-track{
+        margin-top:120px;
+    }
+
+    .slick-slide{
+        -webkit-transform: scale(0.8);
+        transform: scale(0.8);
+    }
+    .slick-active{
+        -webkit-transform: scale(0.8);
+        transform: scale(0.8);
+    }
+    .slick-center{
+        -webkit-transform: scale(1);
+        transform: scale(1);
+    }
+
+    #TitleDiv {
+        position: absolute;
+        width: 570px;
+        height: 120px;
+        z-index: 3;
+        left: 668px;
+        top: 922px;
+    }
+    #leafDiv {
+	position:absolute;
+	width:1920px;
+	height:500px;
+	z-index:3;
+	left: 0px;
+	top: 580px;
+}
+#BkDiv {
+	position:absolute;
+	width:1920px;
+	height:1080px;
+	z-index:2;
+	left: 0px;
+	top: 0px;
+}
+#BOOKDiv {
+	position:absolute;
+	width:1920px;
+	height:800px;
+	z-index:4;
+	left: 0px;
+	top: 0px;
+}
+
+    .bookDiv{
+        height:70%
+    }
+
+            #leafDiv{
+                top:575px;
+            }
+
+</style>
+}
+<div id="BOOKDiv">
+    <div class="arrowL"><a href="#"></a></div>
+    <!--slider Strat-->
+    <div id="TitleDiv"><img src="~/Images/Humanistic/booktitle2.png" width="570" height="120"></div><br>
+    <!--當中間slidr紅色的書 book5.png~book7.png 置換-->
+    <!--<div id="TitleDiv"><img src="~/Images/Humanistic/booktitle2.png" width="570" height="120"></div>-->
+    <div class="bookDiv">
+        <div class="bookTitleSlick">
+            <div class="btn brown" data-href="@Url.Action("BookPage", "Humanistic", new { path = "TzuChengPartial/_OriginalPartial", videoKey = "video.folder.TzuCheng.Video", imgKey = "video.folder.TzuCheng.Img" })"><a href="#"><img src="~/Images/Humanistic/book1.png" width="471" height="601" border="0"></a></div>
+        </div>
+
+        <div class="bookTitleSlick">
+            <div class="btn brown" data-href="@Url.Action("BookPage", "Humanistic", new { path = "HumanisticCoursePartial/_PioneerPartial", videoKey = "video.folder.HumanisticCourse.Video", imgKey = "video.folder.HumanisticCourse.Img" })"><a href="#"><img src="~/Images/Humanistic/book2.png" width="471" height="601" border="0"></a></div>
+        </div>
+
+        <div class="bookTitleSlick">
+            <div class="btn brown" data-href="@Url.Action("BookPage", "Humanistic", new { path = "MentalPartial/_NoWordsPartial", videoKey = "video.folder.Mental.Video", imgKey = "video.folder.Mental.Img" })"><a href="#"><img src="~/Images/Humanistic/book3.png" width="471" height="601" border="0"></a></div>
+        </div>
+
+        <div class="bookTitleSlick">
+            <div class="btn brown" data-href="@Url.Action("BookPage", "Humanistic", new { path = "HumanisticActionPartial/_GraduationCeremonyPartial", videoKey = "video.folder.HumanisticAction.Video", imgKey = "video.folder.HumanisticAction.Img" })"><a href="#"><img src="~/Images/Humanistic/book4.png" width="471" height="601" border="0"></a></div>
+        </div>
+
+        <div class="bookTitleSlick">
+            <div class="btn purple" data-href="@Url.Action("BookPage", "Humanistic", new { path = "MultielementActionPartial/_ArtistPartial" , videoKey = "video.folder.MultielementAction.Video", imgKey = "video.folder.MultielementAction.Img" })"><a href="#"><img src="~/Images/Humanistic/book5.png" width="471" height="601" border="0"></a></div>
+        </div>
+
+        <div class="bookTitleSlick">
+            <div class="btn purple" data-href="@Url.Action("BookPage", "Humanistic", new { path = "LanguageCenterPartial/_EntertainmentPartial", videoKey = "video.folder.LanguageCenter.Video", imgKey = "video.folder.LanguageCenter.Img" })"><a href="#"><img src="~/Images/Humanistic/book6.png" width="471" height="601" border="0"></a></div>
+        </div>
+
+        <div class="bookTitleSlick">
+            <div class="btn purple" data-href="@Url.Action("BookPage", "Humanistic", new { path = "SpacePartial/_SpacePartial", videoKey = "video.folder.Space.Video", imgKey = "video.folder.Space.Img" })"><a href="#"><img src="~/Images/Humanistic/book7.png" width="471" height="601" border="0"></a></div>
+        </div>
+
+    </div>
+    <!--slider End-->
+    <div class="arrowR"><a href="#"></a></div>
+</div>
+<div id="BkDiv" class="bk2Div"></div>
+<div id="leafDiv"><canvas id="canvas" width="1920" height="500"></canvas></div>
+

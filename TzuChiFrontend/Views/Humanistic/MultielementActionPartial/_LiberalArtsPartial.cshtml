@@ -1,0 +1,84 @@
+﻿@{
+    String video = "video.folder.MultielementAction.Video";
+    String img = "video.folder.MultielementAction.Img";
+}
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#bookDiv').slick({
+            //prevArrow: $('.arrowL'),
+            //nextArrow: $('.arrowR'),
+            centerMode: true,
+            slidesToShow: 1,
+            centerPadding: '300px',
+            touchThreshold: 100,
+            infinite: false,
+            onAfterChange:adjustShadow,
+            onInit:adjustShadow
+        });
+        if ($('#videobtn').length !== 0) {
+            $('#videobtn').click(function () {
+                $('#MvDiv').show();
+                $('#MvDiv1').show();
+            });
+        }
+    });
+</script>
+<style>
+    .slick-slide:not(.slick-center) {
+        -webkit-transform: scale(0.8);
+        transform: scale(0.8);
+        opacity: 0.5;
+    }
+
+    .slick-center {
+        -webkit-transform: scale(1);
+        transform: scale(1);
+        opacity: 1;
+    }
+    #bookDiv {
+        margin-top: 100px;
+	height:800px;
+    }
+</style>
+@*<div class="arrowL" style="left:80px;position:absolute"><a href="#"></a></div>*@
+<div id="bookDiv">
+    <!--slider Strat-->
+    <div><img src="~/Images/Humanistic/book5/04LiberalArts/slide1.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book5/04LiberalArts/slide2.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book5/04LiberalArts/slide3.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book5/04LiberalArts/slide4.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book5/04LiberalArts/slide5.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book5/04LiberalArts/slide6.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book5/04LiberalArts/slide7.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book5/04LiberalArts/slide8.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book5/04LiberalArts/slide9.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book5/04LiberalArts/slide10.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book5/04LiberalArts/slide11.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book5/04LiberalArts/slide12.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book5/04LiberalArts/slide13.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book5/04LiberalArts/slide14.jpg" width="950" height="635"></div>
+    <!--slider End-->
+</div>
+@*<div class="arrowR" style="right:260px;position:absolute"><a href="#"></a></div>*@
+
+<!--上方主選單 Start-->
+<div class="cont5Div">
+    <div class="cbtnmenu">
+        <div style="float:left;display:block;width:250px; height:50px;">
+            <ul class="cbtn3"><a href="@Url.Action("BookPage", "Humanistic", new { path = "MultielementActionPartial/_ArtistPartial", videoKey = video, imgKey = img })">駐校藝術家</a></ul><ul class="cbtnline"><img src="/Images/Humanistic/cbtnline4.png" width="250" height="5"></ul>
+        </div>
+        <div style="float:left;display:block;width:250px; height:50px;">
+            <ul class="cbtn3"><a href="@Url.Action("BookPage", "Humanistic", new { path = "MultielementActionPartial/_GeneralEduPartial", videoKey = video, imgKey = img })">通識月系列</a></ul><ul class="cbtnline"><img src="/Images/Humanistic/cbtnline2.png" width="250" height="5"></ul>
+        </div>
+        <div style="float:left;display:block;width:220px; height:50px;">
+            <ul class="cbtn1"><a href="@Url.Action("BookPage", "Humanistic", new { path = "MultielementActionPartial/_ArtContestPartial", videoKey = video, imgKey = img })">學藝競賽</a></ul><ul class="cbtnline"><img src="/Images/Humanistic/cbtnline2.png" width="220" height="5"></ul>
+        </div>
+        <div style="float:left;display:block;width:280px; height:50px;"><ul class="cbtn3D">博雅講座</ul><ul class="cbtnline"><img src="/Images/Humanistic/cbtnline5D.png" width="250" height="5"></ul></div>
+        @if (ViewBag.Video != null && ViewBag.Video.Count != 0)
+        {
+            <div style="float:left;display:block;width:280px; height:50px;"></div>
+            <div id="videobtn" class="btn" style="float:left;display:block;width:100px; height:50px;"><a href="#"><img src="/Images/Humanistic/btn3.png" width="56" height="56" border="0"></a></div>
+        }
+    </div>
+</div>
+<!--上方主選單 End-->

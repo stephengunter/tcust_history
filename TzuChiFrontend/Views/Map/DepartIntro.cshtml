@@ -1,0 +1,162 @@
+﻿@{
+    ViewBag.Title = "天涯比鄰-系所介紹";
+}
+@section scripts {
+    <script language="JavaScript" type="text/javascript" src="@Url.Content("~/Scripts/contentFlow/contentflow.js")"></script>
+    <script type="text/javascript" src="@Url.Content("~/Scripts/hammer.js-master/hammer.min.js")"></script> 
+    <script tyle="text/javascript">
+        var cf = new ContentFlow('contentFlow', { reflectionColor: "#000000" });
+
+        function itemPre() {
+            cf.moveTo('pre');
+        }
+
+        function itemNext() {
+            cf.moveTo('next');
+        }
+
+        $('body').attr('onselectstart', 'return false');
+    </script>
+    <script>
+        $(function () {
+            var moveTo = '@Request.Params["moveTo"]';
+            setTimeout('cf.moveTo(parseInt(' + moveTo + '))', 500);
+        });
+    </script>
+}
+
+@section styles{
+    <link rel="stylesheet" title="Standard" href="@Url.Content("~/Scripts/contentFlow/styles.css")" type="text/css" media="screen" />
+    <link href="@Url.Content("~/Content/Map/reset.css")" rel="stylesheet" type="text/css">
+    <link href="@Url.Content("~/Content/Map/big.css")" rel="stylesheet" type="text/css">
+    <style type="text/css">
+        #gobkDiv1 {
+            position: absolute;
+            width: 165px;
+            height: 159px;
+            z-index: 99;
+            left: 1710px;
+            top: 869px;
+        }
+
+        #sdDiv1 {
+            position: absolute;
+            width: 1500px;
+            height: 550px;
+            z-index: 50;
+            left: 243px;
+            top: 512px;
+        }
+
+        #AR {
+            position: absolute;
+            z-index: 58;
+            left: 1335px;
+            top: 194px;
+        }
+
+        #AL {
+            position: absolute;
+            z-index: 58;
+            left: 90px;
+            top: 194px;
+        }
+
+        #SD1 {
+            position: absolute;
+            z-index: 52;
+            left: -8px;
+            top: 20px;
+        }
+
+        #SD2 {
+            position: absolute;
+            z-index: 54;
+            left: 143px;
+            top: 30px;
+        }
+
+        #SD3 {
+            position: absolute;
+            z-index: 56;
+            left: 503px;
+            width: 470px;
+        }
+
+        #SD4 {
+            position: absolute;
+            z-index: 54;
+            left: 863px;
+            top: 30px;
+        }
+
+        #SD5 {
+            position: absolute;
+            z-index: 52;
+            left: 1013px;
+            top: 20px;
+        }
+        .caption {
+            cursor: default;
+            font-family:"華康新特明體", "微軟正黑體";
+	        font-size:38px;
+	        color:#595757;
+	        text-align:center;
+	        line-height:70px;
+        }
+
+        .arrowL a{
+           width: 30px;
+        }
+
+        body{
+            overflow:hidden;
+        }
+    </style>
+}
+
+<!--第一層回首頁按鈕-->
+<div id="gobkDiv1" class="btn6"><a href="@Url.Content("Index")"></a></div>
+<div id="sdDiv1">
+    <div id="AL" class="arrowL"><a href="javascript:itemNext()"></a></div>
+    <div id="contentFlow" class="ContentFlow" style="width:1896px;left:-220px">
+        <!-- should be place before flow so that contained images will be loaded first -->
+        <div class="loadIndicator"><div class="indicator"></div></div>
+
+        <div class="flow">
+
+            <div class="item" href="@Url.Action("DepartPage", "Map", new { path = "DepartNursingPartial/_HistoryPartial" })">
+                <img class="content" src="@Url.Content("~/Images/Map/schoolpic1.jpg")" />
+                <div class="caption">護理系</div>
+            </div>
+            <div class="item" href="@Url.Action("DepartPage", "Map", new { path = "DepartHealthPartial/_HistoryPartial" })">
+                <img class="content" src="@Url.Content("~/Images/Map/schoolpic2.jpg")" />
+                <div class="caption">醫務管理系</div>
+            </div>
+            <div class="item" href="@Url.Action("DepartPage", "Map", new { path = "DepartMedicalPartial/_HistoryPartial" })">
+                <img class="content" src="@Url.Content("~/Images/Map/schoolpic3.jpg")" />
+                <div class="caption">醫學影像暨放射科學系、放射醫學科學研究所</div>
+            </div>
+            <div class="item" href="@Url.Action("DepartPage", "Map", new { path = "DepartInformationPartial/_HistoryPartial" })">
+                <img class="content" src="@Url.Content("~/Images/Map/schoolpic5.jpg")" />
+                <div class="caption">資訊科技與管理系</div>
+            </div>
+            <div class="item" href="@Url.Action("DepartPage", "Map", new { path = "DepartMarketingPartial/_HistoryPartial" })">
+                <img class="content" src="@Url.Content("~/Images/Map/schoolpic4.jpg")" />
+                <div class="caption">行銷與流通管理系</div>
+            </div>
+            <div class="item" href="@Url.Action("DepartPage", "Map", new { path = "DepartEduPartial/_HistoryPartial" })">
+                <img class="content" src="@Url.Content("~/Images/Map/schoolpic6.jpg")" />
+                <div class="caption">進修推廣部</div>
+            </div>
+        </div>
+
+        <div class="globalCaption" style="color:black"></div>
+
+    </div>
+    <div id="AR" class="arrowR"><a href="javascript:itemPre()"></a></div>
+</div>
+<!--content-->
+<div class="bk3Div"></div>
+
+

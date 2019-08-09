@@ -1,0 +1,45 @@
+﻿@model TzuChiClassLibrary.BO.BasePost
+@using Core.Extensions
+@{
+
+    string uploadDir = System.Web.Configuration.WebConfigurationManager.AppSettings["upload.folder.name"];
+   
+}
+
+@if (!Model.PicUrlList.IsNullOrEmpty())
+{
+    foreach (var f in Model.PicUrlList)
+    {
+        <div id="PicUrl_@(f.ItemOID)">
+            <input type="hidden" name="PicUrlList.index" value="@(f.ItemOID)" />
+            <input type="hidden" name="PicUrlList[@(f.ItemOID)].ItemOID" value="@(f.ItemOID)" />
+            <input type="hidden" name="PicUrlList[@(f.ItemOID)].FunctionOID" value="@(f.FunctionOID)" />
+            <input type="hidden" name="PicUrlList[@(f.ItemOID)].FunctionType" value="@(f.FunctionType)" />
+            <input type="hidden" name="PicUrlList[@(f.ItemOID)].ImageHeight" value="@(f.ImageHeight)" />
+            <input type="hidden" name="PicUrlList[@(f.ItemOID)].ImageWidth" value="@(f.ImageWidth)" />
+            <input type="hidden" name="PicUrlList[@(f.ItemOID)].FileName" value="@(f.FileName)" />
+            <input type="hidden" name="PicUrlList[@(f.ItemOID)].Bit" value="@(f.Bit)" />
+            <input type="hidden" name="PicUrlList[@(f.ItemOID)].Path" value="@(f.Path)" />
+            <input type="hidden" name="PicUrlList[@(f.ItemOID)].CoverImage" value="@(f.CoverImage ? "true":"false")" class="coverInput" />
+            <table class="table">
+                <tr>
+                    <td width="30%">
+
+                        <a data-toggle="modal" data-target="#showPhotoModal" onclick="setCoveragePicPath('@Url.Content(string.Format("~/{0}/{1}", uploadDir, f.Path))')">
+                            <img src="@Url.Content(string.Format("~/{0}/{1}", uploadDir, f.Path))" width="50" />
+
+
+                        </a>
+                    </td>
+                    <td width="20%"><a href="@Url.Content(string.Format("~/{0}/{1}", uploadDir, f.Path))" target="_blank">@(f.FileName)</a></td>
+                    <td>
+                        <input type="button" value="delete" class="del btn btn-danger" onclick="removePicUrl('@(f.ItemOID)')" />
+                        <a class="btn btn-primary coverBtn" id="Set_@(f.ItemOID)" style="display: @(f.CoverImage ? "none" : "inline");" onclick="setPicCoverageUrl('@(f.ItemOID)')">SetCoverage</a>
+                        <label style="display: @(f.CoverImage ? "inline" : "none");" class="coverLabel" id="Cover_@(f.ItemOID)">封面圖</label>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    }
+
+}

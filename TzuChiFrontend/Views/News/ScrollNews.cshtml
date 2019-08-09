@@ -1,0 +1,31 @@
+﻿@model TzuChiClassLibrary.BO.PagenationModel
+@{
+    ViewBag.Title = "校史館 - 資訊查詢 | 校園日誌";
+    string frontendBaseURL = System.Web.Configuration.WebConfigurationManager.AppSettings["website.frontend"];
+    string backendBaseURL = System.Web.Configuration.WebConfigurationManager.AppSettings["website.backend"];
+}
+
+@foreach (var item in ViewBag.DataModel)
+{
+    <div class="scroll-el" data-contentid="@item.ContentID">
+        <span class="title_07">
+            @string.Format("{0:yyyy/MM/dd}", item.ContentTime)
+            <br>
+            @Html.Raw(item.ContentName)
+        </span>
+        <span class="title_07">
+            @if (item.VideoUrlList.Count > 0)
+            {
+                <img class="glow" width="210" height="145" src="@Url.Content(string.Format("{0}/imgs/zoom/210/145/{1}", @backendBaseURL, @item.VideoUrlList[0].PreviewPath))" />
+            }
+            else
+            {
+                <img class="glow" width="210" height="145" src="@Url.Content(string.Format("{0}/imgs/zoom/210/145/{1}", @backendBaseURL, ((@item.PicUrlList.Count > 0) ? item.PicUrlList[0].Path : null)))" />
+            }
+        </span>
+    </div>
+}
+
+
+
+

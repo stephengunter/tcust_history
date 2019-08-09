@@ -1,0 +1,242 @@
+﻿@model TzuChiClassLibrary.BO.EventCalendarModel
+@using Core.Extensions
+@{
+    ViewBag.Title = "大事紀要";
+}
+
+
+@Styles.Render("~/Content/edit.css")
+
+
+
+@section scripts {
+     @Scripts.Render("~/Scripts/uploadify/jquery.uploadify-3.2.min.js")
+     @Scripts.Render("~/Scripts/file-upload.js")
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+
+            var ASPSESSID = "@Session.SessionID";
+            var AUTHID = "@(Request.Cookies[FormsAuthentication.FormsCookieName] == null ? string.Empty : Request.Cookies[FormsAuthentication.FormsCookieName].Value)";
+
+            initFileUpload(ASPSESSID, AUTHID);
+
+        });
+    </script>
+
+    <script type="text/javascript">
+
+        var picUrlTemplate, videoUrlTemplate;
+
+        $(document).ready(function () {
+            $('.datepicker').datepicker({ dateFormat: 'yy/mm/dd' });
+
+            // 將 DIV 內容先轉成 template
+            picUrlTemplate = $("#PicUrlTemplate").template();
+            videoUrlTemplate = $("#VideoUrlTemplate").template();
+
+            $('#reset').click(function () {
+                $('#AcademicYear').val('');
+                $('#ContentName').val('');
+                $('#ContentTime').val('');
+                tinyMCE.activeEditor.setContent('');    //清空內容
+                $('#PicUrlListDiv').empty();
+                $('#VideoUrlListDiv').empty();
+            });
+
+
+        });
+
+
+    </script>
+
+}
+
+
+<h2>校園日誌與榮譽榜</h2>
+
+@using (Html.BeginForm("Page", "EventCalendar", FormMethod.Post,  null ))
+{
+
+    @Html.AntiForgeryToken()
+
+    <input type="hidden" value="@ViewBag.Commamd" id="command" name="command" />
+    @Html.HiddenFor(m => m.ContentID)
+
+
+
+    <div>
+        <table style="width: 100%" border="1">
+            <tr>
+                <td style="width: 230px" class="auto-style9">
+                    <label style="color:red">*</label>
+                    <strong>
+                        學年
+                    </strong>
+                </td>
+                <td style="width: 1262px">
+                 @Html.DropDownListFor(m => m.AcademicYear, (List<SelectListItem>)ViewBag.SelectYearList, "請選擇", new { @class = "form-control", @style = "display: inline;" })
+                @Html.ValidationMessageFor(m => m.AcademicYear)
+                </td>
+            </tr>
+            
+            <tr>
+                <td style="width: 230px" class="auto-style9">
+                    <label style="color:red">*</label>
+                    <strong>
+                        標題
+                    </strong>
+                </td>
+                <td style="width: 1262px">
+                    @Html.TextBoxFor(m => m.ContentName, new { @class = "form-control", @style = "width:65%; max-width: 680px" })
+                    @Html.ValidationMessageFor(m => m.ContentName)
+                </td>
+            </tr>
+          
+            <tr>
+                <td style="width: 230px" class="auto-style9">
+                    <label style="color:red">*</label>
+                    <strong>
+                        事件日期
+                    </strong>
+                </td>
+                <td style="width: 1262px">
+                    @Html.TextBoxFor(m => m.ContentTime, "{0:yyyy/MM/dd}", new { @class = "datepicker" })
+                 
+                    @Html.ValidationMessageFor(m => m.ContentTime)
+                </td>
+            </tr>
+           
+            <tr>
+                <td style="width: 230px" class="auto-style9">
+                    <strong>
+                        內容
+                    </strong>
+                </td>
+                <td style="width: 1262px">
+                    @Html.TextAreaFor(m => m.ContentText, new { @class = "tinymce" })
+                    @Html.ValidationMessageFor(m => m.ContentText)
+                </td>
+            </tr>
+
+
+            <tr>
+                <td style="width: 230px" class="auto-style9">
+                    <strong>
+                        圖檔
+                    </strong>
+                </td>
+                <td style="width: 1262px">
+
+                    <div id="ImageQueue"></div>
+                    <input id="ImageData" type="file" name="ImageData" />
+
+                    <div id="PicUrlListDiv">
+                        @if ("edit".Equals(ViewBag.Commamd) && Model != null )
+                        {
+                            @Html.Partial("_Files", Model)
+                        }
+                    </div>
+                    <span class="auto-style8">
+                        封面圖片：預設為上傳的第一張照片，圖片格式為gif、png、jpg。
+                        超過800x600px時，系統會自動作縮圖處理。
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td style="width: 230px" class="auto-style9">
+                    <strong>
+                        影片上傳
+                    </strong>
+                </td>
+                <td style="width: 1262px">
+
+                    <div id="VideoQueue"></div>
+                    <input id="VideoData" type="file" name="VideoData" />
+
+                    <div id="VideoUrlListDiv">
+                        @if ("edit".Equals(ViewBag.Commamd) && Model != null)
+                        {
+                            @Html.Partial("_Videos", Model)
+                        }
+                    </div>
+                    <span class="auto-style8">
+                        檔案格式為MP4。
+                    </span>
+                </td>
+            </tr>
+            
+            @if (ViewBag.Commamd == "edit")
+            {
+                <tr>
+                    <td style="width: 230px" class="auto-style9">
+                        <strong>
+                            建立時間
+                        </strong>
+                    </td>
+                    <td style="width: 1262px" class="datepicker">
+                        @Html.DisplayFor(m => m.ContentCreateTime, "{0:yyyy/MM/dd}")
+                    </td>
+                </tr>
+                <tr>
+                    <td style="width: 230px" class="auto-style9">
+                        <strong>
+                            建立者
+                        </strong>
+                    </td>
+                    <td style="width: 1262px" class="datepicker">
+                        @Html.DisplayFor(m => m.ContentCreator)
+                    </td>
+                </tr>
+                <tr>
+                    <td style="width: 230px" class="auto-style9">
+                        <strong>
+                            更新時間
+                        </strong>
+                    </td>
+                    <td style="width: 1262px" class="datepicker">
+                        @Html.DisplayFor(m => m.ContentUpdateTime, "{0:yyyy/MM/dd}")
+                    </td>
+                </tr>
+                <tr>
+                    <td style="width: 230px" class="auto-style9">
+                        <strong>
+                            更新者
+                        </strong>
+                    </td>
+                    <td style="width: 1262px" class="datepicker">
+                        @Html.DisplayFor(m => m.ContentUpdater)
+                    </td>
+                </tr>
+
+            }
+
+
+        </table>
+    </div>
+
+    <div>
+        <hr />
+    </div>
+
+    <div class="auto-style5">
+        @if ("add".Equals(ViewBag.Commamd))
+        {
+            <input class="btn btn-success" type="submit" value="新增" />  
+                    
+            <input class="btn btn-default" type="button" id="reset" value="重置" />
+        }
+        else if ("edit".Equals(ViewBag.Commamd))
+        {
+            <input class="btn btn-success" type="submit" value="儲存更新" />
+        }
+
+    </div>
+
+}
+
+
+
+<!-- Popup Photo Modal -->
+@Html.Partial("_PopupPhotoModal")

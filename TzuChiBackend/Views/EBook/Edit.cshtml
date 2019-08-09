@@ -1,0 +1,204 @@
+﻿@model TzuChiBackend.ViewModels.EBookViewModel
+@using Core.Extensions;
+
+@{
+    ViewBag.Title = "電子書管理";
+}
+
+<style>
+    input,
+    select,
+    textarea {
+        max-width: 100%;
+    }
+</style>
+
+
+  <a href="@Url.Action("Index")">
+      <h2>@ViewBag.Title</h2>
+  </a>
+<div>
+    
+    @using (Html.BeginForm("Update", "EBook",FormMethod.Post,new { @class= "form-inline" }))
+    {
+        <div class="form-group  col-sm-6">
+            <label>標題</label>
+            @Html.TextBoxFor(m => m.Title, new { @class = "form-control", style = "width:65%" })
+
+        </div>
+        <div class="form-group">
+            <label>編號</label>
+            <input name="Title" type="text" class="form-control" value="@Model.Number" disabled>
+        </div>
+        <button type="submit" class="btn btn-success">
+            <span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span>
+            存檔
+        </button>
+
+        @Html.HiddenFor(m=>m.Id , new { @id="BookId"})
+    }
+
+</div>
+
+<div style="padding-top:25px" class="form-inline">
+   
+        <div class="form-group">
+            
+           
+            <input type="file" id="FileUpload" />
+        </div>
+        <button type="button" id="btn-upload" class="btn btn-primary">上傳新頁</button>
+  
+</div>
+
+<div id="page-list"  style="padding-top:25px" >
+    @Html.Partial("_Pages",Model)
+</div>
+
+@section Scripts {
+
+    <script type="text/javascript">
+        function getId() {
+            return $("#BookId").val();
+        }
+        function fetchEBookPages() {
+            var book_id = getId();
+            var url = '@Url.Action("Edit","EBook")';
+
+            $.ajax({
+                type: "GET",
+                url: url,
+                data: { id: book_id },
+                dataType: 'html',
+                success: function (data) {
+                    $('#page-list').html(data);
+                },
+                error: function () {
+                    OnError();
+                }
+            });
+        }
+        function upload() {
+            var book_id = getId();
+
+            var fileUpload = $("#FileUpload").get(0);
+            var files = fileUpload.files;
+
+            if (!files.length) {
+                alert('請選擇檔案');
+                return false;
+            }
+
+            if (window.FormData !== undefined) {
+                var fileData = new FormData();
+                for (var i = 0; i < files.length; i++) {
+                    fileData.append(files[i].name, files[i]);
+                }
+                fileData.append('book_id', book_id);
+
+                $.ajax({
+                    url: '@Url.Action("Upload","EBook")',
+                    type: "POST",
+                    contentType: false, // Not to set any content header
+                    processData: false, // Not to process data
+                    data: fileData,
+                    success: function (result) {
+                        fetchEBookPages();
+                    },
+                    error: function (err) {
+                        alert('上傳失敗');
+                    }
+                });
+            } else {
+                alert("FormData is not supported.");
+            }
+        }
+        function removePage(id) {
+            var url = '@Url.Action("RemovePage", "EBook")';
+
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: { Id: id },
+                dataType: 'json',
+                success: function (result) {
+                    fetchEBookPages();
+                },
+                error: function () {
+                    OnError();
+                }
+            });
+        }
+
+        function bookDeletePageClicked() {
+            $(".btn-delete").click(function (e) {
+                e.preventDefault();
+                var id = $(this).data('id');
+
+                swal({
+                    title: "確定要刪除此頁圖片嗎?",
+                    icon: "warning",
+                    buttons: true,
+                    dangerMode: true,
+                })
+                .then((willDelete) => {
+                    if (willDelete) {
+                        removePage(id);
+                    } else {
+
+                    }
+                });
+            });
+        }
+
+        function bookUpDownClicked() {
+			$("#btn-edit-order").click(function (e) {
+				e.preventDefault();
+
+				updatePageOrder();
+            });
+		}
+
+		function updatePageOrder() {
+			let posts = [];
+
+			$('#table-posts > tbody  > tr').each(function () {
+				let id = $(this).find("input.post-id").val();
+				let order = $(this).find("input.display-order").val();
+
+				posts.push({
+					Id: id,
+					Sort: order
+				});
+			});
+
+			var url = '@Url.Action("UpdatePageOrder", "EBook")';
+
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: { posts:posts },
+                dataType: 'json',
+                success: function (result) {
+					fetchEBookPages();
+                },
+                error: function () {
+                    OnError();
+                }
+            });
+
+       
+		}
+
+        $(document).ready(function () {
+            bookDeletePageClicked();
+            bookUpDownClicked();
+
+            $('#btn-upload').click(function (e) {
+                e.preventDefault();
+                upload();
+
+            });
+        });
+    </script>
+}

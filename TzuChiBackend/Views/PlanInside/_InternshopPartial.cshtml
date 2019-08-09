@@ -1,0 +1,99 @@
+﻿@model TzuChiClassLibrary.BO.PlanInsideModel
+@{
+    string uploadDir = System.Web.Configuration.WebConfigurationManager.AppSettings["upload.folder.name"];
+}
+<tr>
+    <td style="width: 230px" class="auto-style9">
+        <strong>
+            產學類型
+        </strong>
+    </td>
+    <td style="width: 1262px">
+        企業實習
+        <input type="hidden" name="CategoryPrepID" value="@ViewBag.CategoryPrepID">
+    </td>
+</tr>
+<tr>
+    <td style="width: 230px" class="auto-style9">
+        <label style="color:red">*</label>
+        <strong>
+            地圖座標
+        </strong>
+    </td>
+    <td style="width: 1262px">
+        使用關聯座標:
+        是<input type="radio" name="xy" value="true" checked />
+        @Html.DropDownListFor(m => m.ImageXY, (List<SelectListItem>)ViewBag.SelectCoordinateList, "請選擇", new { @class = "form-control", @style = "display: inline;" })
+        @Html.ValidationMessageFor(m => m.ImageXY)
+        否<input type="radio" name="xy" value="fasle" />
+        @Html.TextBoxFor(m => m.Coordinate.PointX, new { @class = "Coordinate" })
+        -
+        @Html.TextBoxFor(m => m.Coordinate.PointY, new { @class = "Coordinate" })
+        @Html.ValidationMessageFor(m => m.Coordinate.PointX)
+        @Html.ValidationMessageFor(m => m.Coordinate.PointY)
+    </td>
+</tr>
+<tr>
+    <td style="width: 230px" class="auto-style9">
+        <label style="color:red">*</label>
+        <strong>
+            分區
+        </strong>
+    </td>
+    <td style="width: 1262px">
+        @Html.DropDownListFor(m => m.CategoryPartitionID, (List<SelectListItem>)ViewBag.SelectPartitionList, "請選擇", new { @class = "form-control", @style = "display: inline;" })
+        @Html.ValidationMessageFor(m => m.CategoryPartitionID)
+    </td>
+</tr>
+<tr>
+    <td style="width: 230px" class="auto-style9">
+        <label style="color:red">*</label>
+        <strong>
+            所在地
+        </strong>
+    </td>
+    <td style="width: 1262px">
+        @Html.DropDownListFor(m => m.CategorySiteID, (List<SelectListItem>)ViewBag.SelectSiteList, "請選擇", new { @class = "form-control", @style = "display: inline;" })
+        @Html.ValidationMessageFor(m => m.CategorySiteID)
+    </td>
+</tr>
+
+<tr>
+    <td style="width: 230px" class="auto-style9">
+        <label style="color:red">*</label>
+        <strong>
+            科系
+        </strong>
+    </td>
+    <td style="width: 1262px">
+        @Html.DropDownListFor(m => m.Department, (List<SelectListItem>)ViewBag.SelectDepartmentsList, new { @class = "form-control", @style = "display: inline;" })
+
+        
+        @Html.HiddenFor(m => m.Department)
+        @Html.ValidationMessageFor(m => m.Department)
+    </td>
+</tr>
+
+<tr>
+    <td style="width: 230px" class="auto-style9">
+        <strong>
+            實習單位名稱（實習地點）
+        </strong>
+    </td>
+    <td style="width: 1262px">
+        @Html.TextBoxFor(m => m.Agencies , new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Agencies)
+    </td>
+</tr>
+
+<tr>
+    <td style="width: 230px" class="auto-style9">
+        <strong>
+            簡介
+        </strong>
+    </td>
+    <td style="width: 1262px">
+        @Html.TextAreaFor(m => m.Description, new { @Style = "width: 600px; height: 300px; max-width:600px" })
+        @Html.ValidationMessageFor(m => m.Description)
+    </td>
+</tr>

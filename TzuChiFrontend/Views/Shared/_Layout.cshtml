@@ -1,0 +1,64 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    @*<meta name="viewport" content="width=device-width, initial-scale=1.0">*@
+    @*<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" />
+    <meta name="HandheldFriendly" content="true" />*@
+    <title>@ViewBag.Title</title>
+    @Styles.Render("~/Content/css")
+    <style type="text/css">
+        body {
+            -moz-user-select: none;
+            -webkit-user-select: none;
+        }
+    </style>
+    @Scripts.Render("~/bundles/modernizr")
+    <script type="text/javascript">
+        function iEsc() { return false; }
+        function iRec() { return true; }
+        function DisableKeys() {
+            if (event.ctrlKey || event.shiftKey || event.altKey) {
+                window.event.returnValue = false;
+                iEsc();
+            }
+        }
+        document.ondragstart = iEsc;
+        document.onkeydown = DisableKeys;
+        document.oncontextmenu = iEsc;
+        if (typeof document.onselectstart != "undefined")
+            document.onselectstart = iEsc;
+        else {
+            document.onmousedown = iEsc;
+            document.onmouseup = iRec;
+        }
+        function DisableRightClick(qsyzDOTnet) {
+            if (window.Event) {
+                if (qsyzDOTnet.which == 2 || qsyzDOTnet.which == 3)
+                    iEsc();
+            }
+            else
+                if (event.button == 2 || event.button == 3) {
+                    event.cancelBubble = true
+                    event.returnValue = false;
+                    iEsc();
+                }
+        }
+    </script>
+    @RenderSection("styles", required: false)
+</head>
+<body style="overflow:hidden;">    
+    <div id="main">
+        @RenderBody()
+    </div>
+	<div id="footer">
+	</div>
+		@Scripts.Render("~/bundles/jquery")
+		@Scripts.Render("~/bundles/bootstrap")
+
+		<script type="text/javascript" src="~/Scripts/js/app.js"></script>
+
+		@RenderSection("scripts", required: false)
+</body>
+</html>

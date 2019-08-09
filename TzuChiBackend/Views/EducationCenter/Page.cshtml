@@ -1,0 +1,501 @@
+﻿@model TzuChiClassLibrary.BO.EventCalendarModel
+@{
+    ViewBag.Title = "大事記要";
+    string uploadDir = System.Web.Configuration.WebConfigurationManager.AppSettings["upload.folder.name"];
+    string imageFile = TzuChiClassLibrary.BO.FileUploadModel.FUNCTIONOID_IMAGE;
+    string videoFile = TzuChiClassLibrary.BO.FileUploadModel.FUNCTIONOID_VIDEO;
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script src='@Url.Content("~/Scripts/jquery-ui/jquery-ui.js")'></script>
+    <link href="@Url.Content("~/Scripts/jquery-ui/jquery-ui.css")" rel="stylesheet">
+    <style type="text/css">
+        .auto-style4 {
+            color: #FF6300;
+            font-size: medium;
+        }
+
+        .auto-style5 {
+            text-align: center;
+        }
+
+        .auto-style1 {
+            font-size: small;
+        }
+
+        .auto-style7 {
+            font-size: x-small;
+            color: #FF0000;
+        }
+
+        .auto-style8 {
+            font-size: small;
+            color: #808080;
+        }
+
+        .auto-style9 {
+            text-align: right;
+            font-size: small;
+        }
+
+        .auto-style11 {
+            color: #FF0000;
+        }
+    </style>
+    <style type="text/css">
+        /* Styles for validation helpers
+            -----------------------------------------------------------*/
+        .field-validation-error {
+            color: #ff0000;
+        }
+
+        .field-validation-valid {
+            display: none;
+        }
+
+        .input-validation-error {
+            border: 1px solid #ff0000;
+            background-color: #ffeeee;
+        }
+
+        .validation-summary-errors {
+            font-weight: bold;
+            color: #ff0000;
+        }
+
+        .validation-summary-valid {
+            display: none;
+        }
+    </style>
+
+
+
+    @*引用Uploadify樣式，Queue會用到*@
+    <link href='@Url.Content("~/Scripts/uploadify/uploadify.css")' rel="stylesheet" />
+    @*引用uploadify核心*@
+    <script src='@Url.Content("~/Scripts/uploadify/jquery.uploadify-3.2.min.js")'></script>
+    <script type="text/javascript">
+            $(document).ready(init);
+            function init()
+            {
+                //解決Firefox掉Session用的程式碼
+                var ASPSESSID = "@Session.SessionID";
+                var AUTHID = "@(Request.Cookies[FormsAuthentication.FormsCookieName] == null ? string.Empty : Request.Cookies[FormsAuthentication.FormsCookieName].Value)";
+
+                var width = 814;
+                var height = 269;
+                var buttonImageUrl = "@Url.Content("~/Images/uploadButton.jpg")";//這是我自己準備的按鈕圖
+
+                //js註冊使用jQuery Uploadify
+                //Filedata為input的id
+                //queue為div id，佇列div的 id
+                UploadFileFunc("ImageData", "ImageQueue", ASPSESSID, AUTHID, width, height, buttonImageUrl);
+                UploadFileFunc("VideoData", "VideoQueue", ASPSESSID, AUTHID, width, height, buttonImageUrl);
+
+            }
+
+
+
+            //這個function再自行放到自己的.js檔
+        function UploadFileFunc(FiledataID, QueueID, ASPSESSID, AUTHID, width, height, buttonImageUrl) {
+
+            var mfileTypeExts = "*.jpg;*.gif;*.png;*.JPG;*.GIF;*.PNG";
+            var mfileTypeDesc = "Image Files (.jpg, .gif, .png)";
+            var mfileSizeLimit = "100MB";
+
+            //判斷是否為附件
+            if ("VideoData" == FiledataID) {
+                mfileTypeExts = "*.mp4;*.MP4;*.Mp4";
+                mfileTypeDesc = "Attachment Files (.mp4)";
+                mfileSizeLimit = "100MB";
+
+                $('#' + FiledataID).uploadify({
+                    //buttonImage: buttonImageUrl,//依美工給的圖置換上傳按鈕圖
+                    //width: width,//按鈕寬度和圖片一樣
+                    //height: height,//按鈕高度和圖片一樣
+
+                    swf: '@Url.Content("~/Scripts/uploadify/uploadify.swf")',//必填
+                    uploader: '@Url.Action("UploadFile", "FileUtility")',//使用哪個Action 做上傳
+
+
+                    multi: false,//true支援選擇多檔案上傳
+                    auto: true,//設置true，檔案選擇框，一按確定就上傳，false的話，要另外呼叫方法傳遞upload參數觸發上傳行為
+                    fileTypeExts: mfileTypeExts,//限制可以選擇的檔案類型
+                    fileTypeDesc: mfileTypeDesc,//選擇檔案時的說明
+                    fileSizeLimit: mfileSizeLimit,//在js端就限制檔案大小，User選擇超過大小的檔案時，就會跳出error
+                    queueID: QueueID,//上傳進度條呈現的地方
+                    queueSizeLimit: 4,//限制queue的數量
+                    simUploadLimit: 0,//同時上傳檔案數，0為無限
+                    removeCompleted: true,//檔案上傳完成時，畫面上的佇列是否消失
+
+
+
+                    fileObjName: 'Filedata',//Server端的Action，以什麼名稱接收HttpPostedFileBase物件
+
+                    onSelectError: function (file) {//當選擇檔案不符合條件時，觸發： http://www.uploadify.com/documentation/uploadify/onselecterror/
+
+                        //alert('The file ' + file.name + ' returned an error and was not added to the queue.');
+
+                    },
+                    onUploadSuccess: function (file, data, response) {
+                        //一個佇列上傳成功時
+                        //alert('The file ' + file.name + ' was successfully uploaded with a response of ' + response + ':' + data);
+                        //data參數是Controller回傳的字串，想要Json格式的話，要再另外找Plugin把字串轉成Json物件
+                        //以本文範例data就是該圖片上傳後的Url字串
+                        var jsondata = jQuery.parseJSON(data);
+
+                        if ("ImageData" == FiledataID) {
+                            $.tmpl(picUrlTemplate, { index: new Date().getTime(), fileData: jsondata }).appendTo("#PicUrlListDiv");
+
+                            if ($("#PicUrlListDiv .coverInput").size() == 1) {
+                                $("#PicUrlListDiv .coverInput").val('true');
+                                $("#PicUrlListDiv .coverBtn").hide();
+                                $("#PicUrlListDiv .coverLabel").show();
+                            }
+                        }
+                        else if ("VideoData" == FiledataID) {
+                            //todo
+                            $.tmpl(picUrlTemplate, { index: new Date().getTime(), fileData: jsondata }).appendTo("#PicUrlListDiv");
+                        }
+
+                    },
+                    onQueueComplete: function (queueData) {
+                        //全部佇列執行完畢時
+                        //alert(queueData.uploadsSuccessful + ' files were successfully uploaded.');
+
+
+                    },
+                    //解決Firefox掉Session的程式碼，ASPSESSID和AUTHID命名要和Global.asax.cs裡寫的一樣
+                    formData: {
+                        ASPSESSID: ASPSESSID,
+                        AUTHID: AUTHID
+                    }
+                });
+            }
+        }
+    </script>
+}
+
+<h2>教學分享</h2>
+
+@using (Html.BeginForm("Page", "EventCalendar", FormMethod.Post, new { }))
+{
+
+    @Html.AntiForgeryToken()
+
+    <input type="hidden" value="@ViewBag.Commamd" id="command" name="command" />
+    @Html.HiddenFor(m => m.ContentID)
+
+    <div class="auto-style4">
+        <strong>EventCalendar Infomation</strong>
+    </div>
+
+    <div>
+        <table style="width: 100%" border="1">
+            <tr>
+                <td style="width: 230px" class="auto-style9">
+                    <strong>
+                        學年
+                    </strong>
+                </td>
+                <td style="width: 1262px">
+                    @*@Html.DropDownListFor(m => m.AcademicYear, (List<SelectListItem>)ViewBag.SelectTypeList, "請選擇", new { @class = "form-control", @style = "display: inline;" })*@
+                    @Html.ValidationMessageFor(m => m.AcademicYear)
+                </td>
+            </tr>
+            <tr>
+                <td style="width: 230px" class="auto-style9">
+                    <strong>
+                        標題
+                    </strong>
+                </td>
+                <td style="width: 1262px">
+                    @Html.TextBoxFor(m => m.ContentName)
+                    @Html.ValidationMessageFor(m => m.ContentName)
+                </td>
+            </tr>
+            <tr>
+                <td style="width: 230px" class="auto-style9">
+                    <strong>
+                        事件日期
+                    </strong>
+                </td>
+                <td style="width: 1262px">
+                    @Html.TextBoxFor(m => m.ContentTime, "{0:yyyy/MM/dd}")
+                    @Html.ValidationMessageFor(m => m.ContentTime)
+                </td>
+            </tr>
+            <tr>
+                <td style="width: 230px" class="auto-style9">
+                    <strong>
+                        內容
+                    </strong>
+                </td>
+                <td style="width: 1262px">
+                    @Html.TextAreaFor(m => m.Description)
+                </td>
+            </tr>
+            <tr>
+                <td style="width: 230px" class="auto-style9">
+                    <strong>
+                        圖檔
+                    </strong>
+                </td>
+                <td style="width: 1262px">
+
+                    <div id="queue"></div>
+                    <input id="Filedata" type="file" name="Filedata" />
+
+                    <div id="PicUrlListDiv">
+                        @if ("edit".Equals(ViewBag.Commamd) && Model != null && Model.PicUrlList != null)
+                        {
+                            foreach (var f in Model.PicUrlList)
+                            {
+                                <div id="PicUrl_@(f.ItemOID)">
+                                    <input type="hidden" name="PicUrlList.index" value="@(f.ItemOID)" />
+                                    <input type="hidden" name="PicUrlList[@(f.ItemOID)].ItemOID" value="@(f.ItemOID)" />
+                                    <input type="hidden" name="PicUrlList[@(f.ItemOID)].FunctionOID" value="@(f.FunctionOID)" />
+                                    <input type="hidden" name="PicUrlList[@(f.ItemOID)].FunctionType" value="@(f.FunctionType)" />
+                                    <input type="hidden" name="PicUrlList[@(f.ItemOID)].ImageHeight" value="@(f.ImageHeight)" />
+                                    <input type="hidden" name="PicUrlList[@(f.ItemOID)].ImageWidth" value="@(f.ImageWidth)" />
+                                    <input type="hidden" name="PicUrlList[@(f.ItemOID)].FileName" value="@(f.FileName)" />
+                                    <input type="hidden" name="PicUrlList[@(f.ItemOID)].Bit" value="@(f.Bit)" />
+                                    <input type="hidden" name="PicUrlList[@(f.ItemOID)].Path" value="@(f.Path)" />
+                                    <input type="hidden" name="PicUrlList[@(f.ItemOID)].CoverImage" value="@(f.CoverImage ? "true":"false")" class="coverInput" />
+                                    <table class="table">
+                                        <tr>
+                                            <td width="30%">
+                                                <a href="@Url.Content(string.Format("~/{0}/{1}", uploadDir, f.Path))" target="_blank">
+                                                    <img src="@Url.Content(string.Format("~/{0}/{1}", uploadDir, f.Path))" width="50" />
+                                                </a>
+                                            </td>
+                                            <td width="20%"><a href="@Url.Content(string.Format("~/{0}/{1}", uploadDir, f.Path))" target="_blank">@(f.FileName)</a></td>
+                                            <td>
+                                                <input type="button" value="delete" class="del btn btn-danger" onclick="removePicUrl('@(f.ItemOID)')" />
+                                                <a class="btn btn-primary coverBtn" id="Set_@(f.ItemOID)" style="display: @(f.CoverImage ? "none" : "inline");" onclick="setPicCoverageUrl('@(f.ItemOID)')">SetCoverage</a>
+                                                <label style="display: @(f.CoverImage ? "inline" : "none");" class="coverLabel" id="Cover_@(f.ItemOID)">封面圖</label>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            } // foreach()
+                        }
+                    </div>
+                    <span class="auto-style8">
+                        封面圖片：預設為上傳的第一張照片每張圖片大小不超過100MB，圖片格式為gif、png、jpg。
+                        超過800x600px時，系統會自動作縮圖處理。
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td style="width: 230px" class="auto-style9">
+                    <strong>
+                        影片上傳
+                    </strong>
+                </td>
+                <td style="width: 1262px">
+
+                    <div id="VideoQueue"></div>
+                    <input id="VideoData" type="file" name="VideoData" />
+
+                    <div id="VideoUrlListDiv">
+                        @if ("edit".Equals(ViewBag.Commamd) && Model != null && Model.VideoUrlList != null)
+                        {
+                            foreach (var f in Model.VideoUrlList)
+                            {
+                                <div id="VideoUrl_@(f.ItemOID)">
+                                    <input type="hidden" name="VideoUrlList.index" value="@(f.ItemOID)" />
+                                    <input type="hidden" name="VideoUrlList[@(f.ItemOID)].ItemOID" value="@(f.ItemOID)" />
+                                    <input type="hidden" name="VideoUrlList[@(f.ItemOID)].FunctionOID" value="@(f.FunctionOID)" />
+                                    <input type="hidden" name="VideoUrlList[@(f.ItemOID)].FunctionType" value="@(f.FunctionType)" />
+                                    <input type="hidden" name="VideoUrlList[@(f.ItemOID)].ImageHeight" value="@(f.ImageHeight)" />
+                                    <input type="hidden" name="VideoUrlList[@(f.ItemOID)].ImageWidth" value="@(f.ImageWidth)" />
+                                    <input type="hidden" name="VideoUrlList[@(f.ItemOID)].FileName" value="@(f.FileName)" />
+                                    <input type="hidden" name="VideoUrlList[@(f.ItemOID)].Bit" value="@(f.Bit)" />
+                                    <input type="hidden" name="VideoUrlList[@(f.ItemOID)].Path" value="@(f.Path)" />
+                                    <input type="hidden" name="VideoUrlList[@(f.ItemOID)].CoverImage" value="@(f.CoverImage ? "true":"false")" class="coverInput" />
+                                    <table class="table">
+                                        <tr>
+                                            <td width="30%">
+                                                <a href="@Url.Content(string.Format("~/{0}/{1}", uploadDir, f.Path))" target="_blank">
+                                                    <img src="@Url.Content(string.Format("~/{0}/{1}", uploadDir, f.Path))" width="50" />
+                                                </a>
+                                            </td>
+                                            <td width="20%"><a href="@Url.Content(string.Format("~/{0}/{1}", uploadDir, f.Path))" target="_blank">@(f.FileName)</a></td>
+                                            <td>
+                                                <input type="button" value="delete" class="del btn btn-danger" onclick="removeVideoUrl('@(f.ItemOID)')" />
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            } // foreach()
+                        }
+                    </div>
+                    <span class="auto-style8">
+                        檔案大小不超過100MB，檔案格式為MP4。
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td style="width: 230px" class="auto-style9">
+                    <strong>
+                        建立時間
+                    </strong>
+                </td>
+                <td style="width: 1262px" class="datepicker">
+                    @Html.DisplayFor(m => m.ContentCreateTime, "{0:yyyy/MM/dd}")
+                </td>
+            </tr>
+            <tr>
+                <td style="width: 230px" class="auto-style9">
+                    <strong>
+                        建立者
+                    </strong>
+                </td>
+                <td style="width: 1262px" class="datepicker">
+                    @Html.DisplayFor(m => m.ContentCreator)
+                </td>
+            </tr>
+            <tr>
+                <td style="width: 230px" class="auto-style9">
+                    <strong>
+                        更新時間
+                    </strong>
+                </td>
+                <td style="width: 1262px" class="datepicker">
+                    @Html.DisplayFor(m => m.ContentUpdateTime, "{0:yyyy/MM/dd}")
+                </td>
+            </tr>
+            <tr>
+                <td style="width: 230px" class="auto-style9">
+                    <strong>
+                        更新者
+                    </strong>
+                </td>
+                <td style="width: 1262px" class="datepicker">
+                    @Html.DisplayFor(m => m.ContentUpdater)
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <div>
+        <hr />
+    </div>
+
+    <div class="auto-style5">
+        @if ("add".Equals(ViewBag.Commamd))
+        {
+            <input class="btn btn-success" type="submit" value="新增" />
+        }
+        else if ("edit".Equals(ViewBag.Commamd))
+        {
+            <input class="btn btn-success" type="submit" value="儲存更新" />
+        }
+        <input class="btn btn-success" type="button" id="reset" value="重置" />
+    </div>
+
+}
+
+<div id="PicUrlTemplate" style="display: none;">
+    {{if fileData}}
+    <div id="PicUrl_${index}">
+        <input type="hidden" name="PicUrlList.index" value="${index}" />
+        <input type="hidden" name="PicUrlList[${index}].ItemOID" value="${fileData.ItemOID}" />
+        <input type="hidden" name="PicUrlList[${index}].FunctionOID" value="${fileData.FunctionOID}" />
+        <input type="hidden" name="PicUrlList[${index}].FunctionType" value="${fileData.FunctionType}" />
+        <input type="hidden" name="PicUrlList[${index}].ImageHeight" value="${fileData.ImageHeight}" />
+        <input type="hidden" name="PicUrlList[${index}].ImageWidth" value="${fileData.ImageWidth}" />
+        <input type="hidden" name="PicUrlList[${index}].FileName" value="${fileData.FileName}" />
+        <input type="hidden" name="PicUrlList[${index}].Bit" value="${fileData.Bit}" />
+        <input type="hidden" name="PicUrlList[${index}].Path" value="${fileData.Path}" />
+        <input type="hidden" name="PicUrlList[${index}].CoverImage" value="${fileData.CoverImage}" class="coverInput" />
+        <table class="table">
+            <tr>
+                <td width="30%">
+                    <a href="@Url.Content( string.Format( "~/{0}/", uploadDir) )${fileData.Path}" target="_blank">
+                        <img src="@Url.Content(string.Format("~/{0}/", uploadDir))${fileData.Path}" width="50" />
+                    </a>
+                </td>
+                <td width="20%"><a href="@Url.Content(string.Format("~/{0}/", uploadDir))${fileData.Path}" target="_blank">${fileData.FileName}</a></td>
+                <td>
+                    <input type="button" value="delete" class="del btn btn-danger" onclick="removePicUrl('${index}')" />
+                    <a class="btn btn-primary coverBtn" id="Set_${index}" style="display: inline;" onclick="setPicCoverageUrl('${index}')">SetCoverage</a>
+                    <label style="display: none;" class="coverLabel" id="Cover_${index}">封面圖</label>
+                </td>
+            </tr>
+        </table>
+    </div>
+    {{/if}}
+</div>
+<div id="VideoUrlTemplate" style="display: none;">
+    {{if fileData}}
+    <div id="VideoUrl_${index}">
+        <input type="hidden" name="VideoUrlList.index" value="${index}" />
+        <input type="hidden" name="VideoUrlList[${index}].ItemOID" value="${fileData.ItemOID}" />
+        <input type="hidden" name="VideoUrlList[${index}].FunctionOID" value="${fileData.FunctionOID}" />
+        <input type="hidden" name="VideoUrlList[${index}].FunctionType" value="${fileData.FunctionType}" />
+        <input type="hidden" name="VideoUrlList[${index}].ImageHeight" value="${fileData.ImageHeight}" />
+        <input type="hidden" name="VideoUrlList[${index}].ImageWidth" value="${fileData.ImageWidth}" />
+        <input type="hidden" name="VideoUrlList[${index}].FileName" value="${fileData.FileName}" />
+        <input type="hidden" name="VideoUrlList[${index}].Bit" value="${fileData.Bit}" />
+        <input type="hidden" name="VideoUrlList[${index}].Path" value="${fileData.Path}" />
+        <input type="hidden" name="VideoUrlList[${index}].CoverImage" value="${fileData.CoverImage}" class="coverInput" />
+        <table class="table">
+            <tr>
+                <td width="30%">
+                    <a href="@Url.Content( string.Format( "~/{0}/", uploadDir) )${fileData.Path}" target="_blank">
+                        <img src="@Url.Content(string.Format("~/{0}/", uploadDir))${fileData.Path}" width="50" />
+                    </a>
+                </td>
+                <td width="20%"><a href="@Url.Content(string.Format("~/{0}/", uploadDir))${fileData.Path}" target="_blank">${fileData.FileName}</a></td>
+                <td>
+                    <input type="button" value="delete" class="del btn btn-danger" onclick="removeVideoUrl('${index}')" />
+                </td>
+            </tr>
+        </table>
+    </div>
+    {{/if}}
+</div>
+
+<script type="text/javascript">
+
+    $('.datepicker input').datepicker({ dateFormat: 'yy/mm/dd' });
+
+    // 將 DIV 內容先轉成 template
+
+    var picUrlTemplate = $("#PicUrlTemplate").template();
+
+    function removePicUrl(id) {
+        if ($("#PicUrl_" + id + " .coverInput").val() == 'true') {
+            $("#PicUrl_" + id).remove();
+            $("#PicUrlListDiv .coverInput").first().val('true');
+            $("#PicUrlListDiv .coverBtn").first().hide();
+            $("#PicUrlListDiv .coverLabel").first().show();
+        }
+        else
+            $("#PicUrl_" + id).remove();
+    }
+
+    function setPicCoverageUrl(id) {
+        $("#PicUrlListDiv .coverBtn").show();
+        $("#Set_" + id).hide();
+        $("#PicUrlListDiv .coverLabel").hide();
+        $("#Cover_" + id).show();
+        $("#PicUrlListDiv .coverInput").val('false');
+        $("input[name$='PicUrlList[" + id + "].CoverImage']").val('true');
+
+    }
+
+    var VideoUrlListTemplate = $("#VideoUrlListTemplate").template();
+
+    function removeVideoUrlList(id) {
+        $("#VideoUrl_" + id).remove();
+    }
+
+    $('#reset').click(function () {
+        //todo
+    });
+
+</script>

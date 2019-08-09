@@ -1,0 +1,132 @@
+﻿@model TzuChiBackend.ViewModels.VideoCategoryViewModel
+
+
+
+<form id="form-edit-category">
+    <div class="form-group">
+        <label>名稱</label>
+        <input  name="Name" type="text" class="form-control" value="@Model.Name">       
+    </div>
+
+    @if (!String.IsNullOrEmpty(Model.Id))
+    {
+        <div id="group-sort" class="form-group">
+            <label>排序</label>
+            <input name="Sort" type="text" class="form-control" value="@Model.Sort">            
+        </div>
+
+        <div class="form-group">
+            <label>狀態</label>
+            <input type="radio" name="Status" value="1" > 公開 
+            <input type="radio" name="Status" value="0" > 隱藏 
+        </div>
+
+        
+    }
+
+
+    <div style="padding-top:20px">
+        <input type="hidden" name="Id" value="@Model.Id" />
+        <input type="hidden" name="Active" value="" />
+
+        <button type="submit" class="btn btn-success">存檔</button>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <button id="cancel-edit-category" type="button" class="btn btn-default">取消</button>
+    </div>
+
+</form>
+
+
+<script type="text/javascript">
+    function setCategoryActive(active) {
+        let sort = -9;
+        if (active) sort=0
+        return $('#form-edit-category input[name=Sort]').val(sort);
+    }
+    
+    function toggleSort(active) {
+   
+        if (active) {
+            $('#group-sort').show();
+        } else {
+            $('#group-sort').hide();
+        }
+    }
+    function initEditCategory() {
+        let sort = $('#form-edit-category input[name=Sort]').val();
+        let active = isCategoryActive(sort);
+
+        $('#form-edit-category input[name=Active]').val(active);
+      
+        toggleSort(active);
+
+        $('#form-edit-category input[type=radio][name=Status]').each(function () {
+            if ($(this).val() == '1') {
+                $(this).prop("checked", active)
+            } else {
+                $(this).prop("checked", !active)
+            }
+            
+        });
+
+       
+    }
+    function initCreateCategory() {
+        $('#form-edit-category input[name=Active]').val(true);
+
+    }
+    $(document).ready(function () {
+
+        let id = $('#form-edit-category input[name=Id]').val();
+        if (id) initEditCategory();
+        else initCreateCategory();
+
+      
+
+        $('#cancel-edit-category').click(function () {
+            let sort = $('#form-edit-category input[name=Sort]').val();
+            let active = isCategoryActive(sort);
+            categoryIndex(active);
+        });
+
+        $('#form-edit-category input[type=radio][name=Status]').change(function () {
+            let active = isTrue($(this).val());
+            $('#form-edit-category input[name=Active]').val(active);
+
+            toggleSort(active);
+        });
+        $('#form-edit-category').submit(function (e) {
+            e.preventDefault();
+
+            Id = $(this).find("input[name='Id']").val();
+            Name = $(this).find("input[name='Name']").val();
+            Sort = $(this).find("input[name='Sort']").val();
+
+            let isActive = isTrue($(this).find("input[name='Active']").val());
+
+            if (isActive) {
+                if(!isCategoryActive(Sort)){
+                    Sort = 0;
+                }
+            } else {
+                Sort = -9;
+            }
+
+            var url = '@Url.Action("StoreCategory", "Video")';
+
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: { Id: Id, Name: Name, Sort: Sort },
+                dataType: 'json',
+                success: function (result) {
+                    
+                    categoryIndex(isActive);
+                },
+                error: function () {
+                    OnError();
+                }
+            });
+        });
+    });
+</script>

@@ -1,0 +1,253 @@
+﻿@{
+    ViewBag.Title = "校史館 - 資訊查詢 | 校園日誌";
+}
+
+@section scripts {
+    <script type="text/javascript" src="~/Scripts/inform/js/modernizr.custom.79639.js"></script>
+    <script src="@Url.Content("~/Scripts/slick_h.js")"></script>
+
+    <script>
+        $(function () {
+            $('.slider-for').slick({
+                slidesToShow: 1,
+                slidesToScroll: 1,
+                arrows: false,
+                fade: true,
+                asNavFor: '.slider-nav'
+            });
+            $('.slider-nav').slick({
+                infinite: true,
+                slidesToShow: 3,
+                slidesToScroll: 1,
+                asNavFor: '.slider-for',
+                dots: false,
+                arrows: true,
+                centerMode: true,
+                focusOnSelect: true
+            });
+
+
+            dropDonwList();
+
+            $('#submitBtn').click(function () {
+                submitForm();
+            });
+        });
+
+        function dropDonwList() {
+            $('.dropdown li').click(function () {
+
+                var txt = $(this).text();
+                var val = $(this).attr('data-value');
+                console.log(txt);
+                console.log(val);
+                $(this).parent('ul').siblings('.dd-text').text(txt);
+                $(this).parent('ul').siblings('.dd-text').attr('data-value', val);
+            });
+        }
+
+        function submitForm() {
+            if ($('#semDropList').attr('data-value') != "" || $('#yearDropList').attr('data-value') != "" || $('#keyWordInput').val() != "") {
+
+                $("#keywordSearch").val($('#semDropList').attr('data-value'));
+                $("#yearSearch").val($('#yearDropList').attr('data-value'));
+                $("#semSearch").val($('#keyWordInput').val());
+                document.forms["submitForm"].submit();
+            }
+            else
+                alert("請選擇搜尋條件！！");
+        } // SubmitFormDepart()
+    </script>
+}
+
+@section styles{
+    <link href="~/Content/slick.css" rel="stylesheet" type="text/css">
+
+    <link href="~/Scripts/inform/css/reset.css" rel="stylesheet" type="text/css" />
+    <link href="~/Scripts/inform/css/tzuchi.css" rel="stylesheet" type="text/css" />
+    <link href="~/Scripts/inform/css/style.css" rel="stylesheet" type="text/css" />
+    <noscript>
+        <link href="~/Scripts/inform/css/noJS.css" rel="stylesheet" type="text/css" />
+    </noscript>
+
+    <style>
+        .slider-for {
+            width: 582px;
+            height: 437px;
+        }
+
+        .slider-nav {
+            width: 580px !important;
+        }
+
+        .slider-nav-el {
+            width: 172px;
+            height: 124px;
+        }
+    </style>
+}
+
+<div class="wbox1" style="width:1920px;">
+    <!--左邊標題-->
+    <div class="leftbox"><img src="~/Scripts/inform/images/inform/title_s1.png" width="134" height="750"></div>
+    <!--中間表格-->
+    <div class="centerbox">
+        <!--內文1-->
+        <div class="tztable1">
+            <ul class="title_01">
+                <li class="title_02">2014</li>
+                <li class="title_03">____________</li>
+                <li class="title_04">06.17</li>
+            </ul>
+            <ul class="title_05dalay">
+                500位羅東高商師生參訪本校
+                <br>
+                提前瞭解相關科系
+            </ul>
+            <ul>
+                <li class="intxt2">
+                    <h2>
+                        <span class="news1">
+                            撰稿：秘書室文宣公關組 葉秀品、陳雅柔<br>
+                            拍照：秘書室文宣公關組 陳雅柔、科管四三乙 姜郁雯
+                        </span>
+                    </h2>
+                    <h1>
+                        <span class="news6">
+                            暑假期間，不少學生把握機會出國遊學，既增廣見聞，也拓展視野。六月二十九日至七月三日，研發處、通識教育中心特地舉辦為期五天的學海任我行教育營，分別有英文、韓文及日語營，讓即將出國交流的學生，提前感受國外的學習及生活環境，包含文化差異、飲食、生活習慣等，且全程採外語溝通，讓學生能在最短時間內適應、銜接，更減低在國外交流的緊張與陌生。
+                            <br>
+                            校長羅文瑞表示，光是今年暑假，共有189位師生（23位老師、166位學生)出國交流或實習，分別前往英國、日本、韓國、澳洲、馬來西亞、緬甸、新加坡、法國、大陸等，鼓勵學生把握學習機會，深度體驗風土民情與不同文化的洗禮。尤其，營隊授課講師多有留學當地的經驗，侃侃而談異國生活點滴，以及在溝通、相處上得特別注意的「小撇步」。
+                            即將在七月下旬前往日本滋賀縣近江養護所的護五丙吳晨瑜表示，儘管自己上網找了很多資料，卻不知道在日本，吃麵要發出聲音，但是，喝湯卻不能發出聲音。能在出國前，更瞭解當地文化，相信日本行會有滿滿的收穫。<br>
+                            即將前往韓國大真大學的醫四一甲葉品辰表示，從奧運或足球比賽轉播，不論比賽輸贏，都能看到韓國民眾加油到最後一刻的堅持，感覺到韓國民族意識強大，也更想到當地去親身體驗。護二一丙陳家婕表示，七月十日將參訪澳洲布里斯本與黃金海岸醫療機構，還有實務學習課程，不但在出國前加強英語聽力、口語表達，更能一圓自己的遊學夢。
+                        </span>
+                    </h1>
+                </li>
+            </ul>
+            <ul class="imgintxt1">
+                <span class="glow">
+                    <div class="slider-for">
+                        <div class="slider-for-el">
+                            <img src="~/Scripts/inform/images/inform/new1.jpg" width="582" height="437">
+                        </div>
+                        <div class="slider-for-el">
+                            <img src="~/Scripts/inform/images/inform/new2.jpg" width="582" height="437">
+                        </div>
+                        <div class="slider-for-el">
+                            <img src="~/Scripts/inform/images/inform/new3.jpg" width="582" height="437">
+                        </div>
+                    </div>
+                </span>
+            </ul>
+            <ul class="imgintxt2">                
+                <div class="slider-nav">
+                    <div class="slider-nav-el">
+                        <li>
+                            <img src="~/Scripts/inform/images/inform/new1.jpg" width="172" height="124">s
+                        </li>
+                    </div>
+                    <div class="slider-nav-el">
+                        <li>
+                            <img src="~/Scripts/inform/images/inform/new2.jpg" width="172" height="124">
+                        </li>
+                    </div>
+                    <div class="slider-nav-el">
+                        <li>
+                            <img src="~/Scripts/inform/images/inform/new3.jpg" width="172" height="124">
+                        </li>
+                    </div>
+                    <div class="slider-nav-el">
+                        <li>
+                            <img src="~/Scripts/inform/images/inform/new3.jpg" width="172" height="124">
+                        </li>
+                    </div>
+                </div>
+
+            </ul>
+            <ul class="qrcode">
+                <img src="~/Scripts/inform/images/default_qrcode.png" width="110" height="110">
+            </ul>
+            <div>
+
+            </div>
+        </div>
+        <div class="gettxt2"><a href="inform_1.html">返回</a></div>
+    </div>
+    <!--右邊選單-->
+    <div class="rightbox">
+        <div class="div2">
+            <section class="main">
+                <div class="wrapper-demo">
+                    <div id="" class="dd wrapper-dropdown-5" tabindex="1" style="z-index:3" ;>
+                        <div class="dd-text" id="yearDropList" data-value="">學年度</div>
+                        <ul class="dropdown">
+                            <li data-value="103"><a href="#">103年</a></li>
+                            <li data-value="103"><a href="#">102年</a></li>
+                            <li data-value="101"><a href="#">101年</a></li>
+                            <li data-value="100"><a href="#">100年</a></li>
+                            <li data-value="99"><a href="#">99年</a></li>
+                            <li data-value="98"><a href="#">98年</a></li>
+                            <li data-value="97"><a href="#">97年</a></li>
+                            <li data-value="96"><a href="#">96年</a></li>
+                            <li data-value="95"><a href="#">95年</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+            <section class="main">
+                <div class="wrapper-demo">
+                    <div id="" class="dd wrapper-dropdown-5" tabindex="1" style="z-index:2" ;>
+                        <div id="semDropList" class="dd-text" data-value="">學期</div>
+                        <ul class="dropdown" style="overflow-y:scroll;height:130px" ;>
+                            <li data-value="1s"><a href="#">上學期</a></li>
+                            <li data-value="2s"><a href="#">下學期</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+        </div>
+        <div>
+            <ul class="menu5">
+                <input style="z-index:999999999999999;" name="textfield" type="text" class="textbox" id="keyWordInput" value="輸入" size="10" maxlength="5">
+            </ul>
+            <ul class="righttitle"><img src="~/Scripts/inform/images/inform/righttitle.png" width="210" height="55"></ul>
+            <ul class="btnright"><a id="submitBtn" href="javascript:void(0)">搜尋</a></ul>
+            <ul class="btnIcon"><a href="inform.html"></a></ul>
+        </div>
+        <!-- jQuery if needed -->
+        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+        <script type="text/javascript">
+
+            function DropDown(el) {
+                this.dd = el;
+                this.initEvents();
+            }
+            DropDown.prototype = {
+                initEvents: function () {
+                    var obj = this;
+
+                    obj.dd.on('click', function (event) {
+                        $(this).toggleClass('active');
+                        event.stopPropagation();
+                    });
+                }
+            }
+
+            $(function () {
+                var dd = new DropDown($('.dd'));
+                $(document).click(function () {
+                    // all dropdowns
+                    $('.wrapper-dropdown-5').removeClass('active');
+                });
+            });
+
+        </script>
+    </div>
+</div>
+
+@using (Html.BeginForm("SearchSchoolDiary", "InfoInquiry", null, FormMethod.Post, new { @id = "submitForm" }))
+{
+    @Html.AntiForgeryToken()
+    <input type="hidden" id="keywordSearch" name="keywordSearch" />
+    <input type="hidden" id="yearSearch" name="yearSearch" />
+    <input type="hidden" id="semSearch" name="semSearch" />
+}

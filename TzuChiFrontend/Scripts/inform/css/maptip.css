@@ -1,0 +1,146 @@
+@charset "utf-8";
+/* CSS Document */
+
+.map {
+	float: left;
+	display:block;
+	background-image:url(../images/picture/map.png);
+	background-position:center;
+	background-repeat:no-repeat;
+	width: 1150px;
+	height: 920px;
+	text-align: center;
+	opacity:0.8;
+	padding:0px 0px 0px 0px;
+	margin:50px 0px 0px 150px;
+}
+
+#tipBox1 {
+	position: absolute;
+	left: 445px;
+	top: 113px;
+	width: 71px;
+	height: 39px;
+	visibility: visible;
+}
+#tipBox2 {
+	position: absolute;
+	left: 391px;
+	top: 312px;
+	width: 71px;
+	height: 39px;
+	visibility: visible;
+}
+#tipBox3 {
+	position: absolute;
+	left: 392px;
+	top: 503px;
+	width: 71px;
+	height: 39px;
+	visibility: visible;
+}
+#tipBox4 {
+	position: absolute;
+	left: 807px;
+	top: 301px;
+	width: 71px;
+	height: 39px;
+	visibility: visible;
+}
+#tipBox5 {
+	position: absolute;
+	left: 697px;
+	top: 516px;
+	width: 71px;
+	height: 39px;
+	visibility: visible;
+}
+#tipBox6 {
+	position: absolute;
+	left: 728px;
+	top: 574px;
+	width: 71px;
+	height: 39px;
+	visibility: visible;
+}
+#tipBox7 {
+	position: absolute;
+	left: 686px;
+	top: 677px;
+	width: 71px;
+	height: 39px;
+	visibility: visible;
+}
+#tipBox8 {
+	position: absolute;
+	left: 940px;
+	top: 446px;
+	width: 71px;
+	height: 39px;
+	visibility: visible;
+}
+#tipBox9 {
+	position: absolute;
+	left: 937px;
+	top: 508px;
+	width: 71px;
+	height: 39px;
+	visibility: visible;
+}
+#tipBox10 {
+	position: absolute;
+	left: 929px;
+	top: 640px;
+	width: 71px;
+	height: 39px;
+	visibility: visible;
+}
+
+#tipBox11 {
+	position: absolute;
+	left: 929px;
+	top: 750px;
+	width: 71px;
+	height: 39px;
+	visibility: visible;
+}
+#tipBox12 {
+	position: absolute;
+	left: 1085px;
+	top: 306px;
+	width: 71px;
+	height: 39px;
+	visibility: visible;
+}
+#tipBox13 {
+	position: absolute;
+	left: 1067px;
+	top: 514px;
+	width: 71px;
+	height: 39px;
+	visibility: visible;
+}
+#tipBox14 {
+	position: absolute;
+	left: 1032px;
+	top: 574px;
+	width: 71px;
+	height: 39px;
+	visibility: visible;
+}
+#tipBox15 {
+	position: absolute;
+	left: 1073px;
+	top: 680px;
+	width: 71px;
+	height: 39px;
+	visibility: visible;
+}
+#tipBox16 {
+	position: absolute;
+	left: 1322px;
+	top: 877px;
+	width: 71px;
+	height: 39px;
+	visibility: visible;
+}

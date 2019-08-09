@@ -1,0 +1,47 @@
+﻿@{
+    string backend = System.Web.Configuration.WebConfigurationManager.AppSettings["upload.folder.name"];
+}
+<!--選單區-->
+<div id="menuDiv1" class="menubk">
+    <div class="mBtn">
+        <ul class="mBtn1"><a href="@Url.Action("PlanOutside", "Map", new { categoryOutsideID = TzuChiClassLibrary.BO.PlanOutsideModel.CATEGORYQUTSIDEID_SISTER })"></a></ul>
+        <ul class="mBtn2"><a href="@Url.Action("PlanOutside", "Map", new { categoryOutsideID = TzuChiClassLibrary.BO.PlanOutsideModel.CATEGORYQUTSIDEID_DEGREE })"></a></ul>
+        <ul class="mBtn3"><a href="@Url.Action("PlanOutside", "Map", new { categoryOutsideID = TzuChiClassLibrary.BO.PlanOutsideModel.CATEGORYQUTSIDEID_OVERSEA })"></a></ul>
+        <ul class="mBtn4"><a href="@Url.Action("PlanOutside", "Map", new { categoryOutsideID = TzuChiClassLibrary.BO.PlanOutsideModel.CATEGORYQUTSIDEID_INDUSTRYCOOPERATION })"></a></ul>
+        <ul class="mBtn5D"></ul>
+    </div>
+    <!--選單先選擇國家所在地才會出現menuDiv4-->
+    <section class="main">
+        <div class="wrapper-demo">
+            <div id="dd" class="wrapper-dropdown-5 dd" tabindex="1" style="z-index:3" ;>
+                <span id="menuShow">所在地</span>
+                <ul class="dropdown">
+                    @foreach (var item in ViewBag.SearchList)
+                    {
+                        <li>
+                            <a href="javascript:void(0)" key="@item.Key">
+                                @item.Value
+                            </a>
+                        </li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </section>
+    <ul class="btnright"><a href="javascript:search('@TzuChiClassLibrary.BO.PlanOutsideModel.CATEGORYQUTSIDEID_INTERNSHIP')">搜尋</a></ul>
+</div>
+<!--選擇後 才會出現內文 menuDiv4-->
+
+<div id="menuDiv4" class="menu4bk">
+    <div class="WINup" style="	width:1535px;"><div class="WINclose"></div></div>
+    <div class="WINdown" style="width:1500px;	height:900px;overflow-x:hidden;overflow-y:visible;">
+        @if (ViewBag.Data != null && ViewBag.Data.Count > 0)
+        {
+            if (ViewBag.Data[0].PicUrlList != null && ViewBag.Data[0].PicUrlList.Count > 0)
+            {
+                <img src="@backend@ViewBag.Data[0].PicUrlList[0].Path" width="1300">
+            }
+        }
+    </div>
+</div>
+

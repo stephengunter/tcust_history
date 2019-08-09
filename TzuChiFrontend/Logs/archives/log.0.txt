@@ -1,0 +1,6 @@
+2017-08-23 11:57:42.1932|DEBUG|TzuChiClassLibrary.DAL.HonourListManagementImpl|(Debug)除錯參數化查詢 '(@TypeID nvarchar(36),@Year nvarchar(4000))
+                   ' 必須有參數 '@Year'，但未提供。
+2017-08-23 11:58:20.1750|DEBUG|TzuChiClassLibrary.DAL.HonourListManagementImpl|(Debug)除錯參數化查詢 '(@TypeID nvarchar(36),@Year nvarchar(4000))
+                   ' 必須有參數 '@Year'，但未提供。
+2017-08-23 11:58:44.6517|DEBUG|TzuChiClassLibrary.DAL.HonourListManagementImpl|(Debug)除錯參數化查詢 '(@TypeID nvarchar(36),@Year nvarchar(4000))
+                   ' 必須有參數 '@Year'，但未提供。

@@ -1,0 +1,55 @@
+﻿
+.auto-style4 {
+    color: #FF6300;
+    font-size: medium;
+}
+
+.auto-style5 {
+    text-align: center;
+}
+
+.auto-style1 {
+    font-size: small;
+}
+
+.auto-style7 {
+    font-size: x-small;
+    color: #FF0000;
+}
+
+.auto-style8 {
+    font-size: small;
+    color: #808080;
+}
+
+.auto-style9 {
+    text-align: right;
+    font-size: small;
+}
+
+.auto-style11 {
+    color: #FF0000;
+}
+/* Styles for validation helpers
+            -----------------------------------------------------------*/
+.field-validation-error {
+    color: #ff0000;
+}
+
+.field-validation-valid {
+    display: none;
+}
+
+.input-validation-error {
+    border: 1px solid #ff0000;
+    background-color: #ffeeee;
+}
+
+.validation-summary-errors {
+    font-weight: bold;
+    color: #ff0000;
+}
+
+.validation-summary-valid {
+    display: none;
+}

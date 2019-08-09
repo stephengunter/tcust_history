@@ -1,0 +1,39 @@
+﻿@model TzuChiFrontend.Models.EBookSearchModel
+
+@{
+
+    var menuItems = new List<TzuChiFrontend.Models.EBookMenu>
+    {
+
+        new TzuChiFrontend.Models.EBookMenu() { Id = 1, Text = "慈濟世界", Width = 210, Height = 50, Active = (Model.Menu == 1) },
+        new TzuChiFrontend.Models.EBookMenu() { Id = 2, Text = "四大八法", Width = 210, Height = 50, Active = (Model.Menu == 2) },
+       
+
+     };
+
+
+}
+
+<div class="cbtnmenu">
+
+    @foreach (var item in menuItems)
+    {
+
+        string style = String.Format("float:left;display:block;width:{0}px; height:{1}px;", item.Width, item.Height);
+        string src = "/images/ebook/cbtnline2.png";
+        if (item.Active)
+        {
+            src = "/images/ebook/cbtnline4D.png";
+        }
+        <div class="menuBTN" style="@style">
+            <span class="cbtn1">
+                <a href="@Url.Action("Details",new { category=Model.Category, @id= item.Id })">@item.Text</a>
+            </span>
+            <span class="cbtnline">
+                <img src="@src" width="@item.Width" height="5" border="0">
+            </span>
+
+        </div>
+    }
+
+</div>

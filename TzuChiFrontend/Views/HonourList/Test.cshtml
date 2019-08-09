@@ -1,0 +1,242 @@
+﻿
+@{
+    ViewBag.Title = "榮譽榜";
+}
+
+
+@section styles{
+	<link href="~/Content/reset.css" rel="stylesheet" />
+	<link href="~/Content/tzuchi.css" rel="stylesheet" />
+	<link href="~/Scripts/Swiper_Swiper3D/idangerous.swiper.css" rel="stylesheet" />
+	<link href="~/Scripts/Swiper_Swiper3D/idangerous.swiper.3dflow.css" rel="stylesheet" />
+	<style type="text/css">
+		#keyDiv1 {
+			position: absolute;
+			width: 308px;
+			height: 52px;
+			z-index: 99;
+			left: 1565px;
+			top: 25px;
+		}
+
+		.btnright {
+		}
+
+		.arrowL {
+			position: absolute;
+			left: 100px;
+			top: 100px;
+			z-index: 999;
+		}
+
+		.arrowR {
+			position: absolute;
+			margin: 0px 0px 0px 0px;
+			width: 50px;
+			height: 50px;
+			left: 1000px;
+			top: 100px;
+			z-index: 32767;
+		}
+
+		.NewImg {
+			background-color: white;
+		}
+
+		#flowerDiv1 {
+			position: absolute;
+			display: block;
+			width: 645px;
+			height: 600px;
+			z-index: 1; /*顯示階層最低下*/
+			left: 1275px;
+			top: 450px; /*調整上下*/
+		}
+	</style>
+}
+
+
+
+<honor-view  v-on:ready="onReady" v-on:search="onSearch" v-on:selected="onSelected"></honor-view>
+
+@*<honor-details v-if="selected_item" :year="selected_item.year" :id="selected_item.id"></honor-details>*@
+
+@section scripts{
+	<script src="~/Scripts/HonourList.js"></script>
+	<script src="http://code.createjs.com/easeljs-0.6.0.min.js"></script>
+	<script src="http://code.createjs.com/tweenjs-0.4.0.min.js"></script>
+	<script src="http://code.createjs.com/movieclip-0.6.0.min.js"></script>
+	<script src="http://code.createjs.com/preloadjs-0.3.0.min.js"></script>
+	<script src="~/Scripts/flower.js"></script>
+	<script src="~/Scripts/hammer.js-master/hammer.js"></script>
+	<script src="~/Scripts/Swiper_Swiper3D/idangerous.swiper.js"></script>
+	<script src="~/Scripts/Swiper_Swiper3D/idangerous.swiper.3dflow.js"></script>
+	<script>
+
+		$(function () {
+			initAnimate();
+		});
+
+		/*防止拖動出現禁止符號*/
+		window.onload = function (e) {
+			var evt = e || window.event, imgs, divs, i;
+			if (evt.preventDefault) {
+				imgs = document.getElementsByTagName('img');
+				for (i = 0; i < imgs.length; i++) {
+					imgs[i].onmousedown = disableDragging;
+				}
+			}
+			else {
+				document.ondragstart = function () {
+					return false;
+				};
+			}
+		};
+		function disableDragging(e) {
+			e.preventDefault();
+			return false;
+		}
+
+		var swiper;
+
+		function onReady() {
+			init();
+		}
+
+
+
+		function init() {
+			$(".swiper-container").css({
+				"width": 2270,
+				"height": 1080,
+				"left": -800,
+			});
+
+			$("div[class*='yearDiv']").css("margin-top", "-20px")
+
+			opacityInit(1, $(".swiper-slide").length);
+
+			swiper = new Swiper('.swiper-container', {
+				slidesPerView: 'auto',
+				touchRatio: 3.0,
+				initialSlide: 0,
+				keyboardControl: true,
+				mousewheelControl: true,
+				watchActiveIndex: true,
+				//Enable 3D Flow
+				tdFlow: {
+					rotate: 0,
+					stretch: 200,
+					depth: 300,
+					modifier: 1,
+					shadows: false
+				},
+				onTouchEnd: function () {
+					var length = $(".swiper-slide").length;
+					var currrntSlide = swiper.activeIndex + 1;
+					opacityInit(currrntSlide, length);
+				}
+			});
+
+			var marginTop = 0;
+			for (var i = 1; i < $(".swiper-slide").length; i++) {
+				var marginTopStr = marginTop + "px";
+				$(".swiper-slide").not(".empty").eq(i).css("margin-top", marginTopStr);
+				marginTop = marginTop + 8;
+			}
+
+			//依照上一頁內容跳至該年度
+			var moveTo = '@Request.Params["moveTo"]';
+            var index = $('.swiper-slide').index($('.yearTitle:contains("' + moveTo + '")').parent().parent().parent());
+            setTimeout('moveToIndex(' + index + ')', 500);
+		}
+
+		function testIndex() {
+			var moveTo = '@Request.Params["moveTo"]';
+            var index = $('.swiper-slide').index($('.yearTitle:contains("' + moveTo + '")').parent().parent().parent());
+            setTimeout('moveToIndex(' + index + ')', 500);
+		}
+
+        function moveToIndex(index) {
+            swiper.swipeTo(index - 1, 500);
+            var length = $(".swiper-slide").length;
+            var currrntSlide = swiper.activeIndex + 1;
+            opacityInit(currrntSlide, length);
+        }
+
+        function opacityInit(currrntSlide, length) {
+            var brightness = 100;
+            for (var i = currrntSlide ; i < length ; i++) {
+                filterVal = "brightness(" + brightness + "%)";
+                $(".swiper-slide").not(".empty").eq(i)
+                .css('filter',filterVal)
+                .css('webkitFilter',filterVal)
+                .css('mozFilter',filterVal)
+                .css('oFilter',filterVal)
+                .css('msFilter',filterVal);
+
+                brightness = brightness - 4;
+            }
+        }
+
+        function getByYear(y, contentID){
+            window.location = '/HonourList/GetByYear' + '?year=' + y +'&contentID=' + contentID;
+		}
+
+
+	</script>
+
+
+	<script>
+
+
+		new Vue({
+			el: '#main',
+			data() {
+				return {
+					test:0,
+					selected_item: {
+						year: 2017,
+						id:842
+					},
+
+
+				}
+			},
+			beforeMount() {
+
+			},
+			methods: {
+				onReady() {
+					onReady();
+				},
+				onSearch() {
+					this.test++;
+					moveToIndex(this.test);
+				},
+				onSelected(year,id) {
+					this.selected_item = {
+						year: year,
+						id:id
+					};
+					
+				},
+				onLeave() {
+					document.location = '/SchoolDiary';
+				}
+			}
+
+		});
+
+
+
+	</script>
+
+
+}
+	
+	
+	
+
+
+

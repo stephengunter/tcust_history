@@ -1,0 +1,732 @@
+﻿@model TzuChiClassLibrary.BO.PagenationModel
+@{
+    ViewBag.Title = "校史館 - 資訊查詢 | 校園日誌";
+    string frontendBaseURL = System.Web.Configuration.WebConfigurationManager.AppSettings["website.frontend"];
+    string backendBaseURL = System.Web.Configuration.WebConfigurationManager.AppSettings["website.backend"];
+}
+
+@section scripts {
+    <script src="@Url.Content("~/Scripts/inform/js/modernizr.custom.79639.js")" type="text/javascript"></script>
+    <script src="~/Scripts/turnjs4/lib/turn.js"></script>
+    <script src="~/Scripts/hammer.js-master/hammer.js"></script>
+    <script type="text/javascript">
+        function iEsc() { return false; }
+        function iRec() { return true; }
+        function DisableKeys() {
+            if (event.ctrlKey || event.shiftKey || event.altKey) {
+                window.event.returnValue = false;
+                iEsc();
+            }
+        }
+        document.ondragstart = iEsc;
+        document.onkeydown = DisableKeys;
+        document.oncontextmenu = iEsc;
+        if (typeof document.onselectstart != "undefined")
+            document.onselectstart = iEsc;
+        else {
+            document.onmousedown = iEsc;
+            document.onmouseup = iRec;
+        }
+        function DisableRightClick(qsyzDOTnet) {
+            if (window.Event) {
+                if (qsyzDOTnet.which == 2 || qsyzDOTnet.which == 3)
+                    iEsc();
+            }
+            else
+                if (event.button == 2 || event.button == 3) {
+                    event.cancelBubble = true
+                    event.returnValue = false;
+                    iEsc();
+                }
+        }
+
+        /*防止拖動出現禁止符號*/
+        window.onload = function (e) {
+            var evt = e || window.event, imgs, i;
+            if (evt.preventDefault) {
+                imgs = document.getElementsByTagName('img');
+                for (i = 0; i < imgs.length; i++) {
+                    imgs[i].onmousedown = disableDragging;
+                }
+            }
+            else {
+                document.ondragstart = function () {
+                    return false;
+                };
+            }
+        };
+
+        function disableDragging(e) {
+            e.preventDefault();
+            return false;
+        }
+
+        $(function () {
+            iniTurn();
+            dropDonwList();
+            bindSearch();
+            var iniDep = JSON.parse('@Html.Raw(Json.Encode(ViewBag.SelectClsList))');
+            var dd = new DropDown($('.dd'));
+            $(document).click(function () {
+                // all dropdowns
+                $('.wrapper-dropdown-5').removeClass('active');
+            });
+
+            $('.even').click(function () {
+                $("#flipbook").turn("previous");
+            });
+
+            $('.odd').click(function () {
+                $("#flipbook").turn("next");
+            });
+
+            $('.wbox1').fadeIn('slow');
+
+
+            //計算上方menu寬度
+            countMenuWidth();
+        });
+
+
+
+
+        function bindSearch() {
+
+            console.log('year' + '@Model.Year');
+            console.log('stuNumber' + '@Model.StudentID');
+            console.log('dep' + '@Model.Department');
+            console.log('cls' + '@Model.Class');
+            console.log('stuName' + '@Model.KeyWord');
+
+
+            var year = '@Model.Year' + '';
+            console.log(year);
+            if (year.length > 0) {
+                $('#yeardroplist').attr('data-value', year);
+                $('#yeardroplist').text(year);
+            }
+            var stuNumber = '@Model.StudentID' + '';
+            console.log(stuNumber);
+            if (stuNumber.length > 0) {
+                $('#stunumberinput').val(stuNumber)
+            }
+            var dep = '@Model.Department' + '';
+            console.log(dep);
+            if (dep.length > 0) {
+                $('#depdroplist').attr('data-value', dep);
+                $('#depdroplist').text(dep);
+            }
+            var cls = '@Model.Class' + '';
+            console.log(cls);
+            if (cls.length > 0) {
+                $('#clsdroplist').attr('data-value', cls);
+                $('#clsdroplist').text(cls);
+            }
+            var stuName = '@Model.KeyWord' + '';
+            console.log(stuName);
+            if (stuName.length > 0) {
+                $('#stunameinput').val(stuName);
+            }
+        }
+
+        function iniHint(page) {
+            var tPage = '@ViewBag.DataModel.Count'; //幾頁 10
+            var iniPage = '@ViewBag.FlipPage';
+            @{
+                var IsLeft = (Model.IsTurnLeft) ? "true" : "false";
+            }
+            iniPage = ('@IsLeft' == 'true') ? parseInt(iniPage) : parseInt(tPage) - parseInt(iniPage) + 1;
+
+            if (iniPage == page) {
+                $('.hint').show();
+            }
+        }
+
+        function iniTurn() {
+            var totalPage = '@ViewBag.DataModel.Count'; //幾頁 10
+            var iniPage = '@ViewBag.FlipPage';
+
+            // TODO 左翻右翻判斷
+            @{
+                var IsTurnLeft = (Model.IsTurnLeft) ? "true" : "false";
+            }
+
+            //true 左翻:正常翻閱
+            iniPage = ('@IsTurnLeft' == 'true') ? parseInt(iniPage) : parseInt(totalPage) - parseInt(iniPage) + 1;
+
+            console.log(iniPage + '<===============================');
+
+            if ('@IsTurnLeft' == 'true') {
+                if (iniPage == 1) {
+                    $('.hint').show();
+                }
+            } else {
+                if (iniPage == totalPage) {
+                    $('.hint').show();
+                }
+            }
+
+
+
+
+            if ('@IsTurnLeft' == 'true') {
+                $('#apDiv2').remove();
+            } else {
+                $('#apDiv1').remove();
+            }
+
+            $('#flipbook').turn({
+                acceleration: true,
+                page: iniPage,
+                width: 1272,
+                height: 899,
+                elevation: 50,
+                gradients: true,
+                autoCenter: true,
+                when: {
+                    start: function (event, pageObject, corner) {
+                        if (pageObject.next == 1) {
+                            //防止出現返回第一頁的效果
+                            //event.preventDefault();
+                        }
+                    },
+                }
+            });
+
+
+
+            //$("#flipbook").bind("first", function (event) {
+            //    $('#bookDiv').removeClass('glow');
+            //    $('.hint').show();
+            //});
+            //$("#flipbook").bind("end", function (event) {
+            //    $('#bookDiv').removeClass('glow');
+            //});
+
+            //防止出現返回第一頁的效果
+            $("#flipbook").bind("turning", function (event, page, view) {
+                $('.hint').hide();
+                $('#bookDiv').removeClass('glow');
+                if (page == iniPage) {
+                    //$('#bookDiv').removeClass('glow');
+                    //event.preventDefault();
+                } else if (view[1] == 0) {
+
+                    //$('#bookDiv').removeClass('glow');
+                    //event.preventDefault();
+                } else {
+                    //$('#bookDiv').addClass('glow');
+                    //$('.hint').hide();
+                }
+
+            });
+            //判斷是否更換班級標籤
+            $("#flipbook").bind("turned", function (event, page, view) {
+                iniHint(page);
+
+                $('.even').click(function () {
+                    $("#flipbook").turn("previous");
+                });
+
+                $('.odd').click(function () {
+                    $("#flipbook").turn("next");
+                });
+
+                console.log(page + ':::' + view);
+                console.log(event);
+                //view = view + '';
+                var left = (view[0]);
+                var right = (view[1]);
+
+                var depNow = $("[page=" + page + "]").find('img').attr('data-dep');
+
+                if (page == right) {
+                    page += 1; //表示往左翻
+                } else if (page == left) {
+                    page -= 1; //表示往右翻
+                } else {
+                    return;
+                }
+
+                setClassTag(depNow); //判斷與前頁面 科系不同 需轉換班級
+                //var depLast = $("[page=" + page + "]").find('img').attr('data-dep');
+
+                //if (depLast == depNow) {
+                //    return;
+                //} else {
+                //    console.log(depNow + "function //判斷與前頁面 科系不同 需轉換班級");
+                //    setClassTag(depNow); //判斷與前頁面 科系不同 需轉換班級
+                //}
+            });
+
+            var depName = $("[page=" + iniPage + "]").find('img').attr('data-dep');
+            setClassTag(depName);
+        }
+
+
+        function dropDonwList() {
+            $('.dropdown li').click(function () {
+                var txt = $(this).text();
+                var val = $(this).attr('data-value');
+                console.log(txt);
+                console.log(val);
+                $(this).parent('ul').siblings('.dd-text').text(txt);
+                $(this).parent('ul').siblings('.dd-text').attr('data-value', val);
+            });
+        }
+
+        function submitForm() {
+            $("#clssearch").val($('#clsdroplist').attr('data-value'));
+            $("#depsearch").val($('#depdroplist').attr('data-value'));
+            $("#yearsearch").val($('#yeardroplist').attr('data-value'));
+            $("#stunamesearch").val($('#stunameinput').val());
+            $("#stunosearch").val($('#stuoinput').val());
+            document.forms["submitForm"].submit();
+        }
+
+        function setClassTag(depName) {
+            var depData = JSON.parse('@Html.Raw(Json.Encode(ViewBag.ClsNumberList))');
+
+
+            var clsNumber = 0;
+            var clsHtml = '';
+            var year = $('.title_08').text();
+
+
+            for (var i = 0; i < depData.length; i++) {
+                if (depName == depData[i].Department) {
+
+                    var clsNameArray = depData[i].ClassList;
+
+                    for (var j = 0; j < clsNameArray.length; j++) {
+                        var url = '?year=' + year + '&dep=' + encodeURI(depName) + '&Cls=' + encodeURI(clsNameArray[j]) + '';
+                        clsHtml += '<ul class="cTab"><a href="' + url + '">' + clsNameArray[j] + '</a></ul>';
+
+                    }
+                }
+            }
+
+
+            @*var clsName = JSON.parse('@Html.Raw(Json.Encode(ViewBag.SelectClsList))');
+            var clsHtml = '';
+            console.log(clsName);
+            console.log(depName);
+            console.log(clsNumber);
+            alert('set cls');
+            var year = $('.title_08').text();
+            for (var i = 0; i < clsNumber; i++) {
+                var url = 'GetClassBookByContentID?year=' + year + '&dep=' + depName + '&Cls=' + clsName[i]+ '';
+                //clsHtml += '<ul class="bookp1"><a href="' + url + '">' + clsName[i].CategoryName + '</a></ul>';
+                clsHtml += '<ul class="cTab"><a href="' + url + '">' + clsName[i] + '</a></ul>';
+            }*@
+
+            $('#TabDiv').html(clsHtml);
+
+
+
+            //if (clsHtml == null || clsHtml == 'undefined' || clsHtml == '') {
+            //    $('#bookDiv').removeClass('glow');
+            //    //$('.hint').show();
+            //} else {
+            //    $('#bookDiv').addClass('glow');
+            //    //$('.hint').hide();
+            //}
+
+            //<ul class="bookp1"><a href="javascript:void(0)">甲班</a></ul>
+            //<ul class="bookp1"><a href="javascript:void(0)">乙班</a></ul>
+        }
+
+        function submitFormByDep(dep) {
+            $("#depcond").val(dep);
+            $("#yearcond").val($('.title_08').text());
+            document.forms["submitFormByCond"].submit();
+        }
+
+        function submitFormByCls() {
+            $("#clscond").val($('#clsdroplist').attr('data-value'));
+            $("#depcond").val($('#depdroplist').attr('data-value'));
+            $("#yearcond").val($('#yeardroplist').attr('data-value'));
+            document.forms["submitFormByCond"].submit();
+        }
+
+        function countMenuWidth(){
+            var book1Length = $('.books1').length;
+   
+            var book2Length = $('.books2').length;
+   
+            var book3Length = $('.books3').length;
+   
+            var book4Length = $('.books4').length;
+  
+            var book1Width = 120;
+   
+            var book2Width = 160;
+   
+            var book3Width = 210;
+   
+            var book4Width = 250;
+   
+   
+            var totalWidth = 0;
+            totalWidth = (book1Length * book1Width) + (book2Length * book2Width) + (book3Length * book3Width) + (book4Length * book4Width) ;
+            $('.title_14').css('width', totalWidth);
+
+            if(totalWidth < 1200){
+               $('#scrollDiv').css('overflow', 'hidden');
+            }
+        }
+
+        function back() {
+            var year = '@Request.Params["year"]';
+            var scrollTop = '@Request.Params["scrollTop"]';
+            var clssearch = '@Model.Class';
+            var depsearch = '@Model.Department';
+            var yearsearch = '@Model.Year';
+            var stunumbersearch = '@Model.StudentID';
+            var stunamesearch = '@Model.KeyWord';
+            window.location = '@Url.Content("/ClassBook/GetClassBookList")'
+            //document.referrer.split("?")[0]
+            //var temp = document.referrer.split("?")[0]
+                              + '?moveTo='
+                              + year
+                              + "&scrollTop="
+                              + scrollTop
+                              + "&clssearch="
+                              + clssearch
+                              + "&depsearch="
+                              + depsearch
+                              + "&yearsearch="
+                              + yearsearch
+                              + "&stunumbersearch="
+                              + stunumbersearch
+                              + "&stunamesearch="
+                              + stunamesearch;
+        }
+
+    </script>
+}
+
+@section styles{
+    @*<link rel="stylesheet" href="//code.jquery.com/mobile/1.4.4/jquery.mobile-1.4.4.min.css">*@
+    <style type="text/css">
+      body {
+-moz-user-select : none;
+-webkit-user-select: none;
+}
+    </style>
+    <link href="~/Scripts/inform/css/reset.css" rel="stylesheet" type="text/css">
+    <link href="~/Scripts/inform/css/tzuchi.css" rel="stylesheet" type="text/css">
+    <link href="~/Scripts/inform/css/style.css" rel="stylesheet" type="text/css">
+    <noscript>
+        <link href="~/Scripts/inform/css/noJS.css" rel="stylesheet" type="text/css" />
+    </noscript>
+    <link href="~/Scripts/turnjs4/samples/basic/css/basic.css" rel="stylesheet" />
+    <style type="text/css">
+        .singlePage {
+            width: 600px !important;
+        }
+
+
+        #bookDiv {
+            position: absolute;
+            width: 1274px;
+            height: 900px;
+            left: 251px;
+            top: 81px;
+            z-index: 5;
+        }
+
+        /*.bookCover {
+            position: absolute;
+            width: 637px;
+            height: 900px;
+            left: 631px;
+            top: 82px;
+            z-index: 5;
+        }*/
+
+        #TabDiv {
+            position: absolute;
+            width: 50px;
+            height: 905px;
+            top: 10px;
+            left: 1276px;
+            z-index: 6;
+        }
+
+        #getDiv {
+            position: absolute;
+            width: 140px;
+            height: 60px;
+            top: 997px;
+            left: 1392px;
+            z-index: 7;
+        }
+
+        #apDiv1 {
+            position: absolute;
+            width: 189px;
+            height: 129px;
+            top: 440px;
+            /*left: 1274px;*/
+            left: 1210px;
+            z-index: 10;
+        }
+
+        #apDiv2 {
+            position: absolute;
+            width: 189px;
+            height: 129px;
+            top: 440px;
+            /*left: 443px;*/
+            left: 380px;
+            z-index: 10;
+        }
+
+        .arrowL1 a{
+	    float:left;
+	    display:block;
+        }
+
+        .arrowL1 a:hover{
+	    -webkit-transform: scale(1.2) ;
+            transform: scale(1.2) ;
+        }
+
+        .arrowR1 a{
+	    float:left;
+	    display:block;
+        }
+
+        .arrowR1 a:hover{
+	    -webkit-transform: scale(1.2) ;
+            transform: scale(1.2) ;
+        }
+
+         .title_14{
+            display:inline;
+         }
+
+         ::-webkit-scrollbar {
+            height: 3px;
+         }
+    </style>
+}
+
+
+<div class="wbox1" style="width:1920px;display:none;">
+    <div id="apDiv1" class="hint" style="display:none"><a href="#"><img src="~/Scripts/inform/images/book/tipleft.png" width="189" height="129" border="0"></a></div>
+    <div id="apDiv2" class="hint" style="display:none"><a href="#"><img src="~/Scripts/inform/images/book/tipright.png" width="189" height="129" border="0"></a></div>
+    <!--左邊標題-->
+    <div class="leftbox"><img src="~/Scripts/inform/images/inform/title_s3.png" width="134" height="750"></div>
+    <!--中間表格-->
+    <div class="centerbox">
+        <!--年度-->
+        <div class="divmenu">
+            <ul class="title_13">
+                <li class="title_08">@System.Text.RegularExpressions.Regex.Replace((ViewBag.DataModel.Count > 0) ? ViewBag.DataModel[0].AcademicYear : "", @"[^0-9]", string.Empty)</li>
+                <li class="title_09">學年度</li>
+            </ul>
+            <div id="scrollDiv" style="width:1200px;overflow-x:auto;overflow-y:hidden;float:left;">
+            <ul class="title_14" style="word-break:keep-all;width:4500px;height:45px;display:inline-block">
+                @foreach (var item in ViewBag.ClsNumberList)
+                {
+                    var bookStyle = string.Empty;
+
+                    string dep = item.Department;
+
+                    switch (dep.Length)
+                    {
+                        case 1:
+                        case 2:
+                        case 3:
+                            bookStyle = "books1";
+                            break;
+                        case 4:
+                        case 5:
+                            bookStyle = "books2";
+                            break;
+                        case 6:
+                        case 7:
+                        case 8:
+                            bookStyle = "books3";
+                            break;
+                        case 9:
+                        case 10:
+                        default:
+                            bookStyle = "books4";
+                            break;
+                    }
+                    <li class="@bookStyle"><a href="@Url.Content("~/ClassBook/GetClassBookByContentID?year=" + @System.Text.RegularExpressions.Regex.Replace((ViewBag.DataModel.Count > 0) ? ViewBag.DataModel[0].AcademicYear : "", @"[^0-9]", string.Empty) + "&dep=" + HttpContext.Current.Server.UrlEncode(@item.Department))">@item.Department</a></li>
+                    <li class="booksline">
+                        <img src="~/Scripts/inform/images/book/line.png" width="1" height="38">
+                    </li>
+                }
+                @*<li class="books1"><a href="#">護理系</a></li>
+                    <li class="booksline"><img src="images/book/line.png" width="1" height="38"></li>
+                    <li class="books2"><a href="#">醫務管理系</a></li>
+                    <li class="booksline"><img src="images/book/line.png" width="1" height="38"></li>
+                    <li class="books3"><a href="#">行銷與流通管理系</a></li>
+                    <li class="booksline"><img src="images/book/line.png" width="1" height="38"></li>
+                    <li class="books3"><a href="#">資訊科技與管理系</a></li>
+                    <li class="booksline"><img src="images/book/line.png" width="1" height="38"></li>
+                    <li class="books4"><a href="#">醫學影像暨放射科學系</a></li>
+                    <li class="booksline"><img src="images/book/line.png" width="1" height="38"></li>
+                    <li class="books4"><a href="#">放射醫學科學研究所</a></li>*@
+            </ul>
+            </div>
+        </div>
+        @*<div id="bookCover" class="glow"><img src="images/book/93s.jpg" width="637" height="900"></div>*@
+
+        @*bookCover*@
+        <div id="bookDiv">
+            @*<div id="bookDiv">
+                    <div class="glow"><img src="images/book/93s.jpg" width="637" height="900"></div>
+                </div>*@
+
+
+            <div id="flipbook">
+                @*<div class="glow" style="float:left;display:block;">
+                        <img width="637" height="900">
+                    </div>
+                    <div class="glow" style="float:left;display:block;">
+                        <img width="637" height="900">
+                    </div>*@
+                @foreach (var item in ViewBag.DataModel)
+                {
+                    <div class="hard" style="float:left;display:block;">
+                        <img data-cls="@item.Class"
+                             data-dep="@item.Department"
+                             data-pic="@item.PictureUrl"
+                             data-page="@item.Page"
+                             src="~/Scripts/inform/images/book/classbook/@item.PictureUrl" width="637" height="900">
+                    </div>
+                }
+                @*<div class="glow" style="float:left;display:block;">
+                        <img width="637" height="900">
+                    </div>*@
+                @*<div class="glow" style="float:left;display:block;">
+                        <img src="~/Scripts/inform/images/book/bookp1.jpg" width="637" height="900">
+                    </div>
+                    <div class="glow" style="float:left;display:block;">
+                        <img src="~/Scripts/inform/images/book/bookp2.jpg" width="637" height="900">
+                    </div>
+                    <div class="glow" style="float:left;display:block;">
+                        <img src="~/Scripts/inform/images/book/bookp1.jpg" width="637" height="900">
+                    </div>
+                    <div class="glow" style="float:left;display:block;">
+                        <img src="~/Scripts/inform/images/book/bookp2.jpg" width="637" height="900">
+                    </div>
+                    <div class="glow" style="float:left;display:block;">
+                        <img src="~/Scripts/inform/images/book/bookp1.jpg" width="637" height="900">
+                    </div>
+                    <div class="glow" style="float:left;display:block;">
+                        <img src="~/Scripts/inform/images/book/bookp2.jpg" width="637" height="900">
+                    </div>*@
+            </div>
+            <!--頁籤-->
+            <div id="TabDiv">
+                @* JS 控制班級標籤 *@
+            </div>
+        </div>
+
+        <div id="getDiv" class="gettxt2"><a href="javascript:back()">返回</a></div>
+
+    </div>
+    <!--右邊選單-->
+    <div class="rightbox" style=" width:200px;position:relative; z-index:100; ">
+        <div style="float:left;display:block;text-align:center;margin:80px 0px 0px -15px; padding:0px 0px 0px 0px;">
+            <img src="~/Scripts/inform/images/inform/righttitle.png" width="210" height="55">
+        </div>
+        <div style="float:left;display:block;text-align:center;margin:10px 0px 0px 0px; padding:0px 0px 0px 0px;">
+            <section class="wrapper-demo">
+                <div class="dd wrapper-dropdown-5" tabindex="1" style="z-index:3" ;>
+                    <div class="dd-text" id="yeardroplist">
+                        學年度
+                    </div>
+                    <ul class="dropdown">
+                        <li data-value=""><a href="javascript:void(0)">學年度</a></li>
+                        @foreach (var item in ViewBag.SelectYearList)
+                        {
+                            <li data-value="@item"><a href="javascript:void(0)">@item</a></li>
+                        }
+                    </ul>
+
+                </div>
+            </section>
+            <section class="wrapper-demo">
+                <div class="dd wrapper-dropdown-5" tabindex="1" style="z-index:2" ;>
+                    <div class="dd-text" id="depdroplist">
+                        科系
+                    </div>
+                    <ul class="dropdown">
+                        <li data-value=""><a href="javascript:void(0)">科系</a></li>
+                        @foreach (var item in ViewBag.SelectDepList)
+                        {
+                            <li data-value="@item">
+                                <a href="javascript:void(0)">@item</a>
+                            </li>
+                        }
+                    </ul>
+                </div>
+            </section>
+            <section class="wrapper-demo">
+                <div class="dd wrapper-dropdown-5" tabindex="1" style="z-index:1" ;>
+                    <div class="dd-text" id="clsdroplist">班級</div>
+                    <ul class="dropdown">
+                        <li data-value=""><a href="javascript:void(0)">班級</a></li>
+                        @foreach (var item in ViewBag.SelectClsList)
+                        {
+                            <li data-value="@item">
+                                <a href="javascript:void(0)">@item</a>
+                            </li>
+                        }
+                    </ul>
+                </div>
+            </section>
+            <div class="menu5" style="margin:20px 0px 0px 0px;"><input name="textfield" type="text" class="textbox" id="stunumberinput" placeholder="輸入學號" size="10" maxlength="10"></div>
+            <div class="menu5" style="margin:20px 0px 0px 0px;"><input name="textfield" type="text" class="textbox" id="stunameinput" placeholder="輸入姓名" size="10" maxlength="5"></div>
+
+            <div class="btnright"><a href="javascript:submitForm();">搜尋</a></div>
+            <div class="btnIconr2"><a href="@Url.Content("~/SchoolDiary/Index")"></a></div>
+        </div>
+        <!-- jQuery if needed -->
+        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+        <script type="text/javascript">
+
+            function DropDown(el) {
+                this.dd = el;
+                this.initEvents();
+            }
+            DropDown.prototype = {
+                initEvents: function () {
+                    var obj = this;
+
+                    obj.dd.on('click', function (event) {
+                        $(this).toggleClass('active');
+                        event.stopPropagation();
+                    });
+                }
+            }
+
+            //$(function () {
+            //    var dd = new DropDown($('.dd'));
+
+            //    $(document).click(function () {
+            //        // all dropdowns
+            //        $('.wrapper-dropdown-5').removeClass('active');
+            //    });
+            //});
+
+        </script>
+    </div>
+</div>
+
+@using (Html.BeginForm("SearchClassBook", "ClassBook", null, FormMethod.Post, new { @id = "submitForm" }))
+{
+    <input type="hidden" id="clssearch" name="clssearch" />
+    <input type="hidden" id="depsearch" name="depsearch" />
+    <input type="hidden" id="yearsearch" name="yearsearch" />
+    <input type="hidden" id="stunamesearch" name="stunamesearch" />
+    <input type="hidden" id="stunosearch" name="stunosearch" />
+}

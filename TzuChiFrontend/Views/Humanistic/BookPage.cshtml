@@ -1,0 +1,425 @@
+﻿@{
+    String partialPath = ViewBag.PartialPath;
+}
+
+<!--script不要亂動，這個script需要放置在最上端，否則特效會失效-->
+<script type="text/javascript" src="~/Scripts/jquery.min.1.7.js"></script>
+
+@section scripts{
+<script src="~/Scripts/jquery-1.10.2.js"></script>
+<script type="text/javascript" src="~/Scripts/turn.js"></script>
+<script type="text/javascript" src="~/Scripts/jquery-migrate-1.2.1.js"></script>
+<script src="~/Scripts/slick/slick.js"></script>
+<script src="~/Scripts/easeljs-0.6.0.min.js"></script>
+<script src="~/Scripts/tweenjs-0.4.0.min.js"></script>
+<script src="~/Scripts/movieclip-0.6.0.min.js"></script>
+<script src="~/Scripts/preloadjs-0.3.0.min.js"></script>
+<script src="~/Scripts/water.js"></script>
+    <script>
+        var canvas, stage, exportRoot;
+        var turnBackTimer;
+        var TIME_TO_TURN_BACK = 300000;
+
+        $(document).ready(function () {
+            init();
+
+            turnBackTimer = setTimeout(function () {
+                window.location.href = '@Url.Content("Index")';
+            }, TIME_TO_TURN_BACK);
+
+            $('body').click(function () {
+                clearTimeout(turnBackTimer);
+                turnBackTimer = setTimeout(function () {
+                    window.location.href = '@Url.Content("Index")';
+                }, TIME_TO_TURN_BACK);
+            });
+
+            setTimeout('adjustShadow()', 500);
+
+            @{
+                //設定bookID參數 導回首頁時出現關書特效
+                Request.Params["bookID"] = Request.Params["bookID"];
+                ViewData["bookID"] = "";
+            }
+            
+        });
+
+        function init() {
+            canvas = document.getElementById("canvas");
+            images = images || {};
+
+            var manifest = [
+                { src: "/Images/Humanistic/water/_00000.jpg", id: "_00000" },
+                { src: "/Images/Humanistic/water/_00001.jpg", id: "_00001" },
+                { src: "/Images/Humanistic/water/_00002.jpg", id: "_00002" },
+                { src: "/Images/Humanistic/water/_00003.jpg", id: "_00003" },
+                { src: "/Images/Humanistic/water/_00004.jpg", id: "_00004" },
+                { src: "/Images/Humanistic/water/_00005.jpg", id: "_00005" },
+                { src: "/Images/Humanistic/water/_00006.jpg", id: "_00006" },
+                { src: "/Images/Humanistic/water/_00007.jpg", id: "_00007" },
+                { src: "/Images/Humanistic/water/_00008.jpg", id: "_00008" },
+                { src: "/Images/Humanistic/water/_00009.jpg", id: "_00009" },
+                { src: "/Images/Humanistic/water/_00010.jpg", id: "_00010" },
+                   { src: "/Images/Humanistic/water/_00011.jpg", id: "_00011" },
+                { src: "/Images/Humanistic/water/_00012.jpg", id: "_00012" },
+                { src: "/Images/Humanistic/water/_00013.jpg", id: "_00013" },
+                { src: "/Images/Humanistic/water/_00014.jpg", id: "_00014" },
+                { src: "/Images/Humanistic/water/_00015.jpg", id: "_00015" },
+                { src: "/Images/Humanistic/water/_00016.jpg", id: "_00016" },
+                { src: "/Images/Humanistic/water/_00017.jpg", id: "_00017" },
+                { src: "/Images/Humanistic/water/_00018.jpg", id: "_00018" },
+                { src: "/Images/Humanistic/water/_00019.jpg", id: "_00019" },
+                { src: "/Images/Humanistic/water/_00020.jpg", id: "_00020" },
+                { src: "/Images/Humanistic/water/_00021.jpg", id: "_00021" },
+                { src: "/Images/Humanistic/water/_00022.jpg", id: "_00022" },
+                { src: "/Images/Humanistic/water/_00023.jpg", id: "_00023" },
+                { src: "/Images/Humanistic/water/_00024.jpg", id: "_00024" },
+                { src: "/Images/Humanistic/water/_00025.jpg", id: "_00025" },
+                { src: "/Images/Humanistic/water/_00026.jpg", id: "_00026" },
+                { src: "/Images/Humanistic/water/_00027.jpg", id: "_00027" },
+                { src: "/Images/Humanistic/water/_00028.jpg", id: "_00028" },
+                { src: "/Images/Humanistic/water/_00029.jpg", id: "_00029" },
+                { src: "/Images/Humanistic/water/_00030.jpg", id: "_00030" },
+                { src: "/Images/Humanistic/water/_00031.jpg", id: "_00031" },
+                { src: "/Images/Humanistic/water/_00032.jpg", id: "_00032" },
+                { src: "/Images/Humanistic/water/_00033.jpg", id: "_00033" },
+                { src: "/Images/Humanistic/water/_00034.jpg", id: "_00034" },
+                { src: "/Images/Humanistic/water/_00035.jpg", id: "_00035" },
+                { src: "/Images/Humanistic/water/_00036.jpg", id: "_00036" },
+                { src: "/Images/Humanistic/water/_00037.jpg", id: "_00037" },
+                { src: "/Images/Humanistic/water/_00038.jpg", id: "_00038" },
+                { src: "/Images/Humanistic/water/_00039.jpg", id: "_00039" },
+                { src: "/Images/Humanistic/water/_00040.jpg", id: "_00040" },
+                { src: "/Images/Humanistic/water/_00041.jpg", id: "_00041" },
+                { src: "/Images/Humanistic/water/_00042.jpg", id: "_00042" },
+                { src: "/Images/Humanistic/water/_00043.jpg", id: "_00043" },
+                { src: "/Images/Humanistic/water/_00044.jpg", id: "_00044" },
+                { src: "/Images/Humanistic/water/_00045.jpg", id: "_00045" },
+                { src: "/Images/Humanistic/water/_00046.jpg", id: "_00046" },
+                { src: "/Images/Humanistic/water/_00047.jpg", id: "_00047" },
+                { src: "/Images/Humanistic/water/_00048.jpg", id: "_00048" },
+                { src: "/Images/Humanistic/water/_00049.jpg", id: "_00049" },
+                { src: "/Images/Humanistic/water/_00050.jpg", id: "_00050" },
+                { src: "/Images/Humanistic/water/_00051.jpg", id: "_00051" },
+                { src: "/Images/Humanistic/water/_00052.jpg", id: "_00052" },
+                { src: "/Images/Humanistic/water/_00053.jpg", id: "_00053" },
+                { src: "/Images/Humanistic/water/_00054.jpg", id: "_00054" },
+                { src: "/Images/Humanistic/water/_00055.jpg", id: "_00055" },
+                { src: "/Images/Humanistic/water/_00056.jpg", id: "_00056" },
+                { src: "/Images/Humanistic/water/_00057.jpg", id: "_00057" },
+                { src: "/Images/Humanistic/water/_00058.jpg", id: "_00058" },
+                { src: "/Images/Humanistic/water/_00059.jpg", id: "_00059" },
+                { src: "/Images/Humanistic/water/_00060.jpg", id: "_00060" },
+                { src: "/Images/Humanistic/water/_00061.jpg", id: "_00061" },
+                { src: "/Images/Humanistic/water/_00062.jpg", id: "_00062" },
+                { src: "/Images/Humanistic/water/_00063.jpg", id: "_00063" },
+                { src: "/Images/Humanistic/water/_00064.jpg", id: "_00064" },
+                { src: "/Images/Humanistic/water/_00065.jpg", id: "_00065" },
+                { src: "/Images/Humanistic/water/_00066.jpg", id: "_00066" },
+                { src: "/Images/Humanistic/water/_00067.jpg", id: "_00067" },
+                { src: "/Images/Humanistic/water/_00068.jpg", id: "_00068" },
+                { src: "/Images/Humanistic/water/_00069.jpg", id: "_00069" },
+                { src: "/Images/Humanistic/water/_00070.jpg", id: "_00070" },
+                { src: "/Images/Humanistic/water/_00071.jpg", id: "_00071" },
+                { src: "/Images/Humanistic/water/_00072.jpg", id: "_00072" },
+                { src: "/Images/Humanistic/water/_00073.jpg", id: "_00073" },
+                { src: "/Images/Humanistic/water/_00074.jpg", id: "_00074" },
+                { src: "/Images/Humanistic/water/_00075.jpg", id: "_00075" },
+                { src: "/Images/Humanistic/water/_00076.jpg", id: "_00076" },
+                { src: "/Images/Humanistic/water/_00077.jpg", id: "_00077" },
+                { src: "/Images/Humanistic/water/_00078.jpg", id: "_00078" },
+                { src: "/Images/Humanistic/water/_00079.jpg", id: "_00079" },
+                { src: "/Images/Humanistic/water/_00080.jpg", id: "_00080" },
+                { src: "/Images/Humanistic/water/_00081.jpg", id: "_00081" },
+                { src: "/Images/Humanistic/water/_00082.jpg", id: "_00082" },
+                { src: "/Images/Humanistic/water/_00083.jpg", id: "_00083" },
+                { src: "/Images/Humanistic/water/_00084.jpg", id: "_00084" },
+                { src: "/Images/Humanistic/water/_00085.jpg", id: "_00085" },
+                { src: "/Images/Humanistic/water/_00086.jpg", id: "_00086" },
+                { src: "/Images/Humanistic/water/_00087.jpg", id: "_00087" },
+                { src: "/Images/Humanistic/water/_00088.jpg", id: "_00088" },
+                { src: "/Images/Humanistic/water/_00089.jpg", id: "_00089" },
+                { src: "/Images/Humanistic/water/_00090.jpg", id: "_00090" },
+                { src: "/Images/Humanistic/water/_00091.jpg", id: "_00091" },
+                { src: "/Images/Humanistic/water/_00092.jpg", id: "_00092" },
+                { src: "/Images/Humanistic/water/_00093.jpg", id: "_00093" },
+                { src: "/Images/Humanistic/water/_00094.jpg", id: "_00094" },
+                { src: "/Images/Humanistic/water/_00095.jpg", id: "_00095" },
+                { src: "/Images/Humanistic/water/_00096.jpg", id: "_00096" },
+                { src: "/Images/Humanistic/water/_00097.jpg", id: "_00097" },
+                { src: "/Images/Humanistic/water/_00098.jpg", id: "_00098" },
+                { src: "/Images/Humanistic/water/_00099.jpg", id: "_00099" },
+                { src: "/Images/Humanistic/water/_00100.jpg", id: "_00100" },
+                { src: "/Images/Humanistic/water/_00101.jpg", id: "_00101" },
+                { src: "/Images/Humanistic/water/_00102.jpg", id: "_00102" },
+                { src: "/Images/Humanistic/water/_00103.jpg", id: "_00103" },
+                { src: "/Images/Humanistic/water/_00104.jpg", id: "_00104" },
+                { src: "/Images/Humanistic/water/_00105.jpg", id: "_00105" },
+                { src: "/Images/Humanistic/water/_00106.jpg", id: "_00106" },
+                { src: "/Images/Humanistic/water/_00107.jpg", id: "_00107" },
+                { src: "/Images/Humanistic/water/_00108.jpg", id: "_00108" },
+                { src: "/Images/Humanistic/water/_00109.jpg", id: "_00109" },
+                { src: "/Images/Humanistic/water/_00110.jpg", id: "_00110" },
+                { src: "/Images/Humanistic/water/_00111.jpg", id: "_00111" },
+                { src: "/Images/Humanistic/water/_00112.jpg", id: "_00112" },
+                { src: "/Images/Humanistic/water/_00113.jpg", id: "_00113" },
+                { src: "/Images/Humanistic/water/_00114.jpg", id: "_00114" },
+                { src: "/Images/Humanistic/water/_00115.jpg", id: "_00115" },
+                { src: "/Images/Humanistic/water/_00116.jpg", id: "_00116" },
+                { src: "/Images/Humanistic/water/_00117.jpg", id: "_00117" },
+                { src: "/Images/Humanistic/water/_00118.jpg", id: "_00118" },
+                { src: "/Images/Humanistic/water/_00119.jpg", id: "_00119" },
+                { src: "/Images/Humanistic/water/_00120.jpg", id: "_00120" },
+                { src: "/Images/Humanistic/water/_00121.jpg", id: "_00121" },
+                { src: "/Images/Humanistic/water/_00122.jpg", id: "_00122" },
+                { src: "/Images/Humanistic/water/_00123.jpg", id: "_00123" },
+                { src: "/Images/Humanistic/water/_00124.jpg", id: "_00124" },
+                { src: "/Images/Humanistic/water/_00125.jpg", id: "_00125" },
+                { src: "/Images/Humanistic/water/_00126.jpg", id: "_00126" },
+                { src: "/Images/Humanistic/water/_00127.jpg", id: "_00127" },
+                { src: "/Images/Humanistic/water/_00128.jpg", id: "_00128" },
+                { src: "/Images/Humanistic/water/_00129.jpg", id: "_00129" },
+                { src: "/Images/Humanistic/water/_00130.jpg", id: "_00130" },
+                { src: "/Images/Humanistic/water/_00131.jpg", id: "_00131" },
+                { src: "/Images/Humanistic/water/_00132.jpg", id: "_00132" },
+                { src: "/Images/Humanistic/water/_00133.jpg", id: "_00133" },
+                { src: "/Images/Humanistic/water/_00134.jpg", id: "_00134" },
+                { src: "/Images/Humanistic/water/_00135.jpg", id: "_00135" },
+                { src: "/Images/Humanistic/water/_00136.jpg", id: "_00136" },
+                { src: "/Images/Humanistic/water/_00137.jpg", id: "_00137" },
+                { src: "/Images/Humanistic/water/_00138.jpg", id: "_00138" },
+                { src: "/Images/Humanistic/water/_00139.jpg", id: "_00139" },
+                { src: "/Images/Humanistic/water/_00140.jpg", id: "_00140" },
+                { src: "/Images/Humanistic/water/_00141.jpg", id: "_00141" },
+                { src: "/Images/Humanistic/water/_00142.jpg", id: "_00142" },
+                { src: "/Images/Humanistic/water/_00143.jpg", id: "_00143" },
+                { src: "/Images/Humanistic/water/_00144.jpg", id: "_00144" },
+                { src: "/Images/Humanistic/water/_00145.jpg", id: "_00145" },
+                { src: "/Images/Humanistic/water/_00146.jpg", id: "_00146" },
+                { src: "/Images/Humanistic/water/_00147.jpg", id: "_00147" },
+                { src: "/Images/Humanistic/water/_00148.jpg", id: "_00148" },
+                { src: "/Images/Humanistic/water/_00149.jpg", id: "_00149" },
+                { src: "/Images/Humanistic/water/_00150.jpg", id: "_00150" },
+                { src: "/Images/Humanistic/water/_00151.jpg", id: "_00151" },
+                { src: "/Images/Humanistic/water/_00152.jpg", id: "_00152" },
+                { src: "/Images/Humanistic/water/_00153.jpg", id: "_00153" },
+                { src: "/Images/Humanistic/water/_00154.jpg", id: "_00154" },
+                { src: "/Images/Humanistic/water/_00155.jpg", id: "_00155" },
+                { src: "/Images/Humanistic/water/_00156.jpg", id: "_00156" },
+                { src: "/Images/Humanistic/water/_00157.jpg", id: "_00157" },
+                { src: "/Images/Humanistic/water/_00158.jpg", id: "_00158" },
+                { src: "/Images/Humanistic/water/_00159.jpg", id: "_00159" },
+                { src: "/Images/Humanistic/water/_00160.jpg", id: "_00160" },
+                { src: "/Images/Humanistic/water/_00161.jpg", id: "_00161" },
+                { src: "/Images/Humanistic/water/_00162.jpg", id: "_00162" },
+                { src: "/Images/Humanistic/water/_00163.jpg", id: "_00163" },
+                { src: "/Images/Humanistic/water/_00164.jpg", id: "_00164" },
+                { src: "/Images/Humanistic/water/_00165.jpg", id: "_00165" },
+                { src: "/Images/Humanistic/water/_00166.jpg", id: "_00166" },
+                { src: "/Images/Humanistic/water/_00167.jpg", id: "_00167" },
+                { src: "/Images/Humanistic/water/_00168.jpg", id: "_00168" },
+                { src: "/Images/Humanistic/water/_00169.jpg", id: "_00169" }
+            ];
+
+            var loader = new createjs.LoadQueue(false);
+            loader.addEventListener("fileload", handleFileLoad);
+            loader.addEventListener("complete", handleComplete);
+            loader.loadManifest(manifest);
+
+        }
+
+        function adjustShadow(){
+            setTimeout('adjust()', 1);
+        }
+
+        function adjust(){
+            $('.slick-list').css('padding-bottom', '20px');
+        }
+
+        function handleFileLoad(evt) {
+            if (evt.item.type == "image") { images[evt.item.id] = evt.result; }
+        }
+
+        function handleComplete() {
+            exportRoot = new lib.water();
+
+            stage = new createjs.Stage(canvas);
+            stage.addChild(exportRoot);
+            stage.update();
+
+            createjs.Ticker.setFPS(24);
+            createjs.Ticker.addEventListener("tick", stage);
+        }
+
+        if ($('#MvDiv').length !== 0) {
+            movieInit();
+        }
+
+        function movieInit() {
+            $('.closewin').click(function () {
+                $('#MvDiv').hide();
+                $('#MvDiv1').hide();
+                $('video').get(0).pause();
+            })
+
+            $('video').attr('src', $('.Mvglow1').eq(0).find('img').attr('data-video'));
+            //文字的click事件
+            $(".Mvtxt1").click(function () {
+                var index = $('.Mvtxt').index($(this));
+                $('video').attr('src', $('.Mvglow1').eq(index).find('img').attr('data-video'));
+            });
+
+            //預覽圖的click事件
+            $(".Mvglow1").click(function () {
+                var index = $('.Mvglow1').index($(this));
+                $('video').attr('src', $('.Mvglow1').eq(index).find('img').attr('data-video'));
+            });
+        }//影片頁面專用
+
+
+    </script>
+}
+@section styles{
+<link rel="stylesheet" type="text/css" href="~/Scripts/slick/slick.css" />
+<link rel="stylesheet" type="text/css" href="/Content/Humanistic/style.css" />
+<noscript><link rel="stylesheet" type="text/css" href="/Content/Humanistic/noJS.css" /></noscript>
+<link href="~/Content/Humanistic/reset.css" rel="stylesheet" type="text/css">
+<link href="~/Content/Humanistic/big.css" rel="stylesheet" type="text/css">
+<style type="text/css">
+    #BOOKDiv{
+	    position:absolute;
+	    width:1920px;
+	    height:1080px;
+	    z-index:3;
+	    left: 0px;
+	    top: 0px;
+    }
+#waDiv {
+	position:absolute;
+	width:544px;
+	height:327px;
+	left:1376px;
+	top:753px;
+	z-index:1;
+}
+#gobkDiv {
+	position:absolute;
+	width:130px;
+	height:130px;
+	left:1761px;
+	top:839px;
+	z-index:2;
+}
+#bookDiv {
+	position:absolute;
+	width:1580px;
+	height:1000px;
+	left:177px;
+	top:73px;
+	z-index:5;
+}
+#TabDiv {
+	position:absolute;
+	width:70px;
+	height:905px;
+	top:101px;
+	left: 1716px;
+	z-index:6;
+}
+#MvDiv {
+	position:absolute;
+	width:1920px;
+	height:1080px;
+	z-index:8;
+	background-color:#333333;
+	opacity:0.5;
+}
+#MvDiv1 {
+	position:absolute;
+	width:1120px;
+	height:620px;
+	z-index:10;
+	left: 375px;
+	top: 230px;
+}
+#SM{
+	position:absolute;
+	width:1037px;
+	height:778px;
+	z-index:9;
+	top: 111px;
+	left: 200px;
+}
+.rightdiv {  
+    position:absolute;
+    width:200px;
+    height:805px;
+    top:101px;
+    left: 210px;
+    z-index:6;
+}
+.leftdiv {  
+	position:absolute;
+	width:200px;
+	height:805px;
+	top:101px;
+	left: 1516px;
+	z-index:6;
+}
+
+.bookDiv {
+        height:70%
+}
+    
+#waDiv {
+        top:748px;
+}
+            
+body {
+        overflow:hidden;
+}
+   
+.noscroll { 
+        position: fixed; 
+        overflow-y:scroll 
+}
+
+.slick-center img{
+        border: 6px solid rgb(255, 255, 255); 
+        box-shadow: rgba(0, 0, 0, 0.8) 4px 4px 30px 2px;
+}
+.slick-list{
+        padding-bottom: 20px;
+}
+</style>
+}
+@if (ViewBag.Video != null && ViewBag.Video.Count != 0)
+{
+    <!--彈跳影片視窗 Strat-->
+    <div id="MvDiv1" class="glow" style="display:none">
+        <div style="	float:left;display: block;width:838px;">
+            <video id="mvvideo" width="838" height="620" controls></video>
+        </div>
+        <div class="closewin">
+            <a href="#">
+                <img src="/Images/Humanistic/mv/close.png" width="60" height="66" border="0">
+            </a>
+        </div>
+        <div class="MvRight">
+            <div class="Mvlist1" style="width:240px;height:530px;margin:10px 0px 0px 20px;padding:0px 10px 0px 0px;overflow-x:hidden;overflow-y:visible;">
+                @foreach (var video in ViewBag.Video as IEnumerable<TzuChiClassLibrary.BO.FileUploadModel>)
+                {
+                    <ul class="Mvtxt1"><a href="#">@video.FileName</a></ul>
+                    <ul class="Mvglow1"><a href="#"><img src="@video.PreviewPath" data-video="@video.Path" width="200" height="140" border="0"></a></ul>
+                }
+            </div>
+        </div>
+    </div>
+    <div id="MvDiv" style="display:none"></div>
+    <!--彈跳影片視窗 End-->
+}
+<div id="gobkDiv" class="btn"><a href="@Url.Content("~/Scripts/bookMenu/index.html")"><img src="/Images/Humanistic/gobk.png" width="130" height="130" border="0"></a></div>
+<!--回到首頁按鈕的動畫置入點-->
+<div id="waDiv"><canvas id="canvas" width="544" height="327"></canvas></div>
+    @*<div id="waDiv"><img src="/Images/Humanistic/water.jpg" width="544" height="327"></div>*@
+@Html.Partial(partialPath)

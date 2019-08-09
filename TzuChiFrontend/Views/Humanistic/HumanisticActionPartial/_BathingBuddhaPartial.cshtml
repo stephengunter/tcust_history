@@ -1,0 +1,88 @@
+﻿@{
+    String video = "video.folder.HumanisticAction.Video";
+    String img = "video.folder.HumanisticAction.Img";
+}
+<script type="text/javascript">
+    $(document).ready(function () {
+        if ($('#videobtn').length !== 0) {
+            $('#videobtn').click(function () {
+                $('#MvDiv').show();
+                $('#MvDiv1').show();
+            });
+        }
+        $('#bookDiv').slick({
+            //prevArrow: $('.arrowL'),
+            //nextArrow: $('.arrowR'),
+            centerMode: true,
+            slidesToShow: 1,
+            centerPadding: '300px',
+            touchThreshold: 100,
+            infinite: false,
+            onAfterChange:adjustShadow,
+            onInit:adjustShadow
+
+        });
+    });
+</script>
+<style>
+    .slick-slide:not(.slick-center) {
+        -webkit-transform: scale(0.8);
+        transform: scale(0.8);
+        opacity: 0.5;
+    }
+
+    .slick-center {
+        -webkit-transform: scale(1);
+        transform: scale(1);
+        opacity: 1;
+    }
+
+    #bookDiv {
+        margin-top: 100px;
+	height:800px;
+    }
+</style>
+@*<div class="arrowL" style="left:80px;position:absolute"><a href="#"></a></div>*@
+<div id="bookDiv">
+    <!--slider Strat-->
+    <div><img src="~/Images/Humanistic/book4/03BathingBuddha/slide1.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book4/03BathingBuddha/slide2.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book4/03BathingBuddha/slide3.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book4/03BathingBuddha/slide4.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book4/03BathingBuddha/slide5.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book4/03BathingBuddha/slide6.jpg" width="950" height="635"></div>
+    <!--slider End-->
+</div>
+@*<div class="arrowR" style="right:260px;position:absolute"><a href="#"></a></div>*@
+
+<!--上方主選單 Start-->
+<div class="cont4Div">
+    <div class="cbtnmenu">
+        <div style="float:left;display:block;width:220px; height:50px;">
+            <ul class="cbtn1"><a href="@Url.Action("BookPage", "Humanistic", new { path = "HumanisticActionPartial/_GraduationCeremonyPartial", videoKey = video, imgKey = img })">畢業典禮</a></ul><ul class="cbtnline"><img src="/Images/Humanistic/cbtnline4.png" width="220" height="5"></ul>
+        </div>
+        <div style="float:left;display:block;width:220px; height:50px;">
+            <ul class="cbtn1"><a href="@Url.Action("BookPage", "Humanistic", new { path = "HumanisticActionPartial/_TravalPartial", videoKey = video, imgKey = img })">精舍之旅</a></ul><ul class="cbtnline"><img src="/Images/Humanistic/cbtnline2.png" width="220" height="5"></ul>
+        </div>
+        <div style="float:left;display:block;width:220px; height:50px;">
+            <ul class="cbtn1D">浴　佛</ul><ul class="cbtnline"><img src="/Images/Humanistic/cbtnline2D.png" width="220" height="5"></ul>
+        </div>
+        <div style="float:left;display:block;width:220px; height:50px;">
+            <ul class="cbtn1">
+                <a href="@Url.Action("BookPage", "Humanistic", new { path = "HumanisticActionPartial/_EndOfYearPartial", videoKey = video, imgKey = img })">歲末祝福</a>
+            </ul><ul class="cbtnline"><img src="/Images/Humanistic/cbtnline2.png" width="220" height="5"></ul>
+        </div>
+        <div style="float:left;display:block;width:220px; height:50px;">
+            <ul class="cbtn1">
+                <a href="@Url.Action("BookPage", "Humanistic", new { path = "HumanisticActionPartial/_WaterRepentancePartial", videoKey = video, imgKey = img })">水懺演繹</a>
+            </ul><ul class="cbtnline"><img src="/Images/Humanistic/cbtnline5.png" width="280" height="5"></ul>
+        </div>
+        <!--影片按鈕-->
+        @if (ViewBag.Video != null && ViewBag.Video.Count != 0)
+        {
+            <div style="float:left;display:block;width:280px; height:50px;"></div>
+            <div id="videobtn" class="btn" style="float:left;display:block;width:100px; height:50px;"><a href="#"><img src="/Images/Humanistic/btn3.png" width="56" height="56" border="0"></a></div>
+        }
+</div>
+    </div>
+<!--上方主選單 End-->

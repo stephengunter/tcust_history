@@ -1,0 +1,590 @@
+﻿@{
+    ViewBag.Title = "天涯比鄰-境內地圖";
+    string partialPath = ViewBag.PartialPath;
+    string backend = System.Web.Configuration.WebConfigurationManager.AppSettings["upload.folder.name"];
+}
+@section scripts {
+    <script type="text/javascript" src="@Url.Content("~/Scripts/hammer.js-master/hammer.min.js")"></script>
+    <script type="text/javascript" src="@Url.Content("~/Scripts/modernizr.custom.79639.js")"></script>
+    <!-- jQuery if needed -->
+    <script type="text/javascript">
+        /*防止拖動出現禁止符號*/
+        window.onload = function (e) {
+            var evt = e || window.event, imgs, divs, i;
+            if (evt.preventDefault) {
+                imgs = document.getElementsByTagName('img');
+                divs = document.getElementsByTagName('div');
+                for (i = 0; i < imgs.length; i++) {
+                    imgs[i].onmousedown = disableDragging;
+                }
+                for (i = 0; i < divs.length; i++) {
+                    divs[i].onmousedown = disableDragging;
+                }
+            }
+            else {
+                document.ondragstart = function () {
+                    return false;
+                };
+            }
+        };
+        function disableDragging(e) {
+            e.preventDefault();
+            return false;
+        }
+
+        function DropDown(el) {
+            this.dd = el;
+            this.initEvents();
+        }
+        DropDown.prototype = {
+            initEvents: function () {
+                var obj = this;
+
+                obj.dd.on('click', function (event) {
+                    $(this).toggleClass('active');
+                    event.stopPropagation();
+                });
+            }
+        }
+
+        $(function () {
+            initPartitionSiteTrim();
+
+            var dd = new DropDown($('.dd'));
+
+            $(document).click(function () {
+                // all dropdowns
+                $('.wrapper-dropdown-5').removeClass('active');
+            });
+
+            $('.dropdown-partition li a').click(function () {
+                $('#menuPartition').html($(this).html());
+                $('#menuPartition').attr('key', $(this).attr('key'));
+                partitionSiteLogic($(this).html().trim());
+            });
+            $('.dropdown-site li a').click(function () {
+                $('#menuSite').html($(this).html());
+                $('#menuSite').attr('key', $(this).attr('key'));
+            }); 
+            $('.dropdown-depart li a').click(function () {
+                $('#menuDepart').html($(this).html());
+            });
+
+            $('.WINglow').click(function () {
+                $('#picShow').attr('src', $(this).attr('src'));
+            });
+
+        });
+
+        var partitionsObj = [
+           {
+               "北區": [
+                  "基隆巿", "台北市", "新北市", "桃園縣", "新竹縣", "新竹巿", "苗栗縣"
+               ]
+           },
+           {
+               "中區": [
+                  "台中巿", "彰化縣", "南投縣", "雲林縣"
+               ]
+           },
+           {
+               "南區": [
+                  "台南巿", "高雄巿", "嘉義縣", "嘉義巿", "屏東縣"
+               ]
+           },
+           {
+               "東區": [
+                  "宜蘭縣", "花蓮縣", "台東縣",
+               ]
+           },
+           {
+               "離島": [
+                  "澎湖縣", "金門縣", "連江縣"
+               ]
+           }
+        ];
+
+        function partitionSiteLogic(partition) {
+            jQuery.each(partitionsObj, function (i, val) {
+                if (partition === Object.keys(this)[0]) {
+                    jQuery.each(val, function (i, site) {
+                        $(site).each(function (index, val) {
+                            $(".dropdown-site li a:contains(" + val.trim() + ")").show();
+                        });
+                    });
+                } else {
+                    jQuery.each(val, function (i, site) {
+                        $(site).each(function (index, val) {
+                            $(".dropdown-site li a:contains(" + val.trim() + ")").hide();
+                        });
+                    });
+                }
+                
+            });
+        }
+
+        function initPartitionSiteTrim() {
+            $(".dropdown-site li a").each(function () {
+                $(this).html($(this).html().trim());
+
+            });
+            $(".dropdown-partition li a").each(function () {
+                $(this).html($(this).html().trim());
+            });
+        }
+       
+    </script>
+
+    <!--建立資料物件 Strat-->
+    @Scripts.Render("~/bundles/jquery")
+    <script src="@Url.Content("~/Scripts/slick/slick_h.js")"></script>
+    <script>
+    var planInsideData = {};
+    var planInsideTemp = {};
+    var planInsideImgs = new Array();
+    var planInsideImgsWidth = new Array();
+    var planInsideImgsHeight = new Array();
+    var planInsideImgsInfo = new Array();
+    @foreach (var item in ViewBag.Data)
+            {
+            <text>
+                planInsideTemp.contentName = '@item.ContentName';                      //校名(中文)
+                planInsideTemp.categoryYearID = '@item.CategoryYearID';                //學年
+                planInsideTemp.contentTime = '@item.ContentTime'.split(' ')[0];        //締結日
+                planInsideTemp.endTime = '@item.EndTime'.split(' ')[0];                //締結日
+                planInsideTemp.categoryPartitionID = '@item.CategoryPartitionID';      //分區
+                planInsideTemp.categorySiteID = '@item.CategorySiteID';                //所在地
+                planInsideTemp.department = '@item.Department';                        //簽約單位
+                planInsideTemp.pointX = '@item.Coordinate.PointX';                     //x
+                planInsideTemp.pointY = '@item.Coordinate.PointY';                     //y
+                planInsideTemp.agencies = '@item.Agencies';                            // 實習地點 - PlanInside
+                planInsideTemp.description = '@Html.Raw(item.Description.Replace("\r\n", "<br>").Replace("'", "\""))';  // 介紹
+                planInsideTemp.picUrlList = planInsideImgs;
+                planInsideTemp.ImgWidth = planInsideImgsWidth;
+                planInsideTemp.ImgHeight = planInsideImgsHeight;
+	            planInsideTemp.ItemInfo = planInsideImgsInfo;  
+            </text>
+            if (item.PicUrlList != null && item.PicUrlList.Count > 0)
+            {
+                foreach (var img in item.PicUrlList)
+                {
+                    if (img.CoverImage)
+                    {
+                        <text>
+                        planInsideImgs.unshift('@backend@img.Path');
+                        planInsideImgsWidth.unshift(@img.ImageWidth);
+                        planInsideImgsHeight.unshift(@img.ImageHeight);
+                        planInsideImgsInfo.unshift('@img.ItemInfo');
+                        </text>
+                    }else
+                    {
+                        <text>
+                        planInsideImgs.push('@backend@img.Path');
+                        planInsideImgsWidth.push(@img.ImageWidth);
+                        planInsideImgsHeight.push(@img.ImageHeight);
+                        planInsideImgsInfo.push('@img.ItemInfo');
+                        </text>
+                    }
+                }
+            }
+            if (item.AttachPicUrl != null)
+            {
+                <text>
+                planInsideTemp.attachPicUrl = '@item.AttachPicUrl.Path';          // 附件 ( 單圖 )
+                </text>
+            }
+            <text>
+            planInsideImgs = new Array();
+            planInsideImgsWidth = new Array();
+            planInsideImgsHeight = new Array();
+            planInsideImgsInfo = new Array();
+            planInsideData['@item.ContentID'] = planInsideTemp;
+            planInsideTemp = {};
+            </text>
+            }
+
+    $(function () {
+
+        $('.WINsmall2').slick({
+            infinite: true,
+            centerMode: false,
+            dots: false,
+            slidesToShow: 3,
+            slidesToScroll: 1,
+            arrows: true,
+            onAfterChange: picShowChange
+        });
+
+        var picChange = true;
+        $('.arrowL').click(function () {
+            if($('.WINimg img').length != 2){
+                    $('.slick-prev').click();
+                }else {
+                    if(picChange){
+                         picShowChangeByIndex(1);
+                         picChange = false;
+                    }else{
+                         picShowChangeByIndex(0);
+                         picChange = true;
+                    }
+                }
+            //picShowChange();
+        });
+
+        $('.arrowR').click(function () {
+            if($('.WINimg img').length != 2){
+                    $('.slick-next').click();
+                }else{
+                    if(picChange){                
+                         picShowChangeByIndex(1);
+                         picChange = false;
+                    }else{
+                         picShowChangeByIndex(0);
+                         picChange = true;
+                    }
+                }
+            //picShowChange();
+        });
+
+        //touch event
+        var myElement = document.getElementById('menuBTN');
+        var mc = new Hammer(myElement);
+        var position = parseInt($('#menuBlock').css("margin-top"));
+        var panStart = true;
+        mc.on("pandown panup", function (ev) {
+            var blockHeight = parseInt($('#menuBlock').height());
+            var menuBlockHeight = 800;
+            if((position + ev.deltaY) < 10 && (position + ev.deltaY) > (-blockHeight + menuBlockHeight )){
+               panStart = true;
+               $('#menuBlock').css("margin-top", position + ev.deltaY);
+            }
+            else{
+               if(panStart){
+                   position = position + ev.deltaY;
+                   panStart = false;
+               }
+            }
+        }).on("panend", function (ev) {
+            if(panStart)
+            position = parseInt(position) + ev.deltaY;
+        });
+
+        $('.WINglow').click(function () {
+            $('#picShow').attr('src', $(this).attr('src'));
+        });
+
+    });
+    </script>
+    <!--建立資料物件 End-->
+    <!--座標與彈跳式窗 Start-->
+    <script>
+        var popup = function () {
+            var menuDiv3Top = '190px';
+            @if (ViewBag.CategoryInsideID == TzuChiClassLibrary.BO.PlanInsideModel.CATEGORYQUTSIDEID_INTERNSHIP)
+            {
+                <text>
+                menuDiv3Top = '0px';
+                </text>
+            }
+
+            //調整版面
+            $('#schoolName').hide();
+            $('#menuDiv3').css('left', '573px').css('top', menuDiv3Top);
+            $('#menuDiv4').css('left', '20px').css('top', '247px');
+            //$('#ballTip1').css('width', '30px')
+            //              .css('height', '30px')
+            //              .css('z-index', '32')
+            //              .css('left', '-441px')
+            //              .css('top', '-282px');
+            var ball1Left = parseInt($('#ball1').css('left'));
+            var ball1Top = parseInt($('#ball1').css('top'));
+            $('#ball1').css('left', ball1Left - 469);
+            $('#ball1').css('top', ball1Top - 7);
+
+            //放入資料
+            var targetID = $('#schoolName').attr('contentID');
+            $('#contentName').html(planInsideData[targetID].contentName);
+            $('#agencies').html(planInsideData[targetID].agencies);
+            if (planInsideData[targetID].agencies) {
+                $('#agenciesTitle').show();
+            } else {
+                $('#agenciesTitle').hide();
+            }
+            $('#categorySiteID').html(planInsideData[targetID].categorySiteID);
+            $('#description').html(planInsideData[targetID].description);
+            if (planInsideData[targetID].description) {
+                $('#descriptionTitle').show();
+            } else {
+                $('#descriptionTitle').hide();
+            }
+            $('#contentTime').html(planInsideData[targetID].contentTime);
+            if (planInsideData[targetID].contentTime) {
+                $('#contentTimeTitle').show();
+            }else{
+                $('#contentTimeTitle').hide();
+            }
+            $('#endTime').html(planInsideData[targetID].endTime);
+            $('#categoryDepartmentID').html(planInsideData[targetID].categoryDepartmentID);
+            $('#department').html(planInsideData[targetID].department);
+            if (planInsideData[targetID].department) {
+                $('#departmentTitle').show();
+            } else {
+                $('#departmentTitle').hide();
+            }
+
+            $('#dataShow').show();
+            //插入圖片
+            if (planInsideData[targetID].picUrlList != null && planInsideData[targetID].picUrlList.length > 0) {
+                var picLength = planInsideData[targetID].picUrlList.length;
+                var count = 0;
+
+                if (picLength == 1) {
+                    count = 1;
+                } else if (picLength == 2) {
+                    count = 1;
+                } else if (picLength == 3) {
+                    count = 2;
+                } else {
+                    count = 1;
+                }
+                for (var i = 0; i < count ; i++) {
+                    appendSlideImg(targetID);
+                }
+            }
+
+            picShowChange();
+
+            $('.WINimg').click(function(){
+                if($('.WINimg img').length != 2){
+                    $('.WINsmall2').slickGoTo($(this).attr('index'));
+                }
+            });
+
+            if($('.WINimg img').length == 2){
+                movePic(1);
+                setTimeout("movePic(0)",500);
+            }
+
+        }
+
+        var movePic = function(index){
+            $('.WINsmall2').slickGoTo(index);
+        }
+
+        var popupClose = function () {
+            //調整版面
+            var ball1Left = parseInt($('#ball1').css('left'));
+            var ball1Top = parseInt($('#ball1').css('top'));
+            $('#menuDiv3').css('left', '0px').css('top', '0px');
+            $('#menuDiv4').css('left', '490px').css('top', '247px');
+            //$('#ballTip1').css('width', '172px')
+            //              .css('height', '42px')
+            //              .css('z-index', '34')
+            //              .css('left', ball1Left + 399)
+            //              .css('top', ball1Top - 79);
+            $('#ball1').css('left', ball1Left + 469);
+            $('#ball1').css('top', ball1Top + 7);
+            //清除舊圖
+            $('.slick-track').children().each(function (index, value) {
+                $('.WINsmall2').slickRemove(0);
+            });
+            $('#dataShow').hide();
+            $('#schoolName').show();
+        }
+
+        var appendSlideImg = function (targetID) {
+            for (var i = 0 ; i < planInsideData[targetID].picUrlList.length ; i++) {
+                (function (n) {
+                    var height = planInsideData[targetID].ImgHeight[n];
+                    var width = planInsideData[targetID].ImgWidth[n];
+                    var info = planInsideData[targetID].ItemInfo[n];
+                    if ((height / width) > (100 / 120)) {
+                        var marginLeft = (120 - (width * (100 / height))) / 2;
+                        $('.WINsmall2').slickAdd('<div class="WINimg"><img src="' + planInsideData[targetID].picUrlList[n] + '" height="100" width="auto" border="0" class="WINglow nonFocus" info="' + info + '" style="margin-left:' + marginLeft + 'px"></div>');
+                    } else {
+                        var marginTop = (100 - (height * (120 / width))) / 2;
+                        $('.WINsmall2').slickAdd('<div class="WINimg"><img src="' + planInsideData[targetID].picUrlList[n] + '" width="120" height="auto" border="0" class="WINglow nonFocus" info="' + info + '" style="margin-top:' + marginTop + 'px"></div>');
+                    }
+                })(i);
+            }
+        }
+
+        var picShowChange = function () {
+            var img = new Image();
+            var src = $('.WINimg[index="' + parseInt($('.WINsmall2').slickCurrentSlide()) + '"] img').attr('src');//$('.slick-active:eq(0) img').attr('src');
+            img.src = src;
+
+            $(img).load(function() {
+                if ((img.height/img.width) > (338/452)) {
+                    $('#picShow').css('height', 338).css('width', 'auto')
+                                 .css('margin-top', '0px');
+                }else{
+                    var marginTop = (338 - (img.height*(452/img.width)))/2;
+                    $('#picShow').css('width', 452).css('height', 'auto')
+                                 .css('margin-top', marginTop + 'px');
+                }
+                $('#picShow').attr('src', $('.WINimg[index="' + parseInt($('.WINsmall2').slickCurrentSlide()) + '"] img').attr('src'));
+            });
+
+            //說明
+            var info = $('.WINimg[index="' + $('.WINsmall2').slickCurrentSlide() + '"] img').attr('info');
+            if(info){
+                $('#picDiv1').html(info);
+                $('#picDiv1').show();
+            }else{
+		$('#picDiv1').hide();
+            }
+
+            //透明
+            $(".WINimg img").addClass("nonFocus");
+            $('.WINimg[index="' + $('.WINsmall2').slickCurrentSlide() + '"] img').removeClass("nonFocus");
+        }
+        var picShowChangeByIndex = function (index) {
+            var img = new Image();
+            var src = $('.WINimg[index="' + index + '"] img').attr('src');//$('.slick-active:eq(0) img').attr('src');
+            img.src = src;
+            if ((img.height/img.width) > (338/452)) {
+                $('#picShow').css('height', 338).css('width', 'auto')
+                             .css('margin-top', '0px');
+            }else{
+                var marginTop = (338 - (img.height*(452/img.width)))/2;
+                $('#picShow').css('width', 452).css('height', 'auto')
+                             .css('margin-top', marginTop + 'px');
+            }
+            $('#picShow').attr('src', $('.WINimg[index="' + index + '"] img').attr('src'));
+
+            //說明
+            var info = $('.WINimg[index="' + index  + '"] img').attr('info');
+            if(info){
+                $('#picDiv1').html(info);
+                $('#picDiv1').show();
+            }else{
+		$('#picDiv1').hide();
+            }
+
+            //透明
+            $(".WINimg img").addClass("nonFocus");
+            $('.WINimg[index="' + index  + '"] img').removeClass("nonFocus");
+        }
+
+        var coordinate = function (contentID) {
+            popupClose();
+            coordinateRemove();
+
+            //抽換tip大小
+            @if (ViewBag.CategoryInsideID == TzuChiClassLibrary.BO.PlanInsideModel.CATEGORYQUTSIDEID_INTERNSHIP)
+            {
+                <text>
+                var strLength = planInsideData[contentID].agencies.length;
+                </text>
+            }
+            else 
+            {
+                <text>
+                var strLength = planInsideData[contentID].department.length;
+                </text>
+            }
+            var firstSize = 7;
+            var secondSize = 14;
+            var idName = '';
+            if (strLength <= firstSize) {
+                idName = 'ballTip1';
+            } else if (strLength > firstSize && strLength < secondSize) {
+                idName = 'ballTip2';
+            } else {
+                idName = 'ballTip3';
+            }
+            $('.ballTip').attr('id', idName);
+
+            //放置地圖
+            $('.department').html(planInsideData[contentID].department); 
+            $('.agencies').html(planInsideData[contentID].agencies);
+            $('#ballTip1').css('left', parseInt(planInsideData[contentID].pointX) - 95).css('top', parseInt(planInsideData[contentID].pointY) - 86);
+            $('#ballTip2').css('left', parseInt(planInsideData[contentID].pointX) - 160).css('top', parseInt(planInsideData[contentID].pointY) - 97);
+            $('#ballTip3').css('left', parseInt(planInsideData[contentID].pointX) - 165).css('top', parseInt(planInsideData[contentID].pointY) - 134);
+            $('#ball1').css('left', parseInt(planInsideData[contentID].pointX)).css('top', parseInt(planInsideData[contentID].pointY));
+
+            //放置contentID
+            $('#schoolName').attr('contentID', contentID);
+        }
+
+        var coordinateRemove = function () {
+            $('.ballAll').remove();
+        }
+
+        //選單功能
+        var menuBTNHeight = parseInt($('#menuBlock').css('height'));
+        var menuHeight = 890;
+        var scrollDownMenu = function () {
+            var marginTop = parseInt($('#menuBlock').css("margin-top"));
+            if ((menuBTNHeight + marginTop - (menuHeight * 2)) >= 0) {//判斷可否下拉 
+                $('#menuBlock').animate({ "margin-top": (marginTop - menuHeight) + 'px' }, 500);
+            } else if ((menuBTNHeight + marginTop - menuHeight) >= 0) {//是否為最後一頁
+                $('#menuBlock').animate({ "margin-top": '-' + (menuBTNHeight - menuHeight) + 'px' }, 500);
+            }
+        }
+        var scrollUpMenu = function () {
+            var marginTop = parseInt($('#menuBlock').css("margin-top"));
+            if (marginTop < -menuHeight) {//判斷可否下拉 
+                $('#menuBlock').animate({ "margin-top": (marginTop + menuHeight) + 'px' }, 500);
+            } else if ((menuBTNHeight + marginTop - menuHeight) >= 0) {//是否為最後一頁
+                $('#menuBlock').animate({ "margin-top": '0px' }, 500);
+            }
+        }
+
+        var search = function (categoryInsideID) {
+            var keywordDepart = $('#menuDepart').html();
+            if (keywordDepart) {
+                keywordDepart = keywordDepart.trim();
+            }
+            var keywordPartition = $('#menuPartition').attr('key');
+            var keywordSite = $('#menuSite').attr('key');
+
+            var form = $('<form method="POST" action="@Url.Action("PlanInside", "Map")">');
+            form.append($('<input type="hidden" name="categoryInsideID" value="' + categoryInsideID + '">'));
+            if (keywordDepart && keywordDepart != '系所')
+                form.append($('<input type="hidden" name="department" value="' + keywordDepart + '">'));
+            if (keywordPartition && keywordPartition != '分區')
+                form.append($('<input type="hidden" name="categoryPartitionID" value="' + keywordPartition + '">'));
+            if (keywordSite && keywordSite != '所在地')
+                form.append($('<input type="hidden" name="categorySiteID" value="' + keywordSite + '">'));
+            $('body').append(form);
+            form.submit();
+            form.remove();
+        }
+    </script>
+    }
+
+    @section styles{
+        <style type="text/css">
+            #picDiv1 {
+	        position:absolute;
+	        font-family:"微軟正黑體", Arial;
+	        font-weight:bold;
+	        font-size:18px;
+	        text-align: left;
+	        line-height:28px;
+	        background-color:#ffffff;
+	        opacity:0.8;
+	        padding:5px 5px 5px 5px;
+	        margin:2px 2px 2px 2px;
+	        width:448px;
+	        height:68px;
+	        z-index:4;
+	        left: 36px;
+	        top: 433px;
+            }    
+            .nonFocus {
+                opacity: 0.5;
+            }
+        </style>
+
+    }
+
+<!--第一層回首頁按鈕-->
+<div id="gobkDiv1">
+    <ul class="btn5"><a href="@Url.Action("PlanOutside", "Map", new { categoryOutsideID = TzuChiClassLibrary.BO.PlanOutsideModel.CATEGORYQUTSIDEID_SISTER })"></a></ul>
+    <ul class="btn4"><a href="@Url.Content("Index")"></a></ul>
+</div>
+
+@Html.Partial(partialPath)

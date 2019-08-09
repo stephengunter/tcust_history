@@ -1,0 +1,536 @@
+﻿@model List<TzuChiClassLibrary.BO.ImageShowModel>
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    string backend = System.Web.Configuration.WebConfigurationManager.AppSettings["upload.folder.name"];
+    string backendRoot = System.Web.Configuration.WebConfigurationManager.AppSettings["website.backend"];
+}
+
+@section scripts {
+    <script src="~/Scripts/hammer.js-master/hammer.js"></script>
+    <script src="~/Scripts/jquery.hammer.js"></script>
+    <script src="~/Scripts/slick/slick.js"></script>
+    <script src="~/Scripts/jquery-ui.js"></script>
+    <script src="~/Scripts/jquery.ui.touch-punch.min.js"></script>
+    <script src="~/Scripts/attrchange.js"></script>
+    <script src="~/Scripts/jquery.lazyload.js"></script>
+    <script src="~/Scripts/ifvisible.js-master/src/ifvisible.js"></script>
+    <script src="~/Scripts/video.js"></script>
+    @Scripts.Render("~/Scripts/EventCalendar")
+    @*輪播事件*@
+    <script type="text/javascript">
+        $(function () {
+
+            $('#carousel').click(function () {
+                //$('#carousel').slickPause(); //暫停輪播
+                clearInterval(bkImgtimer);
+                $('.timebk').css('background-image', 'url("@backend' + carouselImgs[0] + '")');
+
+                isCarousel = false;//暫停輪播
+                $('#title').fadeOut("normal");
+                $('#carousel').fadeOut("normal");
+                $('#event-container').fadeIn("slow");
+                $('.timefooter').fadeIn("slow");
+
+                var totalWidth = 500; //預留空間
+                $('.event-bar').each(function (index) {
+                    totalWidth += parseInt($(this).width(), 10);
+                });
+
+                $('#drag-x-container').width(totalWidth);
+                $('.timefooter').width(totalWidth);
+            });
+
+        })
+
+        var carouselImgs = new Array(),//所有輪播圖片路徑
+            carouselIndex = 1,//現在輪播位置
+            carouselLength = parseInt(" @Model.Count ");
+
+            @foreach(TzuChiClassLibrary.BO.ImageShowModel item in Model)
+            {
+                <text>
+                carouselImgs.push('@item.ImageUrl');
+                </text>
+            }
+
+            $('.timebk').css('background-image', 'url("@backend' + carouselImgs[0] + '")');
+
+            $(function () {
+                bkImgtimer = setInterval('carouselInit()', 5000);
+            });
+
+            function carouselInit() {
+                $('.timebk').fadeTo('slow', 0.3, function () {
+                    $('.timebk').css('background-image', 'url("@backend' + carouselImgs[carouselIndex] + '")');
+                }).fadeTo('slow', 1);
+                if (carouselIndex == carouselLength - 1) {
+                    carouselIndex = 0;
+                } else {
+                    carouselIndex++;
+                }
+            }
+
+            function showData(targetWin, ajaxData) {//準備動態產生彈跳視窗HTML內容
+                var picList = ajaxData['PicUrlList'];
+                var vedioList = ajaxData['VideoUrlList'];
+
+                //targetWin.find('.imgtxt').html(FormatDateString(ConvertToDate(ajaxData['ContentTime'])) + '<br>' + ajaxData['Description']);//class imgtxt 內容
+                var regex = /(<((?!br)[^>]+)>)/ig;
+                var description = ajaxData['Description'].replace(regex, "");
+                targetWin.find('.imgtxt').html(FormatDateString(ConvertToDate(ajaxData['ContentTime'])) + '<br>' + description);//class imgtxt 內容
+                //targetWin.find('.imgtxt').html(ajaxData + '<br>' + '創校開學典禮，有20,000餘人參與盛會，第一任校長楊思標，自台大醫學院院長退休數年，七十歲高齡披掛上陣。RightRightRightRight')
+                var dynamicImgHTML = '';
+
+                var widthHeightStr2 = '';
+
+                var widthHeightRatio = 200 / 138;
+
+                if (picList != null) {  //判斷list不為空
+                    for (var i = 0 ; i < picList.length ; i++) {//img
+                        var imageRatio = picList[i].ImageWidth / picList[i].ImageHeight;
+                        var srcString = '/imgs/zoom/' + '200/138/' + picList[i]['Path'];
+
+
+                        if (widthHeightRatio > imageRatio) {
+                            widthHeightStr2 = ' height="138" style="max-width:200px; text-align: center; margin-left: auto; margin-right: auto;" ';
+                        }
+                        else {
+                            widthHeightStr2 = ' width="200" style="max-height:138px; text-align: center;" ';
+                        }
+
+                        dynamicImgHTML += '<li class="imgsmall">' +
+                            '<img data-path="' + picList[i]['Path'] + '"src="@backendRoot' + srcString + '" ' + widthHeightStr2 + '></li>';
+                        //dynamicImgHTML += '<li class="imgsmall"><img src="' + '/Scripts/inform/images/news/news1.jpg' + '" width="200" height="138"></li>';
+                    }
+                }
+                if (vedioList != null) { //判斷list不為空
+                    for (var i = 0 ; i < vedioList.length ; i++) {//vedio
+                        dynamicImgHTML += '<li class="imgsmall" ><img src="@backend' + vedioList[i]['PreviewPath'] + '" width="200" height="138" data-vedioPath="' + vedioList[i]['Path'] + '"></li>';
+                        //dynamicImgHTML += '<li class="imgsmall"><img src="' + '/Scripts/inform/images/news/news1.jpg' + '" width="200" height="138" data-vedioPath="' + 'https://www.youtube.com/v/XGSy3_Czz8k' + '"></li>';
+                    }
+                }
+                targetWin.find('.listimg').html(dynamicImgHTML);
+
+                var widthHeightStr = '';
+
+                var widthHeightRatio = 750 / 516;
+                var imageRatio = picList[0].ImageWidth / picList[0].ImageHeight;
+                var styleString = '';
+
+
+                if (widthHeightRatio > imageRatio) {
+                    widthHeightStr = ' height="516" style="display:normal;max-width:750px; text-align: center; margin-left: auto; margin-right: auto;" ';
+                    styleString = 'display:normal;margin-left:-5px;width:750px;height:516px;vertical-align: middle;  text-align: center;'
+                }
+                else {
+                    widthHeightStr = ' width="750" style="display:table-cell;max-height:516px; text-align: center;" ';
+                    styleString = 'display:table-cell;margin-left:-5px;width:750px;height:516px;vertical-align: middle;'
+                }
+
+
+                if ($.type(targetWin.find('.listimg > li:first').find('img').attr('data-vediopath')) !== 'undefined') {//第一張如果是一般圖片就SHOW圖，如果是影片，則改生成影片HTML
+                    targetWin.find('.showobject').html('<video width="750" height="516" src="' + targetWin.find('.listimg > li:first').find('img').attr('data-vediopath') + '" msZoom="true" controls/>');
+                }
+                else {
+                    targetWin.find('.showobject').html('<img src="' + '@backendRoot' + '/imgs/zoom/750/516/' + targetWin.find('.listimg > li:first').find('img').attr('data-path') + '" ' + widthHeightStr + ' />');
+                    targetWin.find('.showobject').attr('style', styleString);
+                }
+            }
+
+            function dynamicImgEventInit(targetWin) {//當彈跳視窗list圖片加入完畢後開始設定點擊事件
+                targetWin.find('.listimg > li').hammer().on('tap press', function (e) {
+                    var widthHeightStr = '';
+                    var videoId = '';
+                    if (targetWin.attr('id') === "LeftDiv") {
+                        videoId = 'leftVideo';
+                    }
+                    else {
+                        videoId = 'rightVideo';
+                    }
+                    if ($.type($(this).find('img').attr('data-vediopath')) !== 'undefined') {
+                        //targetWin.find('.showobject').html('<video id="video" width="750" height="516" ShowTracker="false" src="@backend' + $(this).find('img').attr('data-vediopath') + '" controls />');
+                        if ($('#' + videoId).length !== 0 && targetWin.find('.showobject').find('img').length === 0) {
+                            _V_(videoId).dispose();
+                        }
+                        targetWin.find('.showobject').html('<video id="' + videoId + '" class="video-js vjs-default-skin vjs-static-controls" width="750" height="468" ShowTracker="false"  controls><source src="@backend' + $(this).find('img').attr('data-vediopath') + '" type="video/mp4"/></video>');
+                        videojs(videoId, {
+                            ControlBar: {
+                                FullscreenToggle: false
+                            }
+                        });
+                    }
+                    else {
+                        var widthNum = Number($(this).find('img').css("width").split("px")[0]);
+                        var heightNum = Number($(this).find('img').css("height").split("px")[0]);
+
+
+
+                        var widthHeightRatio = 750 / 516;
+                        var imageRatio = widthNum / heightNum;
+
+                        var widthHeightStr = '';
+                        if (widthHeightRatio > imageRatio) {
+                            targetWin.find('.showobject').attr('style', 'display:normal;margin-left:-5px;width:750px;height:516px;vertical-align: middle;  text-align: center;');
+                            //widthHeightStr = ' height="516" style="display:normal;max-width:750px; text-align: center; margin-left: auto; margin-right: auto;" ';
+
+                        } else {
+                            targetWin.find('.showobject').attr('style', 'display:table-cell;margin-left:-5px;width:750px;height:516px;vertical-align: middle;');
+                            //widthHeightStr = ' width="750" style="display:table-cell;max-height:516px; text-align: center;" ';
+                        }
+
+                        var srcString = '@backendRoot' + '/imgs/zoom/750/516/' + $(this).find('img').attr('data-path');
+
+                        targetWin.find('.showobject').html('<img src="' + srcString + '" ' + widthHeightStr + ' />');
+                        _V_(videoId).dispose();
+                    }
+                });
+            }
+
+    </script>
+
+}
+
+@section styles{
+    @Styles.Render("~/Content/EventCalendar")
+    <link href="~/Content/slick.css" rel="stylesheet" />
+    <link href="~/Content/video-js.css" rel="stylesheet" type="text/css">
+    <link href="~/Content/jquery-ui.css" rel="stylesheet" />
+    <style>
+       
+
+        .arrowL a {
+            float: left;
+            display: block;
+            background: url(/Images/EventCalendar/arrowL.png);
+            width: 80px;
+            height: 217px;
+            z-index: 200;
+        }
+
+        .arrowL a:hover {
+            background: url(/Images/EventCalendar/arrowL.png);
+            background-position: -4px -0px;
+            -webkit-transform: scale(1.05);
+            transform: scale(1.05);
+            z-index: 200;
+        }
+
+        .arrowR a {
+            float: left;
+            display: block;
+            background: url(/Images/EventCalendar/arrowR.png);
+            width: 80px;
+            height: 217px;
+            z-index: 200;
+        }
+
+            .arrowR a:hover {
+                background: url(/Images/EventCalendar/arrowR.png);
+                background-position: 4px 0px;
+                -webkit-transform: scale(1.05);
+                transform: scale(1.05);
+                z-index: 200;
+            }
+
+        .vjs-default-skin .vjs-load-progress {
+            display: block;
+        }
+
+        .vjs-default-skin .vjs-control-bar {
+            display: block;
+        }
+
+        .vjs-default-skin .vjs-big-play-button {
+            bottom: -48px;
+            display: none;
+        }
+        /* Always show control bar */
+        .video-js.vjs-static-controls .vjs-control-bar {
+            display: block;
+        }
+
+        /* Don't fade out controls */
+        .video-js.vjs-static-controls.vjs-has-started.vjs-user-inactive.vjs-playing .vjs-control-bar {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* Align poster to top */
+        .video-js.vjs-static-controls .vjs-poster {
+            background-position: 50% 0;
+        }
+
+        /* Override tech height:100% */
+        .video-js.vjs-static-controls .vjs-tech {
+            height: auto;
+            height: calc(100% - 30px);
+        }
+    </style>
+}
+
+
+@*彈跳視窗*@
+
+<div id="RightDiv" style="box-shadow:2px 2px 20px 5px #666;" class="pop_win">
+    <div class="img">
+        <ul>
+            <li class="showobject" style="margin-left: -5px;width:750px;height:516px;vertical-align: middle;  text-align: center;"></li>
+            <li class="imgtxt"></li>
+        </ul>
+    </div>
+    <div class="closewin">
+        <img id="close" src="~/Images/EventCalendar/close.png" width="60" height="66" border="0">
+    </div>
+    <div class="listnew">
+        <ul class="listimg" style="text-align:center; padding:5px 5px 5px 5px;"></ul>
+    </div>
+</div>
+<div style="display:none;position:absolute; z-index:95; top:425px; left:2345px;" id="RightDivLL" class="arrowL">
+    <a id="RightPrev" class="PrevNext RightPopup" href="javascript:void(0)"></a>
+</div>
+<div style="display:none;position:absolute; z-index:95; top:425px; left:3390px;" id="RightDivRR" class="arrowR">
+    <a id="RightNext" class="PrevNext RightPopup" href="javascript:void(0)"></a>
+</div>
+
+@*<img id="LeftPrev" class="PrevNext LeftPopup" src="~/Scripts/inform/images/inform/bk001.png" style="position:absolute; z-index:95; top:485px; left:115px;" />
+    <img id="LeftNext" class="PrevNext LeftPopup" src="~/Scripts/inform/images/inform/bk001.png" style="position:absolute; z-index:95; top:485px; left:215px;" />*@
+
+<div id="LeftDiv" style="box-shadow:2px 2px 20px 5px #666;" class="pop_win">
+    <div class="img">
+        <ul>
+            <li class="showobject" style="margin-left: -5px;text-align:center;width:750px;height:516px;vertical-align: middle;  text-align: center;"></li>
+            <li class="imgtxt"></li>
+        </ul>
+    </div>
+    <div class="closewin">
+        <img id="close" src="~/Images/EventCalendar/close.png" width="60" height="66" border="0">
+    </div>
+    <div class="listnew">
+        <ul class="listimg" style="text-align:center; padding:5px 5px 5px 5px;"></ul>
+    </div>
+</div>
+<div style="display:none; position:absolute; z-index:95; top:425px; left:405px;" id="LeftDivLL" class="arrowL">
+    <a id="LeftPrev" class="PrevNext LeftPopup" href="javascript:void(0)"></a>
+</div>
+<div style="display:none; position:absolute; z-index:95; top:425px; left:1450px;" id="LeftDivRR" class="arrowR">
+    <a id="LeftNext" class="PrevNext LeftPopup" href="javascript:void(0)"></a>
+</div>
+@*end彈跳視窗*@
+
+
+<div class="timebk">
+    <div id="carousel">
+        <div class="carousel-el" style="width:3840px; height:1080px;">
+        </div>
+    </div>
+    @*drag-right drag-left *@
+
+    @*
+
+
+    *@
+    <div id="event-container" style="display:none" class="timediv">
+        <div id="drag-x-container">
+            <div id="drag-x" class="drag-x" style="position:relative;">
+                @{
+                    var TopPos = -930;
+                    var TopPosPx = TopPos + "px";
+                    var PrevYear = "";
+                    for (int i = 0; i < @ViewBag.TotalYear; i++)
+                    {
+                        if (i < 9)
+                        {
+                            TopPos += 85;
+                            TopPosPx = TopPos + "px";
+                        }
+                        List<TzuChiClassLibrary.BO.EventCalendarModel> list = (List<TzuChiClassLibrary.BO.EventCalendarModel>)ViewData["Year-" + @i];
+
+                        list.Reverse();
+
+                        if (list != null && list.Count > 0)
+                        {
+                            var BotPos = -220;
+                            var BotPosPx = BotPos + "px";
+                            var AcademicYear = string.Empty;
+                            var WesternYear = "";
+
+                            PrevYear = list[0].AcademicYear;    //紀錄給下一年沒資料時使用
+                            try
+                            {
+                                WesternYear = (Convert.ToInt32(list[0].AcademicYear) + 1911) + "‧09-" + (Convert.ToInt32(list[0].AcademicYear) + 1912) + "‧06";
+                                AcademicYear = list[0].AcademicYear + "學年度";
+                            }
+                            catch (Exception)
+                            {
+                                WesternYear = "";
+                                AcademicYear = list[0].AcademicYear;
+                            }
+                            <div class="event-bar">
+                                <div class="tline"></div>
+                                <div class="time01 drag" style="margin-left:-33px; top:@TopPosPx" id="div-@i">
+                                    <ul class="txt1">@AcademicYear</ul>
+                                    @*<ul class="txt2">@WesternYear</ul>*@
+                                    @foreach (var item in list)
+                                    {
+                                        var EventCoverUrl = string.Empty;
+                                        if (item.PicUrlList != null && item.PicUrlList.Count > 0)
+                                        {
+                                            EventCoverUrl = backendRoot + "/imgs/zoom/303/220/" + item.PicUrlList[0].Path;
+                                            //EventCoverUrl = backend + item.PicUrlList[0].Path;
+
+                                            string widthHeighStr = "";
+
+                                            double widthHeightRatio = 303.0 / 220.0;
+                                            double imageRatio = Convert.ToDouble(item.PicUrlList[0].ImageWidth) / Convert.ToDouble(item.PicUrlList[0].ImageHeight);
+
+                                            if (widthHeightRatio > imageRatio)
+                                            {
+                                                widthHeighStr = "auto 220px";
+                                            }
+                                            else
+                                            {
+                                                widthHeighStr = "303px auto";
+                                            }
+
+                                            <ul data-isimg="true" class="tnew" id="@item.ContentID" style="margin-left:2px;background-color:white;width:303px;background-image:url(@EventCoverUrl); background-size: @widthHeighStr ;background-position:50% 50%; background-repeat: no-repeat; position: absolute; bottom:@BotPosPx; z-index:4; visibility: visible;">
+                                                <li class="txt3">@string.Format("{0:yyyy‧MM‧dd}", item.ContentTime)</li>
+                                                @*@if (@item.ContentName.Length > 31)
+                                                    {
+                                                        <li style="left:9px;" class="txt4">@item.ContentName.Substring(0, 31)</li>
+                                                    }
+                                                    else
+                                                    {
+                                                        <li style="left:9px;" class="txt4">@item.ContentName</li>
+                                                    }*@
+
+
+                                                <li class="txt4" style="margin-left:-2px;overflow:hidden">@item.ContentName</li>
+                                                <li style="margin-left:-2px;">
+                                                    <img src="~/Images/EventCalendar/tmewop.png" width="303" height="220">
+                                                </li>
+                                            </ul>
+
+                                        }
+                                        else
+                                        {
+                                            BotPos = BotPos + 159;
+                                            BotPosPx = BotPos + "px";
+
+                                            <ul data-isimg="false" class="tnew" id="@item.ContentID" style="left: -7px; background-image:url(../Images/EventCalendar/tnew2bk.png); background-size: 303px 62px; background-position: bottom;  background-repeat: no-repeat; position: absolute; bottom:@BotPosPx; z-index:-1; visibility: visible;">
+                                                <li style="left:9px;" class="txt3">@string.Format("{0:yyyy‧MM‧dd}", item.ContentTime)</li>
+
+                                                @*@if (@item.ContentName.Length > 32)
+                                                    {
+                                                        <li style="left:9px;" class="txt4">@item.ContentName.Substring(0, 32)</li>
+                                                    }
+                                                    else
+                                                    {
+                                                        <li style="left:9px;" class="txt4">@item.ContentName</li>
+                                                    }*@
+
+                                                <li style="left:9px;" class="txt4">@item.ContentName</li>
+
+                                                <li>
+                                                    <img src="~/Images/EventCalendar/tmewop.png" width="303" height="0">
+                                                </li>
+                                            </ul>
+                                        }
+
+                                        BotPos = BotPos - 220;
+                                        BotPosPx = BotPos + "px";
+                                    }
+                                    @{
+                                    BotPos = BotPos + 168;
+                                    BotPosPx = BotPos + "px";
+                                    }
+                                    <ul class="tnew" style="margin-left:2px;background-color:white;width:303px;height:52px;background-position:50% 50%; background-repeat: no-repeat; position: absolute; bottom:@BotPosPx; z-index:4; visibility: visible;">
+                                        <li>
+                                            <img src="~/Images/EventCalendar/down.png" width="303" height="52">
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        }
+                        else
+                        {
+                            // 若list沒資料
+                            var WesternYear = "";
+                            var AcademicYear = "";
+                            try
+                            {
+                                WesternYear = (Convert.ToInt32(PrevYear) + 1912) + "‧09-" + (Convert.ToInt32(PrevYear) + 1913) + "‧06";
+                                AcademicYear = (Convert.ToInt32(PrevYear) + 1) + "學年度";
+                                PrevYear = Convert.ToInt32(PrevYear) + 1 + "";
+                            }
+                            catch (Exception e)
+                            {
+                                WesternYear = "1989‧09-1990‧06";
+                                AcademicYear = "78學年度";
+                                PrevYear = "78";
+                            }
+                            @*<div class="event-bar">
+                                    <div class="tline"></div>
+                                    <div class="time01 drag" style="left: -32px; top:@TopPosPx" id="div-@i">
+                                        <ul class="txt1">@AcademicYear</ul>
+                                        <ul class="txt2">@WesternYear</ul>
+                                    </div>
+                                </div>*@
+                        }
+                    }
+                }
+            </div>
+        </div>
+    </div>
+    <div class="timefooter" style="display:none; overflow:hidden; position:relative;">
+        @{
+            Random rnd = new Random();
+            //string[] nailsNameAry = {"tip02.png", "tip01.png", "tip04.png", "tip05.png", "tip04.png", "tip06.png", "tip01.png"};
+            string[] nailsNameAry = { "tip01.png", "tip02.png", "tip03.png", "tip04.png", "tip05.png", "tip06.png" };
+            int[] monthAry = new int[12];
+            bool[] monthExist = new bool[12];
+            int getNail = -1;
+            int rememberNail = -1;
+            for (int i = 0; i < @ViewBag.TotalYear; i++)
+            {
+                monthExist = new bool[12];
+                for (int j = 0; j < monthAry.Length; j++)
+                {
+                    while ((getNail = rnd.Next(0, 5)) == rememberNail) { }
+                    rememberNail = getNail;
+                    monthAry[j] = getNail;
+                }
+                List<TzuChiClassLibrary.BO.EventCalendarModel> list = (List<TzuChiClassLibrary.BO.EventCalendarModel>)ViewData["Year-" + @i];
+
+                if (list != null && list.Count > 0)
+                {
+                    for (int j = 0; j < list.Count; j++)
+                    {
+                        monthExist[(list[j].ContentTime.Month - 1)] = true;
+                    }
+                    <ul class="timefooterimg1">
+                        <li class="tippoint">&nbsp;</li>
+                        @for (int j = 0; j < monthAry.Length; j++)
+                        {
+                            if (monthExist[j])
+                            {
+                                <li class="tippoint"><img src="~/Images/EventCalendar/@nailsNameAry[@monthAry[@j]]" width="20" height="112"></li>
+                            }
+                            else
+                            {
+                                <li class="tippoint">&nbsp;</li>
+                            }
+                        }
+                        <li class="tippoint">&nbsp;</li>
+                    </ul>
+                }
+
+
+
+            }
+        }
+    </div>
+</div>
+<div id="title" class="big">
+    <img src="~/Images/EventCalendar/title01.png" />
+</div>

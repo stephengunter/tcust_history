@@ -1,0 +1,400 @@
+﻿@model TzuChiClassLibrary.BO.SchoolDiaryModel
+@using Core.Extensions
+@{
+    ViewBag.Title = "校園日誌";
+}
+
+
+@Styles.Render("~/Content/edit.css")
+
+@section scripts {
+     @Scripts.Render("~/Scripts/uploadify/jquery.uploadify-3.2.min.js")
+     @Scripts.Render("~/Scripts/file-upload.js")
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+
+            var ASPSESSID = "@Session.SessionID";
+            var AUTHID = "@(Request.Cookies[FormsAuthentication.FormsCookieName] == null ? string.Empty : Request.Cookies[FormsAuthentication.FormsCookieName].Value)";
+
+			initFileUpload(ASPSESSID, AUTHID);
+
+
+		
+
+        });
+    </script>
+
+    <script type="text/javascript">
+
+        var picUrlTemplate, videoUrlTemplate;
+
+        $(document).ready(function () {
+
+            $('.datepicker').datepicker({ dateFormat: 'yy/mm/dd' });
+
+           
+            $('#reset').click(function () {
+                $('#AcademicYear').val('');
+                $('#Semester').val('');
+                $('#SerialNo').val('');
+                $('#ContentName').val('');
+                $('#ContentTime').val('');
+                tinyMCE.activeEditor.setContent('');    //清空內容
+                $('#CoverImageDiv').empty();
+                $('#ContentImageDiv').empty();
+                $('#PicUrlListDiv').empty();
+                $('#VideoUrlListDiv').empty();
+                $('#RelatedLink').val('');
+                $('.showdate').hide();
+            });
+            // 處理 radio button
+            if ($('#ShowDate').val() != 'False' && $('#ShowDate').val() != 'True') $('#ShowDate').val('False');
+            if ($('#ShowDate').val() == 'False') {  //若為無則隱藏
+                $('#rbFalse').attr('checked', 'checked');
+                $('.showdate').hide();
+            } else {
+                $('#rbTrue').attr('checked', 'checked');
+                $('.showdate').show();
+            }
+            $('input[name=rbShowDate]').change(function () {
+                if ($(this).val() == 'False') {
+                    $('#ShowDate').val('False');
+                    $('.showdate').hide();
+                    $('#OpenTime').val('');
+                    $('#CloseTime').val('');
+                } else {
+                    $('#ShowDate').val('True');
+                    $('.showdate').show();
+                }
+            });
+            $('input[name=CloseTime]').change(function () {
+                var open = new Date($('#OpenTime').val());
+                var close = new Date($('#CloseTime').val());
+                if (open > close) {
+                    alert('起始日期不得大於結束日期');
+                    $('#CloseTime').val('');
+                }
+            });
+            $('.btn-success').click(function () {
+                if ($('#ShowDate').val() == 'True') {
+                    if ($('#OpenTime').val() == '' || $('#CloseTime').val() == '') {
+                        alert('請選擇起迄日期');
+                        return false;
+                    }
+                }
+            });
+
+            $('#SerialNo').change(function () {
+                checkSerialNo();
+            });
+
+            typeBackfill();//類別內容回填
+
+        });
+
+        
+        
+
+        function typeBackfill() {
+            @if (Model != null && Model.ContentType != null)
+            {
+                foreach(string item in Model.ContentType)
+                {
+                    <text>
+            $('input[value="' + '@item' + '"]').prop("checked", true);
+            </text>
+                }
+            }
+
+        }
+
+        //編號不可重復確認
+        function checkSerialNo() {
+            $.post('@Url.Content("checkSerialNo")', { serialNo: $('#SerialNo').val() })
+                .done(function (data) {
+                    if (data) {
+                        $('#checkSerialNo').css('color', 'blue').html('此編號可以使用');
+                    } else {
+                        $('#checkSerialNo').css('color', 'red').html('已有人使用此編號');
+                        $('#SerialNo').focus();
+                    }
+                });
+        }
+
+        //類別驗證
+        function checkType() {
+            var typeLength = $('input[name=ContentType]:checked').length;
+            if (typeLength == 0) {
+                alert('請選擇類別');
+                $('input[name=ContentType]').first().focus();
+                return false;
+            }
+            return true;
+        }
+
+    </script>
+
+}
+
+
+<h2>校園日誌與榮譽榜</h2>
+
+@using (Html.BeginForm("Page", "SchoolDiary", FormMethod.Post, new { @onsubmit = "return checkType();" }))
+{
+
+    @Html.AntiForgeryToken()
+
+    <input type="hidden" value="@ViewBag.Commamd" id="command" name="command" />
+    @Html.HiddenFor(m => m.ContentID)
+
+
+
+    <div>
+        <table style="width: 100%" border="1">
+            <tr>
+                <td style="width: 230px" class="auto-style9">
+                    <label style="color:red">*</label>
+                    <strong>
+                        學年
+                    </strong>
+                </td>
+                <td style="width: 1262px">
+                    @Html.DropDownListFor(m => m.AcademicYear, (List<SelectListItem>)ViewBag.SelectYearList, "請選擇", new { @class = "form-control", @style = "display: inline;" })
+                    @Html.ValidationMessageFor(m => m.AcademicYear)
+                </td>
+            </tr>
+            <tr>
+                <td style="width: 230px" class="auto-style9">
+                    <label style="color:red">*</label>
+                    <strong>
+                        學期
+                    </strong>
+                </td>
+                <td style="width: 1262px">
+                    @Html.DropDownListFor(m => m.Semester, (List<SelectListItem>)ViewBag.SelectTermList, "請選擇", new { @class = "form-control", @style = "display: inline;" })
+                    @Html.ValidationMessageFor(m => m.Semester)
+                </td>
+            </tr>
+            <tr>
+                <td style="width: 230px" class="auto-style9">
+                    <label style="color:red">*</label>
+                    <strong>
+                        編號
+                    </strong>
+                </td>
+                <td style="width: 1262px">
+                    @Html.TextBoxFor(m => m.SerialNo, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(m => m.SerialNo)
+                    <span id="checkSerialNo"></span>
+                </td>
+            </tr>
+            <tr>
+                <td style="width: 230px" class="auto-style9">
+                    <label style="color:red">*</label>
+                    <strong>
+                        標題
+                    </strong>
+                </td>
+                <td style="width: 1262px">
+                    @Html.TextBoxFor(m => m.ContentName, new { @class = "form-control", @style = "width:65%; max-width: 680px" })
+                    @Html.ValidationMessageFor(m => m.ContentName)
+                </td>
+            </tr>
+            <tr>
+                <td style="width: 230px" class="auto-style9">
+                    <label style="color:red">*</label>
+                    <strong>
+                        作者
+                    </strong>
+                </td>
+                <td style="width: 1262px">
+
+                    @Html.TextBoxFor(m => m.Author, new { @class = "form-control", @style = "width:65%; max-width: 680px" })
+                    @Html.ValidationMessageFor(m => m.Author)
+                </td>
+            </tr>
+            <tr>
+                <td style="width: 230px" class="auto-style9">
+                    <label style="color:red">*</label>
+                    <strong>
+                        類別
+                    </strong>
+                </td>
+                <td style="width: 1262px">
+                    <input type="checkbox" name="ContentType" value="@TzuChiClassLibrary.BO.SchoolDiaryModel.TYPEID">校園日誌
+                    <input type="checkbox" name="ContentType" value="@TzuChiClassLibrary.BO.HonourListModel.TYPEID">榮譽榜
+                    @Html.ValidationMessageFor(m => m.ContentType)
+                </td>
+            </tr>
+            <tr>
+                <td style="width: 230px" class="auto-style9">
+                    <label style="color:red">*</label>
+                    <strong>
+                        事件日期
+                    </strong>
+                </td>
+                <td style="width: 1262px">
+                    @Html.TextBoxFor(m => m.ContentTime, "{0:yyyy/MM/dd}", new { @class = "datepicker" })
+                    <span style="color:blue">【傑出校友】請將年份改為3000年</span>
+                    @Html.ValidationMessageFor(m => m.ContentTime)
+                </td>
+            </tr>
+            <tr>
+                <td style="width: 230px" class="auto-style9">
+                    <label style="color:red">*</label>
+                    <strong>
+                        起迄日期
+                    </strong>
+                </td>
+                <td style="width: 1262px">
+                    <input type="radio" name="rbShowDate" id="rbFalse" value="False" />無 <input type="radio" name="rbShowDate" id="rbTrue" value="True" />有
+                    @Html.HiddenFor(m => m.ShowDate)
+                    <div class="showdate">
+                        @Html.TextBoxFor(m => m.OpenTime, "{0:yyyy/MM/dd}", new { @class = "datepicker" }) ~ @Html.TextBoxFor(m => m.CloseTime, "{0:yyyy/MM/dd}", new { @class = "datepicker" })
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td style="width: 230px" class="auto-style9">
+                    <strong>
+                        內容
+                    </strong>
+                </td>
+                <td style="width: 1262px">
+                    @Html.TextAreaFor(m => m.ContentText, new { @class = "tinymce" })
+                    @Html.ValidationMessageFor(m => m.ContentText)
+                </td>
+            </tr>
+
+
+            <tr>
+                <td style="width: 230px" class="auto-style9">
+                    <strong>
+                        圖檔
+                    </strong>
+                </td>
+                <td style="width: 1262px">
+
+                    <div id="ImageQueue"></div>
+                    <input id="ImageData" type="file" name="ImageData" />
+
+                    <div id="PicUrlListDiv">
+                        @if ("edit".Equals(ViewBag.Commamd) && Model != null )
+                        {
+                            @Html.Partial("_Files", Model)
+                        }
+                    </div>
+                    <span class="auto-style8">
+                        封面圖片：預設為上傳的第一張照片，圖片格式為gif、png、jpg。
+                        超過800x600px時，系統會自動作縮圖處理。
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td style="width: 230px" class="auto-style9">
+                    <strong>
+                        影片上傳
+                    </strong>
+                </td>
+                <td style="width: 1262px">
+
+                    <div id="VideoQueue"></div>
+                    <input id="VideoData" type="file" name="VideoData" />
+
+                    <div id="VideoUrlListDiv">
+                        @if ("edit".Equals(ViewBag.Commamd) && Model != null)
+                        {
+                            @Html.Partial("_Videos", Model)
+                        }
+                    </div>
+                    <span class="auto-style8">
+                        檔案格式為MP4。
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td style="width: 230px" class="auto-style9">
+                    <strong>
+                        QR-Code(請輸入網址)
+                    </strong>
+                </td>
+                <td style="width: 1262px" class="datepicker">
+                    @Html.TextBoxFor(m => m.RelatedLink, new { @class = "form-control", @style = "width:65%; max-width: 680px" })
+                    @Html.ValidationMessageFor(m => m.RelatedLink)
+                </td>
+            </tr>
+            @if (ViewBag.Commamd == "edit")
+            {
+                <tr>
+                    <td style="width: 230px" class="auto-style9">
+                        <strong>
+                            建立時間
+                        </strong>
+                    </td>
+                    <td style="width: 1262px" class="datepicker">
+                        @Html.DisplayFor(m => m.ContentCreateTime, "{0:yyyy/MM/dd}")
+                    </td>
+                </tr>
+                <tr>
+                    <td style="width: 230px" class="auto-style9">
+                        <strong>
+                            建立者
+                        </strong>
+                    </td>
+                    <td style="width: 1262px" class="datepicker">
+                        @Html.DisplayFor(m => m.ContentCreator)
+                    </td>
+                </tr>
+                <tr>
+                    <td style="width: 230px" class="auto-style9">
+                        <strong>
+                            更新時間
+                        </strong>
+                    </td>
+                    <td style="width: 1262px" class="datepicker">
+                        @Html.DisplayFor(m => m.ContentUpdateTime, "{0:yyyy/MM/dd}")
+                    </td>
+                </tr>
+                <tr>
+                    <td style="width: 230px" class="auto-style9">
+                        <strong>
+                            更新者
+                        </strong>
+                    </td>
+                    <td style="width: 1262px" class="datepicker">
+                        @Html.DisplayFor(m => m.ContentUpdater)
+                    </td>
+                </tr>
+
+            }
+
+
+        </table>
+    </div>
+
+    <div>
+        <hr />
+    </div>
+
+    <div class="auto-style5">
+        @if ("add".Equals(ViewBag.Commamd))
+        {
+            <input class="btn btn-success" type="submit" value="新增" />  
+                    
+            <input class="btn btn-default" type="button" id="reset" value="重置" />
+        }
+        else if ("edit".Equals(ViewBag.Commamd))
+        {
+            <input class="btn btn-success" type="submit" value="儲存更新" />
+        }
+
+    </div>
+
+}
+
+
+
+<!-- Popup Photo Modal -->
+@Html.Partial("_PopupPhotoModal")

@@ -1,0 +1,176 @@
+﻿@{
+    ViewBag.Title = "天涯比鄰-首頁";
+}
+@section scripts {
+
+    <script>
+
+        function start() {
+
+            setTimeout("hideAnimate()", 5000);
+
+            //特效
+            play();
+            setTimeout("showAnimate()", 500);//設定五百毫秒顯示 以避開空白延遲
+
+            setTimeout("toPlanOutside()", 4500);
+
+        }
+
+        function hideAnimate() {
+            $('canvas').hide();
+        }
+
+        function showAnimate() {
+            $('canvas').show();
+        }
+
+        function toPlanOutside() {
+            $('.bk1Div').hide();
+            $('#planOutside').show();
+        }
+    </script>
+
+
+    @*動畫崁入*@
+    <script src="http://code.createjs.com/easeljs-0.6.0.min.js"></script>
+    <script src="http://code.createjs.com/tweenjs-0.4.0.min.js"></script>
+    <script src="http://code.createjs.com/movieclip-0.6.0.min.js"></script>
+    <script src="http://code.createjs.com/preloadjs-0.3.0.min.js"></script>
+    <script src="@Url.Content("~/Scripts/animate/Map/mv01.js")"></script>
+    <script>
+    var canvas, stage, exportRoot;
+    
+    function play() {
+        canvas = document.getElementById("canvas");
+        images = images || {};
+
+        var manifest = [
+                { src: "@Url.Content("~/Scripts/animate/Map/images/movie1.png")", id: "movie1" },
+                { src: "@Url.Content("~/Scripts/animate/Map/images/movie2.jpg")", id: "movie2" },
+                { src: "@Url.Content("~/Scripts/animate/Map/images/movie3.png")", id: "movie3" },
+                { src: "@Url.Content("~/Scripts/animate/Map/images/movie4.png")", id: "movie4" },
+                { src: "@Url.Content("~/Scripts/animate/Map/images/movie5.png")", id: "movie5" }
+            ];
+
+            var loader = new createjs.LoadQueue(false);
+            loader.addEventListener("fileload", handleFileLoad);
+            loader.addEventListener("complete", handleComplete);
+            loader.loadManifest(manifest);
+        }
+
+        function handleFileLoad(evt) {
+            if (evt.item.type == "image") { images[evt.item.id] = evt.result; }
+        }
+
+        function handleComplete() {
+            exportRoot = new lib.mv01();
+
+            stage = new createjs.Stage(canvas);
+            stage.addChild(exportRoot);
+            stage.update();
+
+            createjs.Ticker.setFPS(24);
+            createjs.Ticker.addEventListener("tick", stage);
+        }
+    </script>
+     @*動畫崁入*@
+}
+
+@section styles{
+    <link href="@Url.Content("~/Content/Map/reset.css")" rel="stylesheet" type="text/css">
+    <link href="@Url.Content("~/Content/Map/big.css")" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" type="text/css" href="@Url.Content("~/Content/Map/style.css")" />
+    <noscript><link rel="stylesheet" type="text/css" href="@Url.Content("~/Content/Map/noJS.css")" /></noscript>
+    <style>
+        canvas{
+            position:absolute;
+            top:0px;
+            left:0px;
+            z-index:1;
+        }
+
+         #gobkDiv1 {
+            position: absolute;
+            width: 1920px;
+            height: 70px;
+            z-index: 99;
+            left: 0px;
+            top: 980px;
+        }
+
+        #menuDiv1 {
+            position: absolute;
+            z-index: 40;
+            left: 1734px;
+            top: 0px;
+        }
+
+        #menuDiv2 {
+            position: absolute;
+            z-index: 38;
+            left: 1496px;
+            top: 0px;
+        }
+
+        #menuDiv3 {
+            position: absolute;
+            z-index: 36;
+        }
+
+        #ball1 {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            z-index: 32;
+            left: 1290px;
+            top: 500px;
+        }
+
+        #ballTip1 {
+            position: absolute;
+            width: 220px;
+            height: 42px;
+            z-index: 34;
+            left: 1197px;
+            top: 416px;
+        }
+
+    </style>
+}
+ 
+@*進入頁面*@
+ <div class="bk1Div">
+    <div class="btnDiv">
+        <ul class="btn"><a href="javascript:start()"><img src="@Url.Content("~/Images/Map/btn1.png")" width="700" height="155" border="0"></a></ul>
+        <ul class="btn"><a href="@Url.Content("/Map/DepartIntro")"><img src="@Url.Content("~/Images/Map/btn2.png")" width="700" height="155" border="0"></a></ul>
+    </div>
+ </div>
+
+@*換頁特效*@
+ <canvas id="canvas" width="1920" height="1080" style="background-color:#ffffff;display:none"></canvas>
+
+@*境外頁面*@
+<div id="planOutside" style="display:none">
+    <!--第一層回首頁按鈕-->
+    <div id="gobkDiv1">
+        <ul class="btn3"><a href="@Url.Action("PlanInside", "Map")"></a></ul>
+        <ul class="btn4"><a href="javascript:history.go(0)"></a></ul>
+    </div>
+    <!--選單區-->
+    <div id="menuDiv1" class="menubk">
+        <div class="mBtn">
+            <ul class="mBtn1"><a href="@Url.Action("PlanOutside", "Map", new { categoryOutsideID = TzuChiClassLibrary.BO.PlanOutsideModel.CATEGORYQUTSIDEID_SISTER })"></a></ul>
+            <ul class="mBtn2"><a href="@Url.Action("PlanOutside", "Map", new { categoryOutsideID = TzuChiClassLibrary.BO.PlanOutsideModel.CATEGORYQUTSIDEID_DEGREE })"></a></ul>
+            <ul class="mBtn3"><a href="@Url.Action("PlanOutside", "Map", new { categoryOutsideID = TzuChiClassLibrary.BO.PlanOutsideModel.CATEGORYQUTSIDEID_OVERSEA })"></a></ul>
+            <ul class="mBtn4"><a href="@Url.Action("PlanOutside", "Map", new { categoryOutsideID = TzuChiClassLibrary.BO.PlanOutsideModel.CATEGORYQUTSIDEID_INDUSTRYCOOPERATION })"></a></ul>
+            <ul class="mBtn5"><a href="@Url.Action("PlanOutside", "Map", new { categoryOutsideID = TzuChiClassLibrary.BO.PlanOutsideModel.CATEGORYQUTSIDEID_INTERNSHIP })"></a></ul>
+        </div>
+    </div>
+    <!--content-->
+    <div class="bk2Div">
+        <div class="Title1"><img src="@Url.Content("~/Images/Map/title1.png")" width="420" height="95"></div>
+        <div class="earthDiv" style="	margin: 25px 0px 0px 0px; padding: 0px 0px 0px 0px;"></div>
+    </div>
+</div>
+

@@ -1,0 +1,53 @@
+﻿
+@model TzuChiBackend.ViewModels.PlanOutsideSearchForm
+<table class="table">
+    <thead>
+        <tr style="background-color:#CCCCCC">
+            <th style="width:25%">
+                封面圖
+            </th>
+            <th>
+                類型
+            </th>
+            <th>
+                <a id="th-department" href="#" class="orderT">中文校名</a>
+            </th>
+            <th>
+                <a id="th-country" href="#" class="orderT">國家/地區</a>
+            </th>
+            
+
+            <th>
+                &nbsp;
+            </th>
+        </tr>
+    </thead>
+    @if (Model.DataCount > 0)
+    {
+        <tbody>
+
+            @foreach (var item in Model.PagedViewResults)
+            {
+                <tr>
+                    <td>
+                        @Html.Partial("_Image",item)
+                    </td>
+                    <td> @item.TypeName </td>
+                    <td> @item.CompanyName </td>
+                    <td> @item.AreaName </td>
+                    
+                    <td>
+                        <button data-id="@item.Id" type="button" class="btn btn-primary btn-edit">
+                            修改
+                        </button>
+                        <button data-id="@item.Id" type="button" class="btn btn-danger btn-delete">
+                            刪除
+                        </button>
+
+                    </td>
+                </tr>
+            }
+        </tbody>
+    }
+
+</table>

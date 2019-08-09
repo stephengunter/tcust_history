@@ -1,0 +1,83 @@
+﻿@model TzuChiBackend.ViewModels.EBookViewModel
+@using Core.Extensions;
+
+@{ 
+    string url= System.Web.Configuration.WebConfigurationManager.AppSettings["website.frontend"];
+    //http://localhost:2397/
+}
+
+
+@if (!Model.EBookPageList.IsNullOrEmpty())
+{
+
+    <table id="table-posts" class="table">
+        <thead>
+            <tr style="background-color:#CCCCCC">
+                <th style="width:30%">
+                   
+                </th>
+                <th style="width:15%">
+                    頁次
+					<button id="btn-edit-order" class="btn btn-success  btn-xs" title="存檔">
+						<span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span>
+					</button>
+                </th>
+                <th style="width:15%">
+                    檔名
+                </th>
+
+                <th style="width:20%">
+                    &nbsp;
+                </th>
+            </tr>
+        </thead>
+       
+            <tbody>
+
+                @foreach (var item in Model.EBookPageList)
+                {
+                    string path = url + item.Path;
+
+                    <tr>
+                        <td>
+                            
+                            <img src="@path" width="200">
+                        </td>
+                        <td>
+							<input type="hidden" class="post-id" value="@item.Id" />
+							<input class="form-control display-order" value="@item.Sort" />
+					
+						</td>
+                        <td> @item.Name </td>
+                        
+
+                        <td>
+
+
+                         
+                            <button data-id="@item.Id" type="button" class="btn btn-danger btn-delete btn-sm" title="刪除">
+                                <span class="glyphicon glyphicon-trash"></span>
+                            </button>
+                           
+
+                        </td>
+                    </tr>
+                }
+            </tbody>
+      
+
+    </table>
+
+
+   
+}
+
+ @if (Model.Ajax)
+{
+   <text> <script type="text/javascript">
+            
+                bookDeletePageClicked();
+                bookUpDownClicked();
+    </script>
+   </text>
+}

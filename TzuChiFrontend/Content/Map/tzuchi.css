@@ -1,0 +1,9 @@
+@charset "utf-8";
+/* CSS Document */
+
+/*框架*/
+.wbox1 {
+	background-image:url(../images/bk1.jpg);
+	width:3840px;
+	height:1080px;
+}

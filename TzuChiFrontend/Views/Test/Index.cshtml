@@ -1,0 +1,111 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section scripts{
+    <script src="~/Scripts/easeljs-0.6.0.min.js"></script>
+    <script src="~/Scripts/tweenjs-0.4.0.min.js"></script>
+    <script src="~/Scripts/movieclip-0.6.0.min.js"></script>
+    <script src="~/Scripts/preloadjs-0.3.0.min.js"></script>
+    <script src="~/Scripts/cloud.js"></script>
+    <script src="~/Scripts/jquery-1.10.2.js"></script>
+    <script>
+        var canvas, stage, exportRoot;
+        $(document).ready(function () {
+            init();
+        });
+
+        function init() {
+            canvas = document.getElementById("canvas");
+            images = images || {};
+
+            var manifest = [
+                { src: "/Images/TeachPhilosophy/cloud_1.png", id: "cloud_1" },
+                { src: "/Images/TeachPhilosophy/cloud2.png", id: "cloud2" }
+            ];
+
+            var loader = new createjs.LoadQueue(false);
+            loader.addEventListener("fileload", handleFileLoad);
+            loader.addEventListener("complete", handleComplete);
+            loader.loadManifest(manifest);
+        }
+
+        function handleFileLoad(evt) {
+            if (evt.item.type == "image") { images[evt.item.id] = evt.result; }
+        }
+
+        function handleComplete() {
+            exportRoot = new lib.cloud();
+
+            stage = new createjs.Stage(canvas);
+            stage.addChild(exportRoot);
+            stage.update();
+
+            createjs.Ticker.setFPS(24);
+            createjs.Ticker.addEventListener("tick", stage);
+        }
+    </script>
+}
+
+@section styles{
+    <link href="~/Scripts/inform/css/reset.css" rel="stylesheet" type="text/css">
+    <link href="~/Scripts/inform/css/big_TeachPhilosophy.css" rel="stylesheet" type="text/css">
+    <style type="text/css">
+        #cloudDiv {
+            position: absolute;
+            width: 1920px;
+            height: 830px;
+            z-index: 1;
+        }
+
+        #bk2Div {
+            position: absolute;
+            width: 1920px;
+            height: 1080px;
+            z-index: 2;
+        }
+
+        #btn1Div {
+            position: absolute;
+            width: 548px;
+            height: 135px;
+            z-index: 4;
+            left: 933px;
+            top: 462px;
+        }
+
+        #btn2Div {
+            position: absolute;
+            width: 578px;
+            height: 135px;
+            z-index: 4;
+            left: 520px;
+            top: 290px;
+        }
+    </style>
+}
+
+<div id="btn1Div" class="btn">
+    <a href="@Url.Action("Details", "Test", new { category = 2 })">
+        <img src="/Images/TeachPhilosophy/btn2.png" width="548" height="135" border="0">
+    </a>
+</div>
+<div id="btn2Div" class="btn">
+   
+        <a href="@Url.Action("Details", "Test", new { category = 1 })">
+            <img src="/Images/TeachPhilosophy/btn1.png" width="578" height="135" border="0">
+        </a>
+</div>
+<!--雲的動畫置入點-->
+<div id="cloudDiv">
+    <canvas id="canvas" width="1920" height="830"></canvas>
+</div>
+<div id="bk2Div">
+    <img src="/Images/TeachPhilosophy/bk2.png" width="1920" height="1080">
+</div>
+<div class="bk1Div">
+
+</div>
+

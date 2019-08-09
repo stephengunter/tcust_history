@@ -1,0 +1,27 @@
+﻿@model TzuChiBackend.ViewModels.EBookViewModel
+@using Core.Extensions;
+@{
+    ViewBag.Title = "新增電子書";
+    
+}
+
+<h2>@ViewBag.Title</h2>
+
+
+@using (Html.BeginForm("Store", "EBook"))
+{
+    <div class="form-group">
+        <label>標題</label>
+       
+        @Html.TextBoxFor(m=>m.Title , new { @class= "form-control" })
+    </div>
+
+
+
+    
+
+    <div style="padding-top:20px">
+
+        <button type="submit" class="btn btn-success">存檔</button>
+    </div>
+}

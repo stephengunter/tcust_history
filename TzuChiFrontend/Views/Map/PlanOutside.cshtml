@@ -1,0 +1,603 @@
+﻿@{
+    ViewBag.Title = "天涯比鄰-境外地圖";
+    string partialPath = ViewBag.PartialPath;
+    string backend = System.Web.Configuration.WebConfigurationManager.AppSettings["upload.folder.name"];
+}
+@section scripts {
+    <script type="text/javascript" src="@Url.Content("~/Scripts/hammer.js-master/hammer.min.js")"></script> 
+    <script type="text/javascript" src="@Url.Content("~/Scripts/modernizr.custom.79639.js")"></script> 
+    <!-- jQuery if needed -->
+    <script type="text/javascript">
+        /*防止拖動出現禁止符號*/
+        window.onload = function (e) {
+            var evt = e || window.event, imgs, divs, i;
+            if (evt.preventDefault) {
+                imgs = document.getElementsByTagName('img');
+                divs = document.getElementsByTagName('div');
+                for (i = 0; i < imgs.length; i++) {
+                    imgs[i].onmousedown = disableDragging;
+                }
+                for (i = 0; i < divs.length; i++) {
+                    divs[i].onmousedown = disableDragging;
+                }
+            }
+            else {
+                document.ondragstart = function () {
+                    return false;
+                };
+            }
+        };
+        function disableDragging(e) {
+            e.preventDefault();
+            return false;
+        }
+
+        function DropDown(el) {
+            this.dd = el;
+            this.initEvents();
+        }
+        DropDown.prototype = {
+            initEvents: function () {
+                var obj = this;
+
+                obj.dd.on('click', function (event) {
+                    $(this).toggleClass('active');
+                    event.stopPropagation();
+                });
+            }
+        }
+
+        $(function () {
+
+            var dd = new DropDown($('.dd'));
+
+            $(document).click(function () {
+                // all dropdowns
+                $('.wrapper-dropdown-5').removeClass('active');
+            });
+
+            $('.dropdown-country li a').click(function () {
+                $('#menuShow').html($(this).html());
+                $('#menuShow').attr('key', $(this).attr('key'));
+            });
+
+            $('.dropdown-year li a').click(function () {
+                $('#menuYear').html($(this).html());
+                $('#menuYear').attr('key', $(this).attr('key'));
+            });
+            
+            $('.dropdown li a').click(function () {
+                $('#menuShow').html($(this).html());
+                $('#menuShow').attr('key', $(this).attr('key'));
+            });
+
+        });
+
+    </script>
+    <!--建立資料物件 Strat-->
+    @Scripts.Render("~/bundles/jquery")
+    <script src="@Url.Content("~/Scripts/slick/slick_h.js")"></script>
+    <script>
+        var planOutsideData = {};
+        var planOutsideTemp = {};
+        var planOutsideImgs = new Array();
+        var planOutsideImgsWidth = new Array();
+	var planOutsideImgsHeight = new Array();
+        var planOutsideImgsInfo = new Array();
+        @foreach (var item in ViewBag.Data)
+        {
+        <text>
+        planOutsideTemp.contentName = '@item.ContentName';                              //校名(中文)
+        planOutsideTemp.englishName = '@item.EnglishName';                              //校名(英文)
+        planOutsideTemp.categoryCountryID = '@item.CategoryCountryID';                  //國別
+        planOutsideTemp.contentTime = '@item.ContentTime'.split(' ')[0];                //締結日
+        planOutsideTemp.endTime = '@item.EndTime'.split(' ')[0];                        //締結日
+        planOutsideTemp.IntroCh = '@Html.Raw(item.IntroCh.Replace("\r\n", "<br>").Replace("'", "\""))';    //中文介紹
+        planOutsideTemp.IntroEn = '@Html.Raw(item.IntroEn.Replace("\r\n", "<br>").Replace("'", "\""))';    //英文介紹
+        planOutsideTemp.categoryDepartmentID = '@item.CategoryDepartmentID';            //簽約單位
+        planOutsideTemp.PointX = '@item.Coordinate.PointX';                             //x
+        planOutsideTemp.PointY = '@item.Coordinate.PointY';                             //y
+        planOutsideTemp.PicUrlList = planOutsideImgs;
+	planOutsideTemp.ImgWidth = planOutsideImgsWidth;
+	planOutsideTemp.ImgHeight = planOutsideImgsHeight;
+	planOutsideTemp.ItemInfo = planOutsideImgsInfo;                                //圖檔描述
+        </text>
+        if (item.PicUrlList != null && item.PicUrlList.Count > 0)
+        {
+            foreach (var img in item.PicUrlList)
+            {
+                if (!img.CoverImage)
+                {
+                    <text>
+                        planOutsideImgs.unshift('@backend@img.Path');
+		        planOutsideImgsWidth.unshift(@img.ImageWidth);
+		        planOutsideImgsHeight.unshift(@img.ImageHeight);
+                        planOutsideImgsInfo.unshift('@img.ItemInfo');
+                    </text>
+                }else
+                {
+                    <text>
+                        planOutsideImgs.push('@backend@img.Path');
+         	        planOutsideImgsWidth.push(@img.ImageWidth);
+		        planOutsideImgsHeight.push(@img.ImageHeight);
+                        planOutsideImgsInfo.push('@img.ItemInfo');
+                    </text>
+                }
+            }
+        }
+        <text>
+            planOutsideImgs = new Array();
+	    planOutsideImgsWidth = new Array();
+	    planOutsideImgsHeight = new Array();
+            planOutsideImgsInfo = new Array();
+            planOutsideData['@item.ContentID'] = planOutsideTemp;
+            planOutsideTemp = {};
+        </text>
+        }
+
+        $(function () {
+
+            $('.WINsmall2').slick({
+                infinite: true,
+                centerMode: false,
+                //dots: false,
+                slidesToShow: 3,
+                slidesToScroll: 1,
+                arrows: true,
+                onAfterChange: picShowChange
+            });
+
+            var picChange = true;
+            $('.arrowL').click(function () {
+                if($('.WINimg img').length != 2){
+                    $('.slick-prev').click();
+                }else {
+                    if(picChange){
+                         picShowChangeByIndex(0);
+                         picChange = false;
+                    }else{
+                         picShowChangeByIndex(1);
+                         picChange = true;
+                    }
+                }
+            });
+
+            $('.arrowR').click(function () {
+                if($('.WINimg img').length != 2){
+                    $('.slick-next').click();
+                }else{
+                    if(picChange){
+                         picShowChangeByIndex(0);
+                         picChange = false;
+                    }else{
+                         picShowChangeByIndex(1);
+                         picChange = true;
+                    }
+                }
+            });
+
+            //touch event
+            var myElement = document.getElementById('menuBTN');
+            var mc = new Hammer(myElement);
+            var position = parseInt($('#menuBlock').css("margin-top"));
+            var panStart = true;
+            mc.on("pandown panup", function (ev) {
+                var blockHeight = parseInt($('#menuBlock').height());
+                var menuBlockHeight = 800;
+                if((position + ev.deltaY) < 10 && (position + ev.deltaY) > (-blockHeight + menuBlockHeight )){
+                   panStart = true;
+                   $('#menuBlock').css("margin-top", position + ev.deltaY);
+                }
+                else{
+                   if(panStart){
+                       position = position + ev.deltaY;
+                       panStart = false;
+                }
+            }
+            }).on("panend", function (ev) {
+                if(panStart)
+                position = parseInt(position) + ev.deltaY;
+            });
+
+            $('.WINglow').click(function () {
+                $('#picShow').attr('src', $(this).attr('src'));
+            });
+
+        });
+    </script>
+    <!--建立資料物件 End-->
+    <!--座標與彈跳式窗 Start-->
+    <script>
+        var popup = function () {
+            var targetID = $('#schoolName').attr('contentID');
+            $('#contentName').html(planOutsideData[targetID].contentName);
+            $('#englishName').html(planOutsideData[targetID].englishName);
+            $('#categoryCountryID').html(planOutsideData[targetID].categoryCountryID);
+            $('#contentTime').html(planOutsideData[targetID].contentTime);
+            if (planOutsideData[targetID].contentTime) {
+                $('#contentTimeTitle').show();
+            }else{
+                $('#contentTimeTitle').hide();
+            }
+            $('#endTime').html(planOutsideData[targetID].endTime);
+            if (planOutsideData[targetID].endTime) {
+                $('#endTimeTilde').show();
+            } else {
+                $('#endTimeTilde').hide();
+            }
+            $('#categoryDepartmentID').html(planOutsideData[targetID].categoryDepartmentID);
+            if (planOutsideData[targetID].categoryDepartmentID) {
+                $('#categoryDepartmentIDTitle').show();
+            }else{
+                $('#categoryDepartmentIDTitle').hide();
+            }
+            $('#Intro').html(planOutsideData[targetID].IntroCh);
+            if (planOutsideData[targetID].IntroCh) {
+                $('#IntroTitle').show();
+            }else{
+                $('#IntroTitle').hide();
+            }
+            //插入圖片
+            if (planOutsideData[targetID].PicUrlList != null && planOutsideData[targetID].PicUrlList.length > 0) {
+                var picLength = planOutsideData[targetID].PicUrlList.length;
+                var count = 0;
+
+                if (picLength == 1) {
+                    count = 1;
+                } else if (picLength == 2) {
+                    count = 1;
+                } else if (picLength == 3) {
+                    count = 2;
+                } else {
+                    count = 1;
+                }
+                
+                for (var i = 0; i < count ; i++) {
+                    appendSlideImg(targetID);
+                }
+
+            }
+
+            $('.arrowL').click();
+            picShowChange();
+            $('#dataShow').show();
+
+            $('.WINimg').click(function(){
+                if($('.WINimg img').length != 2){
+                    $('.WINsmall2').slickGoTo($(this).attr('index'));
+                }
+            });
+
+            if($('.WINimg img').length == 2){
+                movePic(1);
+                setTimeout("movePic(0)",500);
+            }
+
+        }
+
+        var movePic = function(index){
+            $('.WINsmall2').slickGoTo(index);
+        }
+
+        var popupClose = function () {
+            //清除舊圖
+            $('.slick-track').children().each(function (index, value) {
+                $('.WINsmall2').slickRemove(0);
+            });
+            $('#dataShow').hide();
+        }
+
+        var appendSlideImg = function (targetID) {
+	        for (var i = 0 ; i < planOutsideData[targetID].PicUrlList.length ; i++) {
+		        (function (n) {
+		            var height = planOutsideData[targetID].ImgHeight[n];
+		            var width = planOutsideData[targetID].ImgWidth[n];
+                            var info = planOutsideData[targetID].ItemInfo[n];
+		            if ((height / width) > (155 / 208)) {
+		                var marginLeft = (208 - (width * (155 / height))) / 2;
+		                $('.WINsmall2').slickAdd('<div class="WINimg"><img src="' + planOutsideData[targetID].PicUrlList[n] + '" height="155" width="auto" border="0" class="WINglow nonFocus" info="' + info + '" style="margin-left:' + marginLeft + 'px"></div>');
+			        }else{
+		                var marginTop = (155 - (height * (208 / width))) / 2;
+		                $('.WINsmall2').slickAdd('<div class="WINimg"><img src="' + planOutsideData[targetID].PicUrlList[n] + '" width="207" height="auto" border="0" class="WINglow nonFocus" info="' + info + '" style="margin-top:' + marginTop + 'px"></div>');
+			        }
+                 })(i);
+            }
+        }
+
+        var picShowChange = function () {
+            //圖片
+            var img = new Image();
+            var src = $('.WINimg[index="' + $('.WINsmall2').slickCurrentSlide() + '"] img').attr('src');
+            img.src = src;
+
+            $(img).load(function() {
+                if ((img.height/img.width) > (550/735)) {
+                    $('#picShow').css('height', 550).css('width', 'auto')
+                             .css('margin-top', '0px');
+                }else{
+                    var marginTop = (550 - (img.height*(735/img.width)))/2;
+                    $('#picShow').css('width', 735).css('height', 'auto')
+                                 .css('margin-top', marginTop + 'px');
+                }
+                $('#picShow').attr('src', $('.WINimg[index="' + $('.WINsmall2').slickCurrentSlide() + '"] img').attr('src'));
+            });
+            
+            //說明
+            var info = $('.WINimg[index="' + $('.WINsmall2').slickCurrentSlide() + '"] img').attr('info');
+            if(info){
+                $('#picDiv1').html(info);
+                $('#picDiv1').show();
+            }else{
+		$('#picDiv1').hide();
+            }
+
+            //透明
+            $(".WINimg img").addClass("nonFocus");
+            $('.WINimg[index="' + $('.WINsmall2').slickCurrentSlide() + '"] img').removeClass("nonFocus");
+        }
+        var picShowChangeByIndex = function (index) {
+            var img = new Image();
+            var src = $('.WINimg[index="' + index + '"] img').attr('src');
+            img.src = src;
+            if ((img.height/img.width) > (550/735)) {
+                $('#picShow').css('height', 550).css('width', 'auto')
+                             .css('margin-top', '0px');
+            }else{
+                var marginTop = (550 - (img.height*(735/img.width)))/2;
+                $('#picShow').css('width', 735).css('height', 'auto')
+                             .css('margin-top', marginTop + 'px');
+            }
+            $('#picShow').attr('src', $('.WINimg[index="' + index  + '"] img').attr('src'));
+
+            //說明
+            var info = $('.WINimg[index="' + index  + '"] img').attr('info');
+            if(info){
+                $('#picDiv1').html(info);
+                $('#picDiv1').show();
+            }else{
+		$('#picDiv1').hide();
+            }
+
+            //透明
+            $(".WINimg img").addClass("nonFocus");
+            $('.WINimg[index="' + index  + '"] img').removeClass("nonFocus");
+        }
+
+        var coordinate = function (contentID) {
+            popupClose();
+            coordinateRemove();
+
+            //抽換tip大小
+            var strLength = planOutsideData[contentID].contentName.length;
+            var firstSize = 8;
+            var secondSize = 15;
+            var idName = '';
+            if(strLength <= firstSize){
+                idName = 'ballTip1';
+            }else if(strLength > firstSize && strLength < secondSize){
+                idName = 'ballTip2';
+            }else{
+                idName = 'ballTip3';
+            }
+            $('.ballTip').attr('id', idName);
+
+            //放置地圖
+            $('.contentName').html(planOutsideData[contentID].contentName);
+            $('#ballTip1').css('left', parseInt(planOutsideData[contentID].PointX) - 95).css('top', parseInt(planOutsideData[contentID].PointY) - 100);
+            $('#ballTip2').css('left', parseInt(planOutsideData[contentID].PointX) - 170).css('top', parseInt(planOutsideData[contentID].PointY) - 100);
+            $('#ballTip3').css('left', parseInt(planOutsideData[contentID].PointX) - 160).css('top', parseInt(planOutsideData[contentID].PointY) - 140);
+            $('#ball1').css('left', parseInt(planOutsideData[contentID].PointX)).css('top', parseInt(planOutsideData[contentID].PointY));
+
+            //放置contentID
+            $('#schoolName').attr('contentID', contentID);
+        }
+
+        var coordinateRemove = function () {
+            $('.ballAll').remove();
+        }
+
+        //切換語言
+        var language = false;
+        var changeLanguage = function(){
+            var targetID = $('#schoolName').attr('contentID');
+            if (language) {
+                $('#Intro').html(planOutsideData[targetID].IntroCh);
+                $('.WINEng a img').attr('src', '@Url.Content("~/Images/Map/btn5.png")');
+                language = false;
+            } else {
+                $('#Intro').html(planOutsideData[targetID].IntroEn);
+                $('.WINEng a img').attr('src', '@Url.Content("~/Images/Map/5-1.png")');
+                language = true;
+            }
+
+        }
+
+        //選單功能
+        var menuBTNHeight = parseInt($('#menuBlock').css('height'));
+        var menuHeight = 890;
+        var scrollDownMenu = function () {
+            var marginTop = parseInt($('#menuBlock').css("margin-top"));
+            if ((menuBTNHeight + marginTop - (menuHeight * 2)) >= 0) {//判斷可否下拉 
+                $('#menuBlock').animate({ "margin-top": (marginTop - menuHeight) + 'px' }, 500);
+            } else if ((menuBTNHeight + marginTop - menuHeight) >= 0) {//是否為最後一頁
+                $('#menuBlock').animate({ "margin-top": '-' + (menuBTNHeight - menuHeight) + 'px' }, 500);
+            }
+        }
+        var scrollUpMenu = function () {
+            var marginTop = parseInt($('#menuBlock').css("margin-top"));
+            if (marginTop < -menuHeight) {//判斷可否下拉 
+                $('#menuBlock').animate({ "margin-top": (marginTop + menuHeight) + 'px' }, 500);
+            } else if ((menuBTNHeight + marginTop - menuHeight) >= 0) {//是否為最後一頁
+                $('#menuBlock').animate({ "margin-top": '0px' }, 500);
+            }
+        }
+
+        var search = function (categoryOutsideID) {
+            var keyword = $('#menuShow').attr('key');
+            var year = $('#menuYear').attr('key');
+
+            var form = $('<form method="POST" action="@Url.Action("PlanOutside", "Map")">');
+            form.append($('<input type="hidden" name="categoryOutsideID" value="' + categoryOutsideID + '">'));
+            if (keyword && keyword != '所在地')
+                form.append($('<input type="hidden" name="categoryCountryID" value="' + keyword + '">'));
+            if (year && year != '年度')
+                form.append($('<input type="hidden" name="year" value="' + year + '">'));
+            $('body').append(form);
+            form.submit();
+            form.remove();
+        }
+    </script>
+    <!--座標與彈跳式窗 End-->
+}
+
+@section styles{
+    <link href="@Url.Content("~/Content/Map/reset.css")" rel="stylesheet" type="text/css">
+    <link href="@Url.Content("~/Content/Map/big.css")" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" type="text/css" href="@Url.Content("~/Content/Map/style.css")" />
+    <noscript><link rel="stylesheet" type="text/css" href="@Url.Content("~/Content/Map/noJS.css")" /></noscript>
+    <style type="text/css">
+        #picDiv1 {
+	    position:absolute;
+	    font-family:"微軟正黑體", Arial;
+	    font-weight:bold;
+	    font-size:24px;
+	    text-align: left;
+	    line-height:36px;
+	    background-color:#ffffff;
+	    opacity:0.8;
+	    padding:5px 5px 5px 5px;
+	    margin:2px 2px 2px 2px;
+	    width:732px;
+	    height:82px;
+	    z-index:4;
+	    left: 92px;
+	    top: 636px;
+        }        
+
+        #gobkDiv1 {
+            position: absolute;
+            width: 1920px;
+            height: 70px;
+            z-index: 99;
+            left: 0px;
+            top: 980px;
+        }
+
+        #menuDiv1 {
+            position: absolute;
+            z-index: 40;
+            left: 1734px;
+            top: 0px;
+        }
+
+        #menuDiv2 {
+            position: absolute;
+            z-index: 36;
+            left: 1496px;
+            top: 0px;
+        }
+
+        #menuDiv3 {
+            position: absolute;
+            z-index: 43;
+        }
+
+        #menuDiv4 {
+	        position:absolute;
+	        z-index:38;
+	        left: 0px;
+	        top: 0px;	
+        }
+
+        #ball1 {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            z-index: 40;
+            left: -1290px;
+            top: -500px;
+        }
+
+        #ballTip1 {
+            position: absolute;
+            width: 220px;
+            height: 42px;
+            z-index: 42;
+            left: -1197px;
+            top: -416px;
+        }
+
+        #ball2 {
+	        position:absolute;
+	        width:30px;
+	        height:30px;
+	        z-index:40;
+	        left: 957px;
+	        top: 510px;
+        }
+
+        #ballTip2 {
+	        position:absolute;
+	        width:370px;
+	        height:42px;
+	        z-index:42;
+	        left: -821px;
+	        top: -428px;
+        }
+
+        #ball3 {
+	        position:absolute;
+	        width:30px;
+	        height:30px;
+	        z-index:40;
+	        left: 640px;
+	        top: 384px;
+        }
+
+        #ballTip3{
+	        position:absolute;
+	        width:350px;
+	        height:42px;
+	        z-index:42;
+	        left: -479px;
+	        top: -300px;
+        }
+
+        .ballAll {
+	        position:absolute;
+	        width:30px;
+	        height:30px;
+	        z-index:40;          
+        }
+        #picShow {
+                vertical-align : middle;
+        }
+
+        .WINimg {
+                width: 208px; height: 156px; display: table-cell; vertical-align: middle;
+        }
+
+	.slick-next,.slick-prev {
+                display:none;
+        }
+        
+        .nonFocus {
+                opacity: 0.5;
+        }
+    </style>
+}
+
+<!--第一層回首頁按鈕-->
+<div id="gobkDiv1">
+    <ul class="btn3"><a href="@Url.Action("PlanInside", "Map")"></a></ul>
+    <ul class="btn4"><a href="@Url.Content("Index")"></a></ul>
+</div>
+
+@Html.Partial(partialPath)
+
+<!--content-->
+<div class="bk2Div">
+    <div class="Title1"><img src="@Url.Content("~/Images/Map/title1.png")" width="420" height="95"></div>
+    <div class="earthDiv" style="margin: 25px 0px 0px 0px; padding: 0px 0px 0px 0px;">
+    </div>
+</div>

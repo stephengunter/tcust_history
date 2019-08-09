@@ -1,0 +1,122 @@
+﻿@{
+    ViewBag.Title = "畢業紀念冊 / 歷屆董事";
+}
+
+@section Scripts {
+    <script src='@Url.Content("~/Scripts/jquery-ui/jquery-ui.js")'></script>
+    <link href="@Url.Content("~/Scripts/jquery-ui/jquery-ui.css")" rel="stylesheet">
+    <style type="text/css">
+        .auto-style1 {
+            font-size: small;
+        }
+
+        .auto-style2 {
+            text-align: center;
+        }
+
+        .auto-style3 {
+            font-size: small;
+            text-align: center;
+        }
+
+        .auto-style4 {
+            color: #FF6300;
+            font-size: medium;
+        }
+
+        .fileUpload {
+            position: relative;
+            overflow: hidden;
+            margin: 10px;
+        }
+
+        .fileUpload input.upload {
+            position: absolute;
+            top: 0;
+            right: 0;
+            margin: 0;
+            padding: 0;
+            font-size: 20px;
+            cursor: pointer;
+            opacity: 0;
+            filter: alpha(opacity=0);
+        }
+
+        #loading {
+            background-color: white;
+            opacity: 0.9;
+            width: 1362px;
+            height: 800px;
+            text-align: center;
+            position: absolute;
+            top: 50px;
+            z-index: 99999;
+            left: 0;
+            display: none;
+        }
+    </style>
+    <script type="text/javascript">
+        $(function () {
+            //上傳
+            $(".upload").change(function () {
+                var file = this.files[0];
+                var fileName = $(this).val().replace(/C:\\fakepath\\/i, '');
+                var fileExtension = fileName.replace(/^.*\./, '');
+
+                if (fileExtension != "xls") {
+                    alert("僅接受 xls 格式檔案。");
+                } else {
+                    if (confirm("即將上傳" + fileName + "，確定上傳？")) {
+                        var formData = new FormData();
+                        formData.append("filedata", file);
+                        formData.append("coverPath", "App_Data/");
+                        formData.append("fileName", "classbook.xls");
+
+                        $('#loading').show();
+
+                        $.ajax({
+                            type: "POST",
+                            url: '@Url.Action("UploadMaintainData", "FileUtility")',
+                            data: formData,
+                            dataType: 'json',
+                            contentType: false,
+                            processData: false,
+                            success: function (response) {
+                                if (response == "false") {
+                                    alert("上傳失敗");
+                                } else if (response == "") {
+                                    alert("上傳成功");
+                                } else {
+                                    alert(response);
+                                }
+                                $('#loading').hide();
+                            },
+                            error: function (error) {
+                                alert("上傳失敗");
+                                $('#loading').hide();
+                            }
+                        });
+                    }
+                }
+
+                $(this).val('');
+            });
+        });
+    </script>
+
+}
+<h2>畢業紀念冊 / 歷屆董事</h2>
+<div class="auto-style4"><strong>ClassBook</strong></div>
+<div style="padding-left:20px; padding-top:10px;">
+    <label class="control-label">畢業紀念冊 / 歷屆董事Excel檔案：</label> <a class="btn btn-success" style="display:none" target="_blank" href="/ClassBook/DownloadClassBook">下載</a>
+    <div class="fileUpload btn btn-primary">
+        <span>上傳</span>
+        <input name="filedata" type="file" class="upload" />
+    </div>
+</div>
+<br>
+<div id="loading">
+    <img src="~/Images/loading.gif" alt="檔案上傳中..." />
+    <p>資料處理中...</p>
+</div>
+

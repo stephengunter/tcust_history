@@ -1,0 +1,157 @@
+﻿@model TzuChiBackend.ViewModels.PostSearchModel
+@using Core.Extensions;
+@using PagedList;
+@using PagedList.Mvc;
+
+@{
+
+    string url = "http://203.64.34.2/imgs/zoom/100/100/";
+
+
+    string pageNumber = "_page_";
+    string keyword = "_keyword_";
+    var routeValues = new { page = pageNumber, keyword = keyword };
+
+    Model.SearchUrl = Url.Action("Select","Tops", routeValues);
+
+    var ajaxOptions = new AjaxOptions
+    {
+        HttpMethod = "Get",
+
+
+        UpdateTargetId = "div-select-top-post",
+        OnFailure = "OnError",
+        InsertionMode=InsertionMode.ReplaceWith
+
+    };
+
+    var pagedListRenderOption = PagedListRenderOptions.EnableUnobtrusiveAjaxReplacing(Model.GetPagedListRenderOption(), ajaxOptions);
+
+
+
+
+}
+<div id="div-select-top-post">
+   <form id="form-searchtop-post" class="form-inline" style="padding-bottom:10px">
+       <input style="min-width:280px" id="top-post-keyword" type="text" value="@Model.KeyWord" class="form-control"/>
+       <button class="btn btn-success"  type="submit" >
+           搜尋標題
+       </button>
+   </form>
+
+    <table class="table">
+        <thead>
+            <tr style="background-color:#CCCCCC">
+                <th>
+
+                    封面圖
+
+                </th>
+                <th style="width:35%">
+                    標題
+                </th>
+
+                <th style="width:35%">
+                    摘要
+                </th>
+                <th style="width:10%">
+                    建檔日期
+                </th>
+
+
+                <th style="width:5%">
+                    &nbsp;
+                </th>
+            </tr>
+        </thead>
+        @if (Model.DataCount > 0)
+        {
+            <tbody>
+
+                @foreach (var item in Model.PostViewList)
+                {
+                    <tr>
+                        <td>
+                            @if (!item.MediaViewModels.IsNullOrEmpty())
+                            {
+                                string path = url + item.MediaViewModels.FirstOrDefault().Path;
+                                <img src="@path">
+                            }
+
+
+                           
+                        </td>
+                        <td> @item.Title </td>
+                        <td> @item.Summary </td>
+                        <td> @item.CreatedAt.ToString("yyyy/MM/dd") </td>
+
+
+
+                        <td>
+
+
+                            <a href="#" class="btn btn-primary  btn-sm select-post" data-id="@item.Id">
+                                <span class="glyphicon glyphicon-zoom-in" aria-hidden="true"></span>
+                            </a>
+
+
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        }
+
+    </table>
+
+
+    <br>
+
+
+    @if (Model.DataCount > 0)
+    {
+
+
+        <div>
+            @Html.PagedListPager(Model.PagedRecordResults, page => Model.SearchUrl.Replace(pageNumber, page.ToString()).Replace(keyword, Model.KeyWord), pagedListRenderOption)
+
+
+
+
+
+        </div>
+
+    }
+
+
+
+
+    <script type="text/javascript">
+
+
+        $(document).ready(function () {
+
+
+            $('.select-post').click(function (e) {
+                e.preventDefault();
+                var id = $(this).data('id');
+                onTopPostSelected(id);
+
+            });
+
+            $('#form-searchtop-post').submit(function (e) {
+                e.preventDefault();
+                var keyword = $('#top-post-keyword').val();
+                fetchPostToSelect(keyword)
+
+            });
+
+
+
+
+
+
+        });
+    </script>
+
+
+</div>

@@ -1,0 +1,14 @@
+﻿@model TzuChiBackend.ViewModels.PlanOutsideViewModel
+
+@if (Model.PicUrlList != null && Model.PicUrlList.Count > 0)
+{//popup 視窗顯示圖片
+    <a data-toggle="modal" data-target="#showPhotoModal" onclick="setCoveragePicPath('@Model.PicUrlList[0].Path')">
+        <img src="@Url.Content("~/imgs/zoom/50/50/" + Model.PicUrlList[0].Path)" width="50" />
+    </a>
+}
+else if (Model.AttachPicUrl != null)
+{
+    <a data-toggle="modal" data-target="#showPhotoModal" onclick="setCoveragePicPath('@Model.AttachPicUrl.Path')">
+        <img src="@Url.Content("~/imgs/zoom/50/50/" + Model.AttachPicUrl.Path)" width="50" />
+    </a>
+}

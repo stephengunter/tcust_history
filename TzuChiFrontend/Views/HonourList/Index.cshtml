@@ -1,0 +1,98 @@
+﻿@model List<TzuChiClassLibrary.BO.ImageShowModel>
+@{      
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    string backend = System.Web.Configuration.WebConfigurationManager.AppSettings["upload.folder.name"];
+    string backendBaseURL = System.Web.Configuration.WebConfigurationManager.AppSettings["website.backend"];
+    string defaultImg = "http://icons.iconseeker.com/png/fullsize/vistoon/default-programs.png";
+}
+@section styles{
+    <link href="~/Content/slick.css" rel="stylesheet" />
+    <link href="~/Content/reset.css" rel="stylesheet" />
+    <link href="~/Content/tzuchi.css" rel="stylesheet" />
+    <style>
+        .picWhite{
+            margin: 893px 0 0 0;
+            position: absolute;
+        }
+        .slick-dots {
+            margin-top: -50px;
+            position: initial;
+        }
+        .slick-dots li button{
+            color:#ffffff;
+            text-shadow:0px 0px 16px #666666;
+            line-height:20px;
+        }
+        .slick-dots li button:before{
+            color: white;
+            font-size:45px;
+        }
+        .slick-dots li.slick-active button:before {
+            color: white;
+            opacity: 0.75;
+        }
+    </style>
+}
+@section scripts{
+    <script src="~/Scripts/HonourList.js"></script>
+    <script src="~/Scripts/hammer.js-master/hammer.js"></script>
+    <script src="@Url.Content("~/Scripts/slick_v.js")"></script>
+    <script>
+        $(function () {
+            $('.carousel').slick({
+                autoplay: true,
+                autoplaySpeed: 2000,
+                dots: true,
+                pauseOnHover:false
+            });
+        });
+
+    </script>
+}
+
+
+    <div class="carousel">
+        @foreach (var img in Model)
+        {
+            string imgPath = string.Empty;
+
+            if (String.IsNullOrEmpty(@img.ImageUrl))
+            {
+                imgPath = @defaultImg;
+            }
+            else
+            {
+                //imgPath = @Url.Content(backend + "/" + img.ImageUrl);
+                imgPath = @Url.Content(string.Format("{0}/imgs/zoom/1920/1080/{1}", backendBaseURL, img.ImageUrl));
+            }
+
+            @*圖片日期及說明顯示邏輯*@
+            string imageDate = @img.ImageName.Split('_')[0];
+            string year = imageDate.Substring(0, 4);
+            string month = imageDate.Substring(4, 2);
+            string day = imageDate.Substring(6, 2);
+
+            string imageName = @img.ImageName.Split('_')[1].Split('.')[0];
+            
+            <div>
+                <div class="pic">
+                    <img src='@imgPath' onclick="javascript:window.location='@Url.Action("GetForFrontPage", "HonourList")'" width="1920" height="1080">
+                </div>
+                <div class="picWhite">
+                    <div class="picL">
+                        <ul class="picYear">@year</ul>
+                        <ul class="picMonth">@month.@day</ul>
+                    </div>
+                    <div class="picR">
+                        <ul class="picRtxt">
+                            @imageName
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+        }
+    </div>
+
+    

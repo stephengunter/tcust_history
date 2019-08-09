@@ -1,0 +1,217 @@
+/* GLOBALS */
+
+.main {
+	float:left;
+	display:block;
+	width:135px;
+	margin:0px 0px 0px 0px;
+	padding:0px 0px 0px 0px;
+}
+
+*,
+*:after,
+*:before {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+}
+
+::selection {
+    background: transparent; 
+}
+
+::-moz-selection {
+    background: transparent; 
+}
+
+.div2 {
+	margin-top:150px;
+}
+	
+.wrapper-demo {
+    margin: 0px 0px 0px 0px;
+	width: 135px;
+    *zoom: 1;
+	font-family:"微軟正黑體", "華康黑體", "Arial Unicode MS";
+	font-weight:bold;
+	font-size:18px;
+	line-height:24px;
+	text-align:center;
+}
+
+.wrapper-demo:after {
+    clear: both;
+	content: "";
+    display: table;
+}
+
+/* DEMO 5 */
+
+.wrapper-dropdown-5 {
+	/* Size & position */
+   position: relative;
+	width: 135px;
+	margin: 50px 0px 0px 27px;
+	padding: 12px 15px;
+	text-align:center;
+	/* Styles */
+    background: #ffffff;
+	border-radius: 10px;
+	box-shadow: 0px 0px 2px 2px rgba(125, 125, 125, 0.55);
+	cursor: pointer;
+	outline: none;
+	-webkit-transition: all 0.3s ease-out;
+	-moz-transition: all 0.3s ease-out;
+	-ms-transition: all 0.3s ease-out;
+	-o-transition: all 0.3s ease-out;
+	transition: all 0.3s ease-out;
+}
+
+.wrapper-dropdown-5:after { /* Little arrow */
+    content: "";
+    width: 0;
+    height: 0;
+    position: absolute;
+    top: 50%;
+    right: 15px;
+    margin-top: -3px;
+    border-width: 6px 6px 0 6px;
+    border-style: solid;
+    border-color: #68889b transparent;
+}
+
+.wrapper-dropdown-5 .dropdown {
+	/* Size & position */
+    position: absolute;
+	top: 50px;
+	left: 0px;
+	right: 0px;
+	/* Styles */
+    background: #ffffff;
+	border-radius: 0 0 10px 10px;
+	border: 1px solid rgba(0,0,0,0.2);
+	border-top: none;
+	border-bottom: none;
+	list-style: none;
+	-webkit-transition: all 0.3s ease-out;
+	-moz-transition: all 0.3s ease-out;
+	-ms-transition: all 0.3s ease-out;
+	-o-transition: all 0.3s ease-out;
+	transition: all 0.3s ease-out;
+	/* Hiding */
+    max-height: 0;
+	overflow-y:scroll;
+	height:140px;
+	visibility: visible;
+	width: 135px;
+}
+
+.wrapper-dropdown-5 .dropdown li {
+    padding: 0 10px ;
+}
+
+.wrapper-dropdown-5 .dropdown li a {
+    display: block;
+    text-decoration: none;
+    color: #333333;
+    padding: 10px 0;
+    transition: all 0.3s ease-out;
+    border-bottom: 1px solid #e6e8ea;
+}
+
+.wrapper-dropdown-5 .dropdown li:last-of-type a {
+    border: none;
+}
+
+.wrapper-dropdown-5 .dropdown li i {
+    margin-right: 5px;
+    color: inherit;
+    vertical-align: middle;
+}
+
+/* Hover state */
+
+.wrapper-dropdown-5 .dropdown li:hover a {
+    color: #4ebfff;
+	background-color:#f0faff;
+}
+
+/* Active state */
+
+.wrapper-dropdown-5.active {
+    border-radius: 10px 10px 0 0;
+    background: #68889b;
+    box-shadow: none;
+    border-bottom: none;
+    color: white;
+}
+
+.wrapper-dropdown-5.active:after {
+    border-color: #82d1ff transparent;
+}
+
+.wrapper-dropdown-5.active .dropdown {
+    border-bottom: 1px solid rgba(0,0,0,0.2);
+    max-height: 400px;
+}
+
+/*.righttitle {
+	float:left;
+	display:block;
+	width:210px;
+	height:55px;
+	text-align:center;
+	margin:-320px 0px 0px -15px;
+	padding:0px 0px 0px 0px;
+}*/
+
+
+.menu5 {
+	width:135px;
+	height:60px;
+	margin: 0px 0px 0px 0px;
+    padding: 0px 0px;
+	display:block;
+	float: left;
+	font-family:"微軟正黑體", "華康黑體", "Arial Unicode MS";
+	font-weight:bold;
+	font-size:20px;
+	line-height:24px;
+	text-align:center;
+	background-color:#ffffff;
+    border-radius: 10px;
+    box-shadow: 0px 0px 2px 2px rgba(125, 125, 125, 0.55);
+
+}
+
+.btnright a{
+	float:left;
+	display:block;
+	cursor:pointer;
+	width:104px;
+	height:42px;
+	font-family:"微軟正黑體";
+	font-weight:bold;
+	font-size:20px;
+	color:#000000;
+	/*text-shadow: 1px 1px #666666;*/
+	line-height:42px;
+	text-decoration: none;
+	text-align:center;
+	background-image:url(../../Images/Map/btn_new.png);
+	background-position: 0px 0px;
+	position: relative;	
+	margin: 20px 0px 0px 41px;
+	padding:0px 0px 0px 0px;
+}
+
+.btnright a:hover {
+    text-shadow: 1px 1px #cccccc;
+	color:#000000;
+	line-height:43px;
+	background-position: 0px 1px;
+}
+
+/* No CSS3 support: none */

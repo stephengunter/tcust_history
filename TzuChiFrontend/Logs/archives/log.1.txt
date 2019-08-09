@@ -1,0 +1,10 @@
+2017-08-22 14:28:01.2203|DEBUG|TzuChiClassLibrary.DAL.NewsManagementImpl|(Debug)除錯至少一個物件必須實作 IComparable。
+2017-08-22 20:00:50.7582|DEBUG|TzuChiClassLibrary.DAL.SchoolDiaryManagementImpl|(Debug)除錯The underlying provider failed on Open.
+2017-08-22 20:00:50.8042|DEBUG|TzuChiClassLibrary.DAL.CategoryManagementImpl|(Debug)除錯The underlying provider failed on Open.
+2017-08-22 20:00:50.8042|DEBUG|TzuChiClassLibrary.DAL.CategoryManagementImpl|(Debug)除錯The underlying provider failed on Open.
+2017-08-22 20:04:25.9400|DEBUG|TzuChiClassLibrary.DAL.SchoolDiaryManagementImpl|(Debug)除錯The underlying provider failed on Open.
+2017-08-22 20:04:25.9731|DEBUG|TzuChiClassLibrary.DAL.CategoryManagementImpl|(Debug)除錯The underlying provider failed on Open.
+2017-08-22 20:04:25.9731|DEBUG|TzuChiClassLibrary.DAL.CategoryManagementImpl|(Debug)除錯The underlying provider failed on Open.
+2017-08-22 20:08:31.4222|DEBUG|TzuChiClassLibrary.DAL.SchoolDiaryManagementImpl|(Debug)除錯The underlying provider failed on Open.
+2017-08-22 20:08:46.7521|DEBUG|TzuChiClassLibrary.DAL.CategoryManagementImpl|(Debug)除錯The underlying provider failed on Open.
+2017-08-22 20:08:46.7521|DEBUG|TzuChiClassLibrary.DAL.CategoryManagementImpl|(Debug)除錯The underlying provider failed on Open.

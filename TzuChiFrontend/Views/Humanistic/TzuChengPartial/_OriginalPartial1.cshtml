@@ -1,0 +1,121 @@
+﻿@{
+    String video = "video.folder.TzuCheng.Video";
+    String img = "video.folder.TzuCheng.Img";
+}
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('body').css('top', -(document.documentElement.scrollTop) + 'px').addClass('noscroll');
+        //翻頁特效
+        $('.flipbook').turn({
+            page: 2,
+            width: 1500,
+            height: 905,
+            elevation: 0,
+            gradients: true,
+            autoCenter: false,
+            when: {
+                start: function (event, pageObject, corner) {
+                    if (pageObject.next == 1)
+                        event.preventDefault();
+                },
+                turning: function (event, page, view) {
+                    if (page == 1)
+                        event.preventDefault();
+                }
+            }
+        });
+        $('#TabDiv  div').click(function () {
+            if ($(this).index() === 0) {
+                $(".flipbook").turn("page", 2);
+            }
+             else if ($(this).index() === 1) {
+                $(".flipbook").turn("page", 6);
+            }
+            else if ($(this).index() === 2) {
+                $(".flipbook").turn("page", 14);
+            }
+        });
+        if ($('#videobtn').length !== 0) {
+            $('#videobtn').click(function () {
+                $('#MvDiv').show();
+                $('#MvDiv1').show();
+            });
+        }
+
+        $('.rightdiv').click(function () {
+            $(".flipbook").turn('previous');
+            //$(".flipbook").turn("display", "single");
+            //$(".flipbook").turn('display');
+        })
+
+        $('.leftdiv').click(function () {
+            $(".flipbook").turn('next');
+        })
+        //$(".flipbook").turn("options", { turnCorners: "tl,tr" });
+    });
+</script>
+
+@*<div class="rightdiv"></div>
+<div class="leftdiv"></div>*@
+<div id="bookDiv" class="bookbk">
+    <!-- 翻頁特效區域 -->
+    <div class="flipbook" style="left:36px;top:24px;">
+        <!-- 為了一開始顯示兩頁,這裡放一個空DIV -->
+        <div></div>
+        <!-- 以下放入各個頁面 -->
+        <div  style="background-image:url(/Images/Humanistic/book1/page1.jpg)" width="750" height="905"></div>
+        <div  style="background-image:url(/Images/Humanistic/book1/page2.jpg)" width="750" height="905"></div>
+        <div  style="background-image:url(/Images/Humanistic/book1/page3.jpg)" width="750" height="905"></div>
+        <div  style="background-image:url(/Images/Humanistic/book1/page4.jpg)" width="750" height="905"></div>
+        <div  style="background-image:url(/Images/Humanistic/book1/page5.jpg)" width="750" height="905"></div>
+        <div  style="background-image:url(/Images/Humanistic/book1/page6.jpg)" width="750" height="905"></div>
+        <div  style="background-image:url(/Images/Humanistic/book1/page7.jpg)" width="750" height="905"></div>
+        <div  style="background-image:url(/Images/Humanistic/book1/page8.jpg)" width="750" height="905"></div>
+        <div  style="background-image:url(/Images/Humanistic/book1/page9.jpg)" width="750" height="905"></div>
+        <div  style="background-image:url(/Images/Humanistic/book1/page10.jpg)" width="750" height="905"></div>
+        <div  style="background-image:url(/Images/Humanistic/book1/page11.jpg)" width="750" height="905"></div>
+        <div  style="background-image:url(/Images/Humanistic/book1/page12.jpg)" width="750" height="905"></div>
+        <div  style="background-image:url(/Images/Humanistic/book1/page13.jpg)" width="750" height="905"></div>
+        <div  style="background-image:url(/Images/Humanistic/book1/page14.jpg)" width="750" height="905"></div>
+    </div>
+</div>
+
+<!--頁籤-->
+<div id="TabDiv">
+    <div class="cTab5">
+        <a href="#">
+            起<br>
+            <br>
+            源
+        </a>
+    </div>
+    <div class="cTab2"><a href="#">定<br>位<br>角<br>色</a></div>
+    <div class="cTab2"><a href="#">統<br>計<br>數<br>據</a></div>
+</div>
+
+<!--上方主選單 Start-->
+<div class="cont1Div">
+    <div class="cbtnmenu">
+        <div style="float:left;display:block;width:220px; height:50px;">
+            <ul class="cbtn1D"> 細說從頭 </ul><ul class="cbtnline"><img src="/Images/Humanistic/cbtnline4D.png" width="220" height="5"></ul>
+        </div>
+        <div style="float:left;display:block;width:220px; height:50px;">
+            <ul class="cbtn1"><a href="@Url.Action("BookPage", "Humanistic", new { path = "TzuChengPartial/_InteractionPartial", videoKey = video, imgKey = img })">溫馨互動</a></ul><ul class="cbtnline"><img src="/Images/Humanistic/cbtnline2.png" width="220" height="5"></ul>
+        </div>
+        <div style="float:left;display:block;width:220px; height:50px;">
+            <ul class="cbtn1">
+                <a href="@Url.Action("BookPage", "Humanistic", new { path = "TzuChengPartial/_ImmortalPartial", videoKey = video, imgKey = img })">緣起不滅</a>
+            </ul><ul class="cbtnline"><img src="/Images/Humanistic/cbtnline2.png" width="220" height="5"></ul>
+        </div>
+        <div style="float:left;display:block;width:220px; height:50px;">
+            <ul class="cbtn1">
+                <a href="@Url.Action("BookPage", "Humanistic", new { path = "TzuChengPartial/_ListPartial", videoKey = video, imgKey = img })">懿德名單</a>
+            </ul><ul class="cbtnline"><img src="/Images/Humanistic/cbtnline5.png" width="280" height="5"></ul>
+        </div>
+        @if (ViewBag.Video != null && ViewBag.Video.Count != 0)
+        {
+            <div style="float:left;display:block;width:280px; height:50px;"></div>
+            <div id="videobtn" class="btn" style="float:left;display:block;width:100px; height:50px;"><a href="#"><img src="/Images/Humanistic/btn3.png" width="56" height="56" border="0"></a></div>
+        }
+    </div>
+</div>

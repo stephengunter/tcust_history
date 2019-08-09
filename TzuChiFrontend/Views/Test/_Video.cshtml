@@ -1,0 +1,44 @@
+﻿@model TzuChiFrontend.Models.EBookSearchModel
+
+@{
+    string imageUrl = "/video/img";
+    string videoUrl = "/video";
+ }
+
+
+<div class="Mv1">
+    <video width="1150" height="850" autoplay controls poster=""></video>
+</div>
+<div class="Mvlist1" style="overflow-x:hidden;overflow-y:visible;">
+
+       @foreach (var video in Model.EBookFileList)
+       {
+           string imageSrc = String.Format("{0}/{1}.jpg", imageUrl, video.Id);
+           string videoSrc = String.Format("{0}/{1}.mp4", videoUrl, video.Id);
+            <ul class="Mvtxt">
+                <li>
+                    <a href="#">@video.Title</a>
+                </li>
+            </ul>
+            <ul class="Mvglow">
+                <li>
+                    <a href="#">
+                        <img src="@imageSrc" data-video="@videoSrc" width="235" height="165" border="0" />
+                    </a>
+                </li>
+            </ul>
+       }
+         
+       
+</div>
+
+@if (Model.Ajax)
+{
+   <text>
+      <script type="text/javascript" >
+          initVideos();
+      </script>
+
+   </text>
+
+}

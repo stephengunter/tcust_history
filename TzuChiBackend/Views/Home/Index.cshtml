@@ -1,0 +1,62 @@
+﻿@{
+    ViewBag.Title = "慈濟技術學院-校史館";
+    string frontend = System.Web.Configuration.WebConfigurationManager.AppSettings["website.frontend"];
+    string downLoad = "FileUtility/DownloadExcel/";
+    string upload = "FileUtility/UploadExcel/";
+}
+@section Scripts {
+    <script>
+        $(function () {
+            $('input[type=file]').on('change', prepareUpload);
+        });
+
+        function prepareUpload(event) {
+            var files;
+            var data = new FormData();
+            files = event.target.files;
+            data.append('filedata', files[0]);
+            
+            $.ajax({
+                url: '@frontend@upload',
+                type: 'POST',
+                data: data,
+                cache: false,
+                dataType: 'json',
+                processData: false, // Don't process the files
+                contentType: false, // Set content type to false as jQuery will tell the server its a query string request
+                success: function (data, textStatus, jqXHR) {
+                    if (typeof data.error === 'undefined') {
+                        // Success so call function to process the form
+                        console.log('SUCCESS: ' + data);
+                    }
+                    else {
+                        // Handle errors here
+                        console.log('ERRORS: ' + data.error);
+                    }
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    // Handle errors here
+                    console.log('ERRORS: ' + textStatus);
+                    // STOP LOADING SPINNER
+                }
+            });
+        }
+
+        function uploadClick() {
+            $('#filedata').click();
+        }
+
+    </script>
+}
+<div class="jumbotron">
+    <h1>慈濟技術學院-校史館</h1>
+    <p class="lead">後台管理系統</p>
+    @if (Request.IsAuthenticated)
+    {
+        <a href="@frontend@downLoad" class="btn btn-primary btn-lg">下載畢業紀念冊,歷屆董事Excel</a>
+        <a href="javascript:uploadClick()" class="btn btn-primary btn-lg">上傳畢業紀念冊,歷屆董事Excel</a>
+        <div style="display:none">
+            <input type="file" id="filedata" name="filedata" accept="application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" />
+        </div>
+    }
+</div>

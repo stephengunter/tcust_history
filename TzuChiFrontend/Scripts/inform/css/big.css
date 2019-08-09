@@ -1,0 +1,795 @@
+﻿@charset "utf-8";
+/* CSS Document */
+
+/*首頁框架*/
+.big {
+	float:left;
+	display: block;
+	cursor:pointer;
+}
+/*卷軸框架*/
+#rollerDiv1 {
+	position:absolute;
+	background-image:url(/Images/Founding/roller1.png);
+	background-repeat:no-repeat;
+	background-position:center;
+	width:3840px;
+	height:1000px;
+	z-index:5;
+	left: 0px;
+	top: 40px;
+}
+
+#rollerDiv2 {
+	position:absolute;
+	background-image:url(/Images/Founding/roller2.png);
+	background-repeat:no-repeat;
+	background-position:center;
+	width:3840px;
+	height:1000px;
+	z-index:5;
+	left: 0px;
+	top: 40px;
+}
+
+#rollerDiv3 {
+	position:absolute;
+	background-image:url(/Images/Founding/roller3.png);
+	background-repeat:no-repeat;
+	background-position:center;
+	width:3840px;
+	height:1000px;
+	z-index:5;
+	left: 0px;
+	top: 40px;
+}
+
+#rollerDiv4 {
+	position:absolute;
+	background-image:url(/Images/Founding/roller4.png);
+	background-repeat:no-repeat;
+	background-position:center;
+	width:3840px;
+	height:1000px;
+	z-index:5;
+	left: 0px;
+	top: 40px;
+}
+
+/*主選單*/
+
+.menu {
+	float:left;
+	display:block;
+	margin:110px 0px 0px 0px;
+	padding:0px 0px 0px 0px;
+	width:340px;
+	height:388px;
+	text-align:center;
+}
+
+.menuA1 {
+	float:left;
+	display:block;
+	margin:0px 0px 0px 0px;
+	padding:0px 0px 0px 0px;
+	background:url(/Images/Founding/menu.png);
+	background-position:340px 0px;
+	width:340px;
+	height:97px;
+}
+
+.menuD1 a{
+	float:left;
+	display:block;
+	margin:0px 0px 0px 0px;
+	padding:0px 0px 0px 0px;
+	background:url(/Images/Founding/menu.png);
+	background-position:0px 0px;
+	width:340px;
+	height:97px;
+}
+
+.menuD1 a:hover{
+	background:url(/Images/Founding/menu.png);
+	background-position:340px 0px;
+	-webkit-transform: scale(1.2) ;
+    transform: scale(1.2) ;
+}
+
+.menuA2 {
+	float:left;
+	display:block;
+	margin:0px 0px 0px 0px;
+	padding:0px 0px 0px 0px;
+	background:url(/Images/Founding/menu.png);
+	background-position:340px -99px;
+	width:340px;
+	height:97px;
+}
+
+.menuD2 a{
+	float:left;
+	display:block;
+	margin:0px 0px 0px 0px;
+	padding:0px 0px 0px 0px;
+	background:url(/Images/Founding/menu.png);
+	background-position:0px -99px;
+	width:340px;
+	height:97px;
+}
+
+.menuD2 a:hover{
+	background:url(/Images/Founding/menu.png);
+	background-position:340px -99px;
+	-webkit-transform: scale(1.2) ;
+    transform: scale(1.2) ;
+}
+
+.menuA3 {
+	float:left;
+	display:block;
+	margin:0px 0px 0px 0px;
+	padding:0px 0px 0px 0px;
+	background:url(/Images/Founding/menu.png);
+	background-position:340px -196px;
+	width:340px;
+	height:97px;
+}
+
+.menuD3 a{
+	float:left;
+	display:block;
+	margin:0px 0px 0px 0px;
+	padding:0px 0px 0px 0px;
+	background:url(/Images/Founding/menu.png);
+	background-position:0px -196px;
+	width:340px;
+	height:97px;
+}
+
+.menuD3 a:hover{
+	background:url(/Images/Founding/menu.png);
+	background-position:340px -196px;
+	-webkit-transform: scale(1.2) ;
+    transform: scale(1.2) ;
+}
+
+.menuA4 {
+	float:left;
+	display:block;
+	margin:0px 0px 0px 0px;
+	padding:0px 0px 0px 0px;
+	background:url(/Images/Founding/menu.png);
+	background-position:340px -293px;
+	width:340px;
+	height:97px;
+}
+
+.menuD4 a{
+	float:left;
+	display:block;
+	margin:0px 0px 0px 0px;
+	padding:0px 0px 0px 0px;
+	background:url(/Images/Founding/menu.png);
+	background-position:0px -293px;
+	width:340px;
+	height:97px;
+}
+
+.menuD4 a:hover{
+	background:url(/Images/Founding/menu.png);
+	background-position:340px -293px;
+	-webkit-transform: scale(1.2) ;
+    transform: scale(1.2) ;
+}
+
+/*內頁左右滑動鍵*/	
+.arrowL a{
+	float:left;
+	display:block;
+	margin:465px 0px 0px 0px;
+	padding:0px 0px 0px 0px;
+	background:url(/Images/Founding/arrowL.png);
+	width:36px;
+	height:70px;
+}
+
+.arrowL a:hover{
+	background:url(/Images/Founding/arrowL.png);
+	-webkit-transform: scale(1.2) ;
+    transform: scale(1.2) ;
+}
+
+.arrowR a{
+	float:left;
+	display:block;
+	margin:465px 0px 0px 0px;
+	padding:0px 0px 0px 0px;
+	background:url(/Images/Founding/arrowR.png);
+	width:36px;
+	height:70px;
+}
+
+.arrowR a:hover{
+	background:url(/Images/Founding/arrowR.png);
+	-webkit-transform: scale(1.2) ;
+    transform: scale(1.2) ;
+}
+
+
+/*內頁-創校緣起按鈕介面*/
+.contBTN {
+	float:left;
+	display:block;
+	margin:85px 0px 0px 0px;
+	padding:0px 0px 0px 0px;
+	width:3150px;
+	height:810px;
+}
+
+.BTNImg {
+	float:left;
+	display:block;
+	margin:0px 0px 0px 0px;
+	padding:0px 12px 0px 12px;
+	width:760px;
+	height:810px;
+}
+
+.BTN a{
+	float:left;
+	display:block;
+	margin:0px 0px 0px 0px;
+	padding:0px 12px 0px 12px;
+	width:760px;
+	height:810px;
+}
+
+.BTN a:hover{
+-webkit-transition-duration: 0.3s;
+  transition-duration: 0.3s;
+  -webkit-transform: scale(0.99);
+  transform: scale(0.99);
+}
+
+/*內頁框架*/
+.contbk {
+	background-image:url(/Images/Founding/contbk.jpg);
+	background-repeat:repeat-x;
+	width:3840px;
+	height:1080px;
+	}
+	
+.movLeft {
+	float:left;
+	display:block;
+	background-position:left;
+	margin:540px 0px 0px 0px;
+	padding:0px 0px 0px 0px;
+	width:1920px;
+	height:540px;
+}
+
+.movRight {
+	float:right;
+	display:block;
+	background:url(/Images/Founding/movieright.jpg);
+	background-repeat:no-repeat;
+	background-position:right;
+	margin:540px 0px 0px 0px;
+	padding:0px 0px 0px 0px;
+	width:1920px;
+	height:540px;
+	}
+
+/*彈跳視窗設定*/
+
+.WINglow {
+	float:left;
+	display: inline-block;
+	margin:0px 0px 0px 0px;
+	padding:20px 20px 0px 20px;
+	background-color:#ffffff;
+	opacity:0.98;
+	border-radius:10px 10px;
+	-webkit-transition-duration: 0.3s;
+	transition-duration: 0.3s;
+	-webkit-transition-property: box-shadow;
+	transition-property: box-shadow;
+	-webkit-transform: translateZ(0);
+	transform: translateZ(0);
+	box-shadow: 3px 3px 18px rgba(0, 0, 0, 0.6);
+}
+
+/*創校緣起content1-彈跳內文1*/
+
+.WINtxt {
+	float:left;
+	display:block;
+	width:1200px;
+	margin:20px 40px 0px 40px;
+	padding:0px 0px 0px 0px;
+}
+
+.Title {
+	float:left;
+	display:block;
+	text-align:left;
+	font-family:"華康新特明體","微軟正黑體";
+	font-size:42px;
+	font-weight:bold;
+	color:#333333;
+	line-height:50px;
+	width:1100px;
+	margin:0px 0px 0px 0px;
+	padding:0px 0px 0px 50px;
+}
+
+.Line {
+	float:left;
+	display:block;
+	line-height:20px;
+	width:1100px;
+	margin:0px 0px 0px 0px;
+	padding:0px 0px 0px 50px;
+}
+
+.Button {
+	float:left;
+	display:block;
+	text-align:left;
+	font-family:"華康新特明體","微軟正黑體";
+	font-size:30px;
+	font-weight:bold;
+	color:#333333;
+	line-height:50px;
+	width:1100px;
+	margin:0px 0px 0px 0px;
+	padding:20px 0px 0px 50px;
+}
+
+.Content {
+	float:left;
+	display:block;
+	width:680px;
+	height:700px;
+	overflow-x: hidden;
+	overflow-y: visible;
+	text-align:left;
+	font-family:"華康新特明體","微軟正黑體";
+	font-size:30px;
+	font-weight:bold;
+	color:#333333;
+	line-height:50px;
+	margin:20px 0px 0px 0px;
+	padding:0px 0px 0px 50px;
+}
+
+.ConImg {
+	float:left;
+	display:block;
+	width:405px;
+	height:770px;
+	margin:-50px 20px 0px 20px;
+	padding:0px 0px 0px 20px;
+}
+
+.WINclose {
+	float:right;
+	display:block;
+	width:60px;
+	height:66px;
+    margin-top:-880px;
+}
+
+.books2 a {
+	cursor:pointer;
+	float:left;
+	display:block;
+	font-family:"華康特明體","微軟正黑體", Arial;
+	font-weight:bold;
+	font-size:30px;
+	line-height:48px;
+	width:148px;
+	height:50px;
+	text-align:center;
+	text-decoration:none;
+	text-shadow:2px 2px 2px #e2e2e2;
+	color:#333333;
+	padding:0px 0px 0px 0px;
+	margin:0px 0px 0px 0px;
+}
+
+.books2 a:hover {
+	line-height:50px;
+	color: #686868;
+	text-shadow:1px 1px 1px #cecece;
+	background-image:url(/Images/Founding/book/books2.png);
+}
+
+
+.books3 a {
+	cursor:pointer;
+	float:left;
+	display:block;
+	font-family:"華康特明體","微軟正黑體", Arial;
+	font-weight:bold;
+	font-size:30px;
+	line-height:48px;
+	width:297px;
+	height:50px;
+	text-align:center;
+	text-decoration:none;
+	text-shadow:2px 2px 2px #e2e2e2;
+	color:#333333;
+	padding:0px 0px 0px 0px;
+	margin:0px 0px 0px 0px;
+}
+
+.books3 a:hover {
+	line-height:50px;
+	color: #686868;
+	text-shadow:1px 1px 1px #cecece;
+	background-image:url(/Images/Founding/book/books3.png);
+}
+.books4 a {
+	cursor:pointer;
+	float:left;
+	display:block;
+	font-family:"華康特明體","微軟正黑體", Arial;
+	font-weight:bold;
+	font-size:30px;
+	line-height:48px;
+	width:207px;
+	height:50px;
+	text-align:center;
+	text-decoration:none;
+	text-shadow:2px 2px 2px #e2e2e2;
+	color:#333333;
+	padding:0px 0px 0px 0px;
+	margin:0px 0px 0px 0px;
+}
+
+.books4 a:hover {
+	line-height:50px;
+	color: #686868;
+	text-shadow:1px 1px 1px #cecece;
+	background-image:url(/Images/Founding/book/books4.png);
+}
+
+.books5 a {
+	cursor:pointer;
+	float:left;
+	display:block;
+	font-family:"華康特明體","微軟正黑體", Arial;
+	font-weight:bold;
+	font-size:30px;
+	line-height:48px;
+	width:87px;
+	height:50px;
+	text-align:center;
+	text-decoration:none;
+	text-shadow:2px 2px 2px #e2e2e2;
+	color:#333333;
+	padding:0px 0px 0px 0px;
+	margin:0px 0px 0px 0px;
+}
+
+.books5 a:hover {
+	line-height:50px;
+	color: #686868;
+	text-shadow:1px 1px 1px #cecece;
+	background-image:url(/Images/Founding/book/books5.png);
+}
+
+.booksline {
+	float:left;
+	display:block;
+	width:2px;
+	height:50px;
+	padding:0px 0px 0px 0px;
+	margin:0px 20px 0px 20px;
+}
+
+/*創校緣起content2-歷屆董事彈跳內文*/
+
+.Title3 {
+	float:left;
+	display:block;
+	text-align:left;
+	font-family:"華康新特明體","微軟正黑體";
+	font-size:28px;
+	font-weight:bold;
+	color:#333333;
+	line-height:50px;
+	width:750px;
+	margin:0px 0px 0px 0px;
+	padding:0px 0px 0px 50px;
+}
+
+/*創校緣起content3-歷任校長彈跳內文2*/
+
+.Con3 {
+	float:left;
+	display:block;
+	width:1180px;
+	height:700px;
+	overflow-x: hidden;
+	overflow-y: visible;
+	text-align:left;
+	font-family:"華康新特明體","微軟正黑體";
+	font-size:30px;
+	font-weight:bold;
+	color:#333333;
+	line-height:50px;
+	margin:40px 0px 0px 0px;
+	padding:0px 0px 0px 50px;
+}
+
+.Con3glow {
+	float:left;
+	display: inline-block;
+	width:980px;
+	height:40px;
+	margin:10px 0px 10px 0px;
+	padding:20px 20px 0px 100px;
+	background-color:#ffffff;
+	text-align:left;
+	font-family:"華康黑體","微軟正黑體";
+	font-size:28px;
+	font-weight:bold;
+	color:#333333;
+	line-height:20px;
+	opacity:0.98;
+	border-radius:2px 2px;
+	-webkit-transition-duration: 0.3s;
+	transition-duration: 0.3s;
+	-webkit-transition-property: box-shadow;
+	transition-property: box-shadow;
+	-webkit-transform: translateZ(0);
+	transform: translateZ(0);
+	box-shadow: 0px 0px 6px rgba(0, 0, 0, 0.6);
+}
+
+.Con4ind {
+	float:left;
+	display: inline-block;
+	width:198px;
+	height:340px;
+	margin:10px 40px 10px 40px;
+	padding:0px 0px 0px 0px;
+	background-color:#ffffff;
+	text-align:left;
+}
+
+.Con4img {
+	float:left;
+	display: inline-block;
+	width:220px;
+	height:230px;
+	margin:5px 5px 5px 5px;
+	padding:0px 0px 0px 0px;
+	background-color:#ffffff;
+	text-align:center;
+}
+.Con4txt {
+	float:left;
+	display: inline-block;
+	width:220px;
+	margin:0px 0px 0px 0px;
+	padding:0px 0px 0px 0px;
+	background-color:#ffffff;
+	text-align:center;
+	font-family:"華康新特明體","微軟正黑體";
+	font-size:28px;
+	font-weight:bold;
+	color:#333333;
+	line-height:36px;
+}
+.Con5txt {
+	float:left;
+	display: inline-block;
+	width:220px;
+	height:25px;
+	margin:0px 0px 0px 0px;
+	padding:0px 0px 0px 0px;
+	background-color:#ffffff;
+	text-align:center;
+	font-family:"華康黑體","微軟正黑體";
+	font-size:16px;
+	font-weight:bold;
+	color:#333333;
+	line-height:25px;
+}
+
+.Title2 {
+	float:left;
+	display:block;
+	text-align:left;
+	font-family:"華康新特明體","微軟正黑體";
+	font-size:42px;
+	font-weight:bold;
+	color:#333333;
+	line-height:50px;
+	width:250px;
+	margin:0px 0px 0px 0px;
+	padding:0px 0px 0px 50px;
+}
+
+.book3s1 a {
+	cursor:pointer;
+	float:left;
+	display:block;
+	font-family:"華康特明體","微軟正黑體", Arial;
+	font-weight:bold;
+	font-size:24px;
+	line-height:40px;
+	width:254px;
+	height:42px;
+	text-align:center;
+	text-decoration:none;
+	text-shadow:2px 2px 2px #e2e2e2;
+	color:#333333;
+	padding:0px 0px 0px 0px;
+	margin:0px 0px 0px 0px;
+}
+
+.book3s1 a:hover {
+	line-height:40px;
+	color: #686868;
+	text-shadow:1px 1px 1px #cecece;
+	background-image:url(/Images/Founding/book/book3s1.png);
+}
+
+.book3s2 a {
+	cursor:pointer;
+	float:left;
+	display:block;
+	font-family:"華康特明體","微軟正黑體", Arial;
+	font-weight:bold;
+	font-size:24px;
+	line-height:40px;
+	width:154px;
+	height:42px;
+	text-align:center;
+	text-decoration:none;
+	text-shadow:2px 2px 2px #e2e2e2;
+	color:#333333;
+	padding:0px 0px 0px 0px;
+	margin:0px 0px 0px 0px;
+}
+
+.book3s2 a:hover {
+	line-height:42px;
+	color: #686868;
+	text-shadow:1px 1px 1px #cecece;
+	background-image:url(/Images/Founding/book/book3s2.png);
+}
+
+.book3s3 a {
+	cursor:pointer;
+	float:left;
+	display:block;
+	font-family:"華康特明體","微軟正黑體", Arial;
+	font-weight:bold;
+	font-size:24px;
+	line-height:40px;
+	width:178px;
+	height:42px;
+	text-align:center;
+	text-decoration:none;
+	text-shadow:2px 2px 2px #e2e2e2;
+	color:#333333;
+	padding:0px 0px 0px 0px;
+	margin:0px 0px 0px 0px;
+}
+
+.book3s3 a:hover {
+	line-height:42px;
+	color: #686868;
+	text-shadow:1px 1px 1px #cecece;
+	background-image:url(/Images/Founding/book/book3s3.png);
+}
+
+/*內頁content4-歷任董事*/
+
+.Cont4 {
+	float:left;
+	display:block;
+	margin:100px 0px 0px -10px;
+	padding:0px 12px 0px 8px;
+	width:400px;*/
+	height:700px;
+}
+
+.C4title {
+	float:left;
+	display:block;
+	width:305px;
+	margin:0px 0px 0px 0px;
+	padding:0px 0px 0px 50px;
+	font-family:"華康隸書體W7(P)", "微軟正黑體";
+	font-size:30px;
+	font-weight:bold;
+	line-height:37px;
+	color:#5A5858;
+	text-align:left;
+
+}
+
+.C4line {
+	float:left;
+	display:block;
+	width:215px;
+	height:3px;
+	background-color:#727171;
+	margin:20px 20px 20px 50px;
+	padding:0px 0px 0px 0px;
+	text-align:left;
+}
+
+.C4txt {
+	float:left;
+	display:block;
+	width:305px;
+	margin:0px 0px 0px 0px;
+	padding:0px 0px 0px 50px;
+	font-family:"華康隸書體W7(P)", "微軟正黑體";
+	font-size:28px;
+	font-weight:bold;
+	line-height:35px;
+	color:#231815;
+	text-align:left;
+}
+
+.C5txt {
+	float:left;
+	display:block;
+	width:165px;
+	margin:0px 0px 0px -10px;
+	padding:0px 0px 0px 0px;
+	font-family:"華康隸書體W7(P)", "微軟正黑體";
+	font-size:28px;
+	font-weight:bold;
+	line-height:35px;
+	color:#231815;
+	text-align:left;
+}
+
+.C6txt {
+	float:left;
+	display:block;
+	width:185px;
+	margin:-526px 0px 0px 208px;
+	padding:0px 0px 0px 0px;
+	font-family:"華康隸書體W7(P)", "微軟正黑體";
+	font-size:28px;
+	font-weight:bold;
+	line-height:35px;
+	color:#231815;
+	text-align:left;
+}
+
+/* scrollbar */
+::-webkit-scrollbar {
+    width: 10px;
+}
+ 
+/* Track */
+::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3); 
+    -webkit-border-radius: 10px;
+    border-radius: 10px;
+}
+ 
+/* Handle */
+::-webkit-scrollbar-thumb {
+    -webkit-border-radius: 10px;
+    border-radius: 10px;
+    background: rgba(98,98,98,0.8); 
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5); 
+}
+::-webkit-scrollbar-thumb:window-inactive {
+	background: rgba(255,0,0,0.4); 
+}

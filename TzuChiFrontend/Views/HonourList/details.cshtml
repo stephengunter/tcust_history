@@ -1,0 +1,80 @@
+﻿
+
+@section styles{
+	
+	<!-- Add fancyBox -->
+	<link rel="stylesheet" href="~/Scripts/fancybox/source/jquery.fancybox.css" type="text/css" media="screen" />
+
+	<link href="~/Content/reset.css" rel="stylesheet" />
+	<link href="~/Content/tzuchi.css" rel="stylesheet" />
+	<style type="text/css">
+		.draggable {
+			width: 423px !important;
+		}
+
+		
+	</style>
+
+}
+
+<honor-details v-on:ready="onReady" :year="selected_item.year" :id="selected_item.id" > </honor-details >
+
+
+ @section scripts {
+	 <script src="~/Scripts/HonourList.js"></script> 
+	 <script src="~/Scripts/hammer.js-master/hammer.js"></script> 
+	 <script src="~/Scripts/jquery.hammer.js"></script>
+	 <script src="~/scripts/slick/slick_v_honorlist.js"></script> 
+	 <script> 
+		 function onReady() {
+
+			 alert('onReady');
+			
+		}
+
+	</script >
+	 <script > 
+		 new Vue({
+			el: '#main',
+			data() {
+				return {
+				test:0,
+					selected_item: {
+				year: 2017,
+						id:842
+					},
+
+
+				}
+			},
+			beforeMount() {
+
+			},
+			methods: {
+				onReady() {
+
+					onReady();
+				},
+				onSearch() {
+					this.test++;
+					moveToIndex(this.test);
+				},
+				onSelected(year,id) {
+					this.selected_item = {
+						year: year,
+						id: id
+					};
+
+				},
+				onLeave() {
+					document.location = '/SchoolDiary';
+				}
+			}
+
+		 });
+
+	 </script >
+
+
+}
+	

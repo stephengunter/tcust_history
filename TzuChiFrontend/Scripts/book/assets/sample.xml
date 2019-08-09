@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<content width="750" height="905" >
+		<page src="assets/cover.jpg"/>
+		<page src="http://middle-east.brightideas.com.tw/test/Images/TeachPhilosophy/c1/page1.jpg">
+			<snap x="88" y="558" width="623" height="247">http://middle-east.brightideas.com.tw/test/Images/TeachPhilosophy/c1/snap1.jpg</snap>
+		</page>
+		<page src="http://middle-east.brightideas.com.tw/test/Images/TeachPhilosophy/c1/page2.jpg">
+			<snap x="41" y="339" width="625" height="430">http://middle-east.brightideas.com.tw/test/Images/TeachPhilosophy/c1/snap2.jpg</snap>
+		</page>
+		<page src="http://middle-east.brightideas.com.tw/test/Images/TeachPhilosophy/c1/page3.jpg">
+			<snap x="87" y="195" width="623" height="250">http://middle-east.brightideas.com.tw/test/Images/TeachPhilosophy/c1/snap3_1.jpg</snap>
+			<snap x="85" y="485" width="232" height="297">http://middle-east.brightideas.com.tw/test/Images/TeachPhilosophy/c1/snap3_2.jpg</snap>
+			<snap x="328" y="490" width="375" height="295">http://middle-east.brightideas.com.tw/test/Images/TeachPhilosophy/c1/snap3_3.jpg</snap>
+		</page>
+		<page src="http://middle-east.brightideas.com.tw/test/Images/TeachPhilosophy/c1/page4.jpg">
+			<snap x="43" y="270" width="622" height="407">http://middle-east.brightideas.com.tw/test/Images/TeachPhilosophy/c1/snap4.jpg</snap>
+		</page>
+		<page src="http://middle-east.brightideas.com.tw/test/Images/TeachPhilosophy/c1/page5.jpg">
+			<snap x="83" y="320" width="623" height="466">http://middle-east.brightideas.com.tw/test/Images/TeachPhilosophy/c1/snap5.jpg</snap>
+		</page>
+		<page src="http://middle-east.brightideas.com.tw/test/Images/TeachPhilosophy/c1/page6.jpg">
+			<snap x="42" y="343" width="622" height="320">http://middle-east.brightideas.com.tw/test/Images/TeachPhilosophy/c1/snap6.jpg</snap>
+		</page>
+		<page src="http://middle-east.brightideas.com.tw/test/Images/TeachPhilosophy/c1/page7.jpg">
+			<snap x="84" y="53" width="625" height="334">http://middle-east.brightideas.com.tw/test/Images/TeachPhilosophy/c1/snap7_1.jpg</snap>
+			<snap x="84" y="450" width="625" height="334">http://middle-east.brightideas.com.tw/test/Images/TeachPhilosophy/c1/snap7_2.jpg</snap>
+		</page>
+		<page src="http://middle-east.brightideas.com.tw/test/Images/TeachPhilosophy/c1/page8.jpg">
+			<snap x="43" y="55" width="623" height="333">http://middle-east.brightideas.com.tw/test/Images/TeachPhilosophy/c1/snap8_1.jpg</snap>
+			<snap x="43" y="450" width="623" height="333">http://middle-east.brightideas.com.tw/test/Images/TeachPhilosophy/c1/snap8_2.jpg</snap>
+		</page>
+		<page src="http://middle-east.brightideas.com.tw/test/Images/TeachPhilosophy/c1/page9.jpg">
+			<snap x="85" y="130" width="625" height="630">http://middle-east.brightideas.com.tw/test/Images/TeachPhilosophy/c1/snap9.jpg</snap>			
+		</page>
+		<page src="http://middle-east.brightideas.com.tw/test/Images/TeachPhilosophy/c1/page10.jpg">
+			<snap x="46" y="243" width="270" height="187">http://middle-east.brightideas.com.tw/test/Images/TeachPhilosophy/c1/snap10_1.jpg</snap>
+			<snap x="46" y="585" width="270" height="187">http://middle-east.brightideas.com.tw/test/Images/TeachPhilosophy/c1/snap10_2.jpg</snap>
+		</page>
+		<page src="http://middle-east.brightideas.com.tw/test/Images/TeachPhilosophy/c1/page11.jpg">
+			<snap x="86" y="240" width="270" height="190">http://middle-east.brightideas.com.tw/test/Images/TeachPhilosophy/c1/snap10_1.jpg</snap>
+			<snap x="86" y="580" width="270" height="190">http://middle-east.brightideas.com.tw/test/Images/TeachPhilosophy/c1/snap10_2.jpg</snap>
+		</page>
+		<page src="http://middle-east.brightideas.com.tw/test/Images/TeachPhilosophy/c1/page12.jpg">
+			<snap x="46" y="245" width="270" height="185">http://middle-east.brightideas.com.tw/test/Images/TeachPhilosophy/c1/snap12_1.jpg</snap>
+			<snap x="45" y="580" width="268" height="168">http://middle-east.brightideas.com.tw/test/Images/TeachPhilosophy/c1/snap12_2.jpg</snap>		
+		</page>
+		<page src="assets/cover.jpg"/>
+	<tabs>
+		<tab name="相見歡" flip="1">B_2_1</tab>
+		<tab name="家聚家訪" flip="3">B_2_2</tab>
+		<tab name="協助招生" flip="6">B_2_3</tab>
+		<tab name="家冠梳妝" flip="8">B_2_4</tab>
+		<tab name="畢典尋根" flip="10">B_2_5</tab>
+	</tabs>
+</content>

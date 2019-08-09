@@ -1,0 +1,504 @@
+﻿@charset "utf-8";
+/* CSS Document */
+
+/*首頁框架*/
+.bk2Div {
+	float:left;
+	display: block;
+	width:1920px;
+	height:1080px;
+	background-image:url(/Images/Humanistic/bk2.jpg);
+	background-repeat:no-repeat;
+}
+
+.bookDiv {
+	float:left;
+	display: block;
+	width:1718px;
+	height:1080px;
+}
+
+.bookTitle {
+	float:left;
+	display: block;
+	width:471px;
+	height:700px;
+	margin:200px 0px 0px 0px;
+	padding:0px 50px 0px 50px;	
+}
+
+.bookTitle1 {
+	float:left;
+	display: block;
+	width:570px;
+	height:120px;
+	margin:100px 0px 0px -50px;
+	padding:0px 0px 0px 0px;	
+}
+
+.btn a{
+	float:left;
+	display:block;
+	margin:0px 0px 0px 0px;
+	padding:0px 0px 0px 0px;
+}
+
+.btn a:hover{
+	-webkit-transform: scale(1.1);
+    transform: scale(1.1);
+}
+
+/*左右滑動鍵*/	
+.arrowL a{
+	float:left;
+	display:block;
+	margin:465px 0px 0px 60px;
+	padding:0px 0px 0px 0px;
+	background:url(/Images/Humanistic/arrowL.png);
+	width:36px;
+	height:70px;
+}
+
+.arrowL a:hover{
+	background:url(/Images/Humanistic/arrowL.png);
+	background-position:-4px -0px;
+	-webkit-transform: scale(1.2) ;
+    transform: scale(1.2) ;
+}
+
+.arrowR a{
+	float:left;
+	display:block;
+	margin:465px 0px 0px 0px;
+	padding:0px 0px 0px 0px;
+	background:url(/Images/Humanistic/arrowR.png);
+	width:36px;
+	height:70px;
+}
+
+.arrowR a:hover{
+	background:url(/Images/Humanistic/arrowR.png);
+	background-position:4px 0px;
+	-webkit-transform: scale(1.2) ;
+    transform: scale(1.2) ;
+}
+
+
+/*電子書框架*/
+.bookbk {
+	float:left;
+	display: block;
+	width:1580px;
+	height:1000px;
+	background-image:url(/Images/Humanistic/bookbk.png);
+	background-repeat:no-repeat;
+}
+
+.bookbk1 {
+	float:left;
+	display: block;
+	width:1580px;
+	height:1000px;
+	background-image:url(/Images/Humanistic/bookbk1.png);
+	background-repeat:no-repeat;
+}
+
+.bookL {
+	float:left;
+	display: block;
+	width:750px;
+	height:905px;
+	margin:25px 0px 0px 36px;
+}
+
+.bookR {
+	float:left;
+	display: block;
+	width:750px;
+	height:905px;
+	margin:25px 0px 0px 0px;
+
+}
+
+.bookin {
+	float:left;
+	display: block;
+	width:580px;
+	height:725px;
+	margin:0px 0px 0px 0px;
+	padding:80px 80px 80px 80px;
+	font-family:"華康黑體", "微軟正黑體";
+	font-size:23px;
+	font-weight:bold;
+	color:#333333;
+	line-height:32px;
+	text-align:left;
+}
+
+.bookbox {
+	background-color:#ffffff;
+	border:1px #999999;
+	box-shadow:1px 1px 6px #cccccc;
+	border-radius:10px 10px;
+	font-family:"華康黑體", "微軟正黑體";
+	font-size:20px;
+	font-weight:bold;
+	color:#333333;
+	line-height:32px;
+	text-align:left;
+}
+
+.glow {
+	float:left;
+	display: block;
+	margin:0px 0px 0px 0px;
+	padding:0px 0px 0px 0px;
+	-webkit-transition-property: box-shadow;
+	transition-property: box-shadow;
+	box-shadow: 1px 1px 10px 4px rgba(0, 0, 0, 0.6);
+}
+
+/*book框架*/
+.cont1Div {
+	float:left;
+	display: block;
+	width:1920px;
+	height:1080px;
+	background-image:url(/Images/Humanistic/contbk1.jpg);
+	background-repeat:no-repeat;
+}
+
+.cont2Div {
+	float:left;
+	display: block;
+	width:1920px;
+	height:1080px;
+	background-image:url(/Images/Humanistic/contbk2.jpg);
+	background-repeat:no-repeat;
+}
+
+.cont3Div {
+	float:left;
+	display: block;
+	width:1920px;
+	height:1080px;
+	background-image:url(/Images/Humanistic/contbk3.jpg);
+	background-repeat:no-repeat;
+}
+
+.cont4Div {
+	float:left;
+	display: block;
+	width:1920px;
+	height:1080px;
+	background-image:url(/Images/Humanistic/contbk4.jpg);
+	background-repeat:no-repeat;
+}
+
+.cont5Div {
+	float:left;
+	display: block;
+	width:1920px;
+	height:1080px;
+	background-image:url(/Images/Humanistic/contbk5.jpg);
+	background-repeat:no-repeat;
+}
+.cont6Div {
+	float:left;
+	display: block;
+	width:1920px;
+	height:1080px;
+	background-image:url(/Images/Humanistic/contbk6.jpg);
+	background-repeat:no-repeat;
+}
+
+.cont7Div {
+	float:left;
+	display: block;
+	width:1920px;
+	height:1080px;
+	background-image:url(/Images/Humanistic/contbk7.jpg);
+	background-repeat:no-repeat;
+}
+.cbtnmenu {
+	float:left;
+	display: block;
+	margin:20px 0px 0px 203px;
+	padding:0px 0px 0px 0px;
+	width:1600px;
+	height:55px;
+}
+
+.cbtnline {
+	float:left;
+	display: block;
+	margin:-5px 0px 0px 0px;
+	padding:0px 0px 0px 0px;
+	height:5px;
+}
+
+.cbtn1D {
+	float:left;
+	display: block;
+	margin:0px 0px 0px 0px;
+	padding:0px 20px 0px 20px;
+	width:180px;
+	height:45px;
+	font-family:"華康仿宋體W6(P)", "微軟正黑體";
+	font-size:33px;
+	line-height:40px;
+	color:#3C3736;
+	text-align:center;
+}
+
+.cbtn1 a {
+	float:left;
+	display: block;
+	margin:0px 0px 0px 0px;
+	padding:0px 20px 0px 20px;
+	width:180px;
+	height:45px;
+	font-family:"華康仿宋體W6(P)", "微軟正黑體";
+	font-size:33px;
+	line-height:40px;
+	color:#3C3736;
+	text-decoration:none;
+	text-align:center;
+}
+
+.cbtn1 a:hover {
+	padding:0px 20px 0px 20px;
+	color:#666666;
+	-webkit-transform: scale(1.1);
+    transform: scale(1.1);
+}
+
+.cbtn2D {
+	float:left;
+	display: block;
+	margin:0px 0px 0px 0px;
+	padding:0px 10px 0px 10px;
+    width:350px;
+	height:45px;
+	font-family:"華康仿宋體W6(P)", "微軟正黑體";
+	font-size:33px;
+	line-height:40px;
+	color:#3C3736;
+	text-align:center;
+}
+.cbtn2 a {
+	float:left;
+	display: block;
+	margin:0px 0px 0px 0px;
+	padding:0px 10px 0px 10px;
+    width:350px;
+	height:45px;
+	font-family:"華康仿宋體W6(P)", "微軟正黑體";
+	font-size:33px;
+	line-height:40px;
+	color:#3C3736;
+	text-decoration:none;
+}
+
+.cbtn2 a:hover {
+	padding:0px 10px 0px 10px;
+	color:#666666;
+	-webkit-transform: scale(1.1);
+    transform: scale(1.1);
+}
+
+.cbtn3D {
+	float:left;
+	display: block;
+	margin:0px 0px 0px 0px;
+	padding:0px 10px 0px 10px;
+    width:230px;
+	height:45px;
+	font-family:"華康仿宋體W6(P)", "微軟正黑體";
+	font-size:33px;
+	line-height:40px;
+	color:#3C3736;
+	text-align:center;
+}
+.cbtn3 a {
+	float:left;
+	display: block;
+	margin:0px 0px 0px 0px;
+	padding:0px 10px 0px 10px;
+    width:230px;
+	height:45px;
+	font-family:"華康仿宋體W6(P)", "微軟正黑體";
+	font-size:33px;
+	line-height:40px;
+	color:#3C3736;
+	text-decoration:none;
+}
+
+.cbtn3 a:hover {
+	padding:0px 10px 0px 10px;
+	color:#666666;
+	-webkit-transform: scale(1.1);
+    transform: scale(1.1);
+}
+
+
+/*慈濟世界 content2框架*/
+.cTab a{
+	float:left;
+	display: block;
+	cursor:pointer;
+	margin:4px 0px 4px 0px;
+	padding:15px 0px 0px 0px;
+	width:50px;
+	height:140px;
+	background-image:url(/Images/Humanistic/tabbk.jpg);
+	/*background-color:#defff5;*/
+	border-radius:0px 10px 10px 0px;
+	box-shadow:0px 0px 8px #666666;
+	font-family:"華康仿宋體W6(P)", "微軟正黑體";
+	font-size:20px;
+	line-height:20px;
+	color:#3C3736;
+	text-decoration:none;
+	text-align:center;
+}
+
+.cTab a:hover {
+	margin:2px 0px 2px 2px;
+	color:#666666;
+	text-shadow:0px 0px 1px 4px #999999;
+	-webkit-transform: scale(1.1);
+    transform: scale(1.1);
+}
+
+.cTab2 a{
+	float:left;
+	display: block;
+	cursor:pointer;
+	margin:4px 0px 4px 0px;
+	padding:15px 0px 0px 0px;
+	width:50px;
+	height:100px;
+	background-image:url(/Images/Humanistic/tabbk.jpg);
+	/*background-color:#defff5;*/
+	border-radius:0px 10px 10px 0px;
+	box-shadow:0px 0px 8px #666666;
+	font-family:"華康仿宋體W6(P)", "微軟正黑體";
+	font-size:20px;
+	line-height:20px;
+	color:#3C3736;
+	text-decoration:none;
+	text-align:center;
+}
+
+.cTab2 a:hover {
+	margin:2px 0px 2px 2px;
+	color:#666666;
+	-webkit-transform: scale(1.1);
+    transform: scale(1.1);
+}
+
+.cTab3 a{
+	float:left;
+	display: block;
+	cursor:pointer;
+	margin:4px 0px 4px 0px;
+	padding:15px 0px 0px 0px;
+	width:50px;
+	height:160px;
+	background-image:url(/Images/Humanistic/tabbk.jpg);
+	/*background-color:#defff5;*/
+	border-radius:0px 10px 10px 0px;
+	box-shadow:0px 0px 8px #666666;
+	font-family:"華康仿宋體W6(P)", "微軟正黑體";
+	font-size:20px;
+	line-height:20px;
+	color:#3C3736;
+	text-decoration:none;
+	text-align:center;
+}
+
+.cTab3 a:hover {
+	margin:2px 0px 2px 2px;
+	color:#666666;
+	-webkit-transform: scale(1.1);
+    transform: scale(1.1);
+}
+
+.cTab4 a{
+	float:left;
+	display: block;
+	cursor:pointer;
+	margin:4px 0px 4px 0px;
+	padding:15px 0px 0px 0px;
+	width:50px;
+	height:120px;
+	background-image:url(/Images/Humanistic/tabbk.jpg);
+	/*background-color:#defff5;*/
+	border-radius:0px 10px 10px 0px;
+	box-shadow:0px 0px 8px #666666;
+	font-family:"華康仿宋體W6(P)", "微軟正黑體";
+	font-size:20px;
+	line-height:20px;
+	color:#3C3736;
+	text-decoration:none;
+	text-align:center;
+}
+
+.cTab4 a:hover {
+	margin:2px 0px 2px 2px;
+	color:#666666;
+	-webkit-transform: scale(1.1);
+    transform: scale(1.1);
+}
+
+.cTab5 a{
+	float:left;
+	display: block;
+	cursor:pointer;
+	margin:4px 0px 4px 0px;
+	padding:15px 0px 0px 0px;
+	width:50px;
+	height:80px;
+	background-image:url(/Images/Humanistic/tabbk.jpg);
+	/*background-color:#defff5;*/
+	border-radius:0px 10px 10px 0px;
+	box-shadow:0px 0px 8px #666666;
+	font-family:"華康仿宋體W6(P)", "微軟正黑體";
+	font-size:20px;
+	line-height:20px;
+	color:#3C3736;
+	text-decoration:none;
+	text-align:center;
+}
+
+.cTab5 a:hover {
+	margin:2px 0px 2px 2px;
+	color:#666666;
+	-webkit-transform: scale(1.1);
+    transform: scale(1.1);
+}
+
+
+/* scrollbar */
+::-webkit-scrollbar {
+    width: 10px;
+}
+ 
+/* Track */
+::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3); 
+    -webkit-border-radius: 10px;
+    border-radius: 10px;
+}
+ 
+/* Handle */
+::-webkit-scrollbar-thumb {
+    -webkit-border-radius: 10px;
+    border-radius: 10px;
+    background: rgba(98,98,98,0.8); 
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5); 
+}
+::-webkit-scrollbar-thumb:window-inactive {
+	background: rgba(255,0,0,0.4); 
+}

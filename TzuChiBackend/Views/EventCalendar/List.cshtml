@@ -1,0 +1,231 @@
+﻿@model TzuChiClassLibrary.BO.PagenationModel
+@{
+    ViewBag.Title = "大事紀要";
+    string message = TempData["EventCalendarMessage"] as string;
+}
+
+@section Scripts {
+    <script src='@Url.Content("~/Scripts/jquery-ui/jquery-ui.js")'></script>
+    <link href="@Url.Content("~/Scripts/jquery-ui/jquery-ui.css")" rel="stylesheet">
+    <style type="text/css">
+        .auto-style1 {
+            font-size: small;
+        }
+
+        .auto-style2 {
+            text-align: center;
+        }
+
+        .auto-style3 {
+            font-size: small;
+            text-align: center;
+        }
+
+        .auto-style4 {
+            color: #FF6300;
+            font-size: medium;
+        }
+    </style>
+    <script type="text/javascript">
+            $(function () {
+                if ('@message' != "") {
+                    alert('@message');
+				}
+
+				
+
+                $(".orderT").click(function () {
+                    $(".OrderNum").val(parseInt($(".orderT").index(this) + 1));
+                    $(".Order").val(($(".Order").val() == "True") ? "false" : "true");
+                    document.forms["sortForm"].submit();
+                });
+
+            });
+    </script>
+}
+<h2>大事紀要</h2>
+<div class="auto-style4"><strong>EventCalendar List</strong></div>
+<div>
+    @using (Html.BeginForm("List", "EventCalendar", null, FormMethod.Post, new { @name = "submitForm", @role = "form", @class = "form-inline" }))
+        {
+            <div>
+                <label class="control-label">檢索</label>
+                @Html.TextBoxFor(model => model.KeyWord, new { @class = "form-control", @placeholder = "關鍵字" })
+
+                @Html.DropDownListFor(model => model.QueryField, (List<SelectListItem>)ViewBag.SearchList, new { @class = "form-control" })
+                @Html.HiddenFor(model => model.Page, new { @Value = 1 })
+                @Html.HiddenFor(model => model.Order, new { @Value = false })
+                @Html.HiddenFor(model => model.OrderNum, new { @Value = 0 })
+                <input type="text" name='totalPage' value='@ViewBag.TotalPage' style='display:none' />
+                <input class="btn btn-success" type="submit" value="搜索" />
+
+            </div>
+    }
+    @*
+        <div>
+            <label class="control-label">發佈日期 日期區段</label>
+            @Html.TextBoxFor(model => model.BeginDateTime, new { @id = "beginDateTime", @class = "form-control" })
+            <span> 至</span>
+            @Html.TextBoxFor(model => model.EndDateTime, new { @id = "endDateTime", @class = "form-control" })
+        </div>
+    }*@
+</div>
+
+<div>
+    <label class="control-label">總筆數：(@ViewBag.TotalEventCalendar)</label>
+    <input class="btn btn-default btn-sm btn-primary" type="button" value="新增" onclick="location.href='@Url.Action( "Page" )'" />
+</div>
+<br>
+<div>
+    <table class="table">
+        <tr style="background-color:#CCCCCC">
+            <td class="auto-style2" style="width: 50px; height: 17px">
+                <strong>
+                    封面圖
+                </strong>
+            </td>
+            <td class="auto-style2" style="width: 100px; height: 17px">
+                <a href="javascript:void(0)" class="orderT">
+                    <strong>
+                        標題
+                    </strong>
+                </a>
+            </td>
+            <td class="auto-style2" style="width: 50px; height: 17px">
+                <a href="javascript:void(0)" class="orderT">
+                    <strong>
+                        學年度
+                    </strong>
+                </a>
+            </td>
+            <td class="auto-style2" style="width: 50px; height: 17px">
+                <a href="javascript:void(0)" class="orderT">
+                    <strong>
+                        事件日期
+                    </strong>
+                </a>
+            </td>
+            <td class="auto-style2" style="width: 90px; height: 17px">
+                @*<a href="javascript:void(0)" class="orderT">*@
+                    <strong>
+                        操作
+                    </strong>
+                @*</a>*@
+            </td>
+        </tr>
+        @foreach (var item in ViewBag.DataModel)
+        {
+            <tr>
+                <td class="auto-style3" style="width: 50px">
+                    @if (item.PicUrlList != null && item.PicUrlList.Count > 0)
+                    {//popup 視窗顯示圖片
+                        <a data-toggle="modal" data-target="#showPhotoModal" onclick="setCoveragePicPath('@item.PicUrlList[0].Path')">
+                            <img src="@Url.Content("~/imgs/zoom/50/50/" + item.PicUrlList[0].Path)" width="50" />
+                        </a>
+                    }
+                </td>
+                <td class="auto-style3" style="width: 50px">@item.ContentName</td>
+                <td class="auto-style3" style="width: 50px">@item.AcademicYear</td>
+                <td class="auto-style3" style="width: 50px">@string.Format("{0:yyyy/MM/dd}", item.ContentTime)</td>
+                <td class="auto-style3" style="width: 90px">
+                    <input type="button" class="btn btn-default btn-sm btn-primary" value="修改" onclick="location.href='@Url.Action("Page", new { ContentID = item.ContentID })'" />
+                    <input type="button" class="btn btn-default btn-sm btn-danger" value="刪除" onclick="del('@item.ContentID');" />
+                </td>
+            </tr>
+        }
+    </table>
+    <br />
+    <table width="100%" border="0" cellspacing="0">
+        <tr>
+            <td width="50%" align="right" class="inpage_basic2">
+
+                @if (Model.Page == 1)
+                {
+                    <input class="btn btn-default" type="button" disabled="disabled" value="第一頁" />
+                    <input class="btn btn-default" type="button" disabled="disabled" value="上一頁" />
+                }
+                else
+                {
+                    <input class="btn btn-default" type="button" id="firstPage" onclick="SubmitPage(1)" value="第一頁" />
+                    <input class="btn btn-default" type="button" onclick="SubmitPage(@Model.Page-1)" value="前一頁" />
+                }
+                @if (Model.Page == ViewBag.TotalPage)
+                {
+                    <input class="btn btn-default" type="button" disabled="disabled" value="下一頁" />
+                    <input class="btn btn-default" type="button" disabled="disabled" value="末頁" />
+                }
+                else
+                {
+                    <input class="btn btn-default" type="button" onclick="SubmitPage(@Model.Page+1)" value="後一頁" />
+                    <input class="btn btn-default" type="button" id="lastPage" onclick="SubmitPage(@(ViewBag.TotalPage == 0 ? 1 : ViewBag.TotalPage))" value="末頁" />
+                }
+
+            </td>
+            <td width="15%" align="right" class="inpage_basic2">跳至第</td>
+            <td width="10%" class="inpage_basic2">
+                <input type="text" id="jumptext" value="@Model.Page" size="5" />
+            </td>
+            <td><input class="btn btn-default" type="button" id="jumpBtn" onclick="JumpPage()" value="跳頁" /></td>
+            <td class="inpage_basic2">@Model.Page/@(ViewBag.TotalPage == 0 ? 1 : ViewBag.TotalPage)頁</td>
+
+        </tr>
+    </table>
+</div>
+
+@using (Html.BeginForm("List", "EventCalendar", null, FormMethod.Post, new { @name = "sortForm" }))
+{
+     <!--for 分頁-->
+    <span>
+        <!--對應條件-->
+        @Html.HiddenFor(model => model.KeyWord)
+        @Html.HiddenFor(model => model.QueryField)
+        @Html.HiddenFor(model => model.BeginDateTime)
+        @Html.HiddenFor(model => model.EndDateTime)
+        @Html.HiddenFor(model => model.Page, new { @class = "PageSearch", @Value = 1 })
+        @Html.HiddenFor(model => model.Order, new { @class = "Order" })
+        @Html.HiddenFor(model => model.OrderNum, new { @class = "OrderNum" })
+        @Html.HiddenFor(model => model.Page, new { @class = "PageSearch", @Value = 1 })
+        <input type="text" name='totalPage' value='@ViewBag.TotalPage' style='display:none' />
+    </span>
+}
+<!-- Popup Photo Modal -->
+@Html.Partial("_PopupPhotoModal")
+<script>
+
+    //$('#beginDateTime,#endDateTime').datepicker({ dateFormat: 'yy/mm/dd' });
+
+    function SubmitPage(page) {
+
+        $(".PageSearch").val(page);
+
+        if ('@Model.Page' != page)
+            document.forms["sortForm"].submit();
+
+    } // SubmitPage()
+
+    function JumpPage() {
+
+        $(".PageSearch").val($("#jumptext").val());
+
+        if ('@Model.Page' != $("#jumptext").val())
+            document.forms["sortForm"].submit();
+    } // JumpPage()
+
+    function del(ContentID) {
+        if (confirm("資料刪除後將無法復原，確定要刪除嗎?")) {
+            var form = $('<form method="POST" action=" @Url.Action("Delete") ">');
+            form.append($('<input type="hidden" name="ContentID" value="' + ContentID + '">'));
+            $('body').append(form);
+            form.submit();
+            form.remove();
+        } else {
+
+        }
+    }
+
+    function setCoveragePicPath(path) {
+        $(".popupPhoto").attr("src", "@Url.Content("~/Uploads/")" + path);
+        console.log(path);
+    }
+
+</script>

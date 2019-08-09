@@ -1,0 +1,144 @@
+﻿@model TzuChiBackend.ViewModels.VideoViewModel
+@using Core.Extensions;
+@{
+    string title = "影片專區";
+    if (String.IsNullOrEmpty(Model.Id))
+    {
+        title += " - 新增";
+    }
+    else
+    {
+
+        title += " - 編輯";
+    }
+    ViewBag.Title = title;
+}
+
+<style>
+    input,
+    select,
+    textarea {
+        max-width: 100%;
+    }
+</style>
+
+<h2>@ViewBag.Title</h2>
+
+<div>
+
+    @using (Html.BeginForm("Store", "Video", FormMethod.Post, new { @class = "form", enctype = "multipart/form-data" }))
+    {
+        <div class="form-group">
+            <label>分類</label>
+            @Html.DropDownListFor(m => m.CategoryId, Model.CategoryOptions, new { @class = "form-control", style = "width:30%" })
+
+        </div>
+        <div class="form-group">
+            <label>標題</label>
+            @Html.TextBoxFor(m => m.Title, new { @class = "form-control", style = "width:65%" })
+
+        </div>
+
+        if (String.IsNullOrEmpty(Model.Id))
+        {
+             <div class="form-group">
+                <label>影片 (限定mp4檔) </label>
+                @Html.TextBoxFor(m => m.VideoUpload, new { type = "file" })
+
+            </div>
+
+        }
+
+
+        <div class="form-group">
+            <label>排序</label>
+            @Html.TextBoxFor(m => m.DisplayOrder, new { @class = "form-control", style = "width:30%" })
+
+        </div>
+
+		
+		<div id="cover-image-edit"  class="form-group" style="display:none">
+			<label>封面圖</label>
+			@Html.TextBoxFor(m => m.ImageUpload, new { type = "file" })
+
+		</div>
+
+	
+		
+		<div id="cover-image-view" class="form-group" style="display:none">
+			<label>封面圖</label>
+			<p>
+				
+
+				@if (!String.IsNullOrEmpty(Model.ImageUrl))
+				{
+					<img width="200" src="@Model.ImageUrl">
+					<button id="btn-remove-img" class="btn btn-danger btn-xs">
+						<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+					</button>
+				}
+				
+			</p>
+		</div>
+
+
+        <button type="submit" class="btn btn-success">
+            <span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span>
+            存檔
+        </button>
+
+       <text>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   </text>
+        <a href="@Url.Action("Index")" class="btn btn-default">
+           
+            取消
+        </a>
+        @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+
+        @Html.HiddenFor(m => m.Id, new { @id = "VideoId" })
+		@Html.HiddenFor(m => m.ImageUrl, new { @id = "ImageUrl" })
+	}
+
+</div>
+
+
+
+@section Scripts {
+	<script type="text/javascript">
+		function isCreate() {
+			let id = $('#VideoId').val();
+			if (id) return false;
+			return true;			
+		}
+		function hasImage() {
+			let imageUrl = $('#ImageUrl').val();
+			if (imageUrl) return true;
+			return false;
+		}
+		$(document).ready(function () {
+			if (isCreate()) {
+				$('#cover-image-view').hide();
+				$('#cover-image-edit').show();
+			} else {
+				if (hasImage()) {
+					$('#cover-image-edit').hide();
+					$('#cover-image-view').show();
+				} else {
+					$('#cover-image-view').hide();
+					$('#cover-image-edit').show();
+				} 
+				
+			}
+		});
+		$('#btn-remove-img').click(function (e) {
+			e.preventDefault();
+			$('#cover-image-view').hide();
+			$('#cover-image-edit').show();
+
+			$('#ImageUrl').val('');
+			
+		});
+
+
+	</script>
+
+}

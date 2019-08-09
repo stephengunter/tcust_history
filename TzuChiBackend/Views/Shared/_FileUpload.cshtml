@@ -1,0 +1,156 @@
+﻿@model TzuChiClassLibrary.BO.FileUploadModel
+@{
+
+    string uploadDir = System.Web.Configuration.WebConfigurationManager.AppSettings["upload.folder.name"];
+
+    string path = String.Format("~/{0}/{1}", uploadDir, Model.Path);
+
+
+    string divId = "";
+    string type = "";
+
+    //  ImageData  ,   VideoData  ,   ContentImageData ,  CoverImageData
+}
+
+@if (Model.Type == "CoverImageData")
+{
+
+    type = "CoverImage";
+    divId = String.Format("CoverImage_{0}", Model.Index);
+    <div id="@divId">
+
+        <input type="hidden" name="@String.Format("{0}.Index", type)" value="@Model.Index" />
+        <input type="hidden" name="@String.Format("{0}.ItemOID", type)" value="@Model.ItemOID" />
+        <input type="hidden" name="@String.Format("{0}.FunctionOID", type)" value="@Model.FunctionOID" />
+        <input type="hidden" name="@String.Format("{0}.FunctionType", type)" value="@Model.FunctionType" />
+        <input type="hidden" name="@String.Format("{0}.ImageHeight", type)" value="@Model.ImageHeight" />
+        <input type="hidden" name="@String.Format("{0}.ImageWidth", type)" value="@Model.ImageWidth" />
+        <input type="hidden" name="@String.Format("{0}.FileName", type)" value="@Model.FileName" />
+        <input type="hidden" name="@String.Format("{0}.Bit", type)" value="@Model.Bit" />
+        <input type="hidden" name="@String.Format("{0}.Path", type)" value="@Model.Path" />
+        <input type="hidden" name="@String.Format("{0}.CoverImage", type)" value="@Model.CoverImage" class="coverInput" />
+        <table class="table">
+            <tr>
+                <td width="30%">
+                    <a data-toggle="modal" data-target="#showPhotoModal" onclick="setCoveragePicPath('@Url.Content(path)')">
+                        <img src="@Url.Content(path)" width="50" />
+                    </a>
+                </td>
+                <td width="20%"><a href="@Url.Content(path)" target="_blank">@Model.FileName</a></td>
+                <td>
+                    <input type="button" value="delete" class="del btn btn-danger" onclick="removeCoverImage()" />
+                </td>
+            </tr>
+        </table>
+    </div>
+}
+else if (Model.Type == "ContentImageData")
+{
+    type = "ContentImage";
+    divId = String.Format("ContentImage_{0}", Model.Index);
+
+    <div id="@divId">
+      
+            <input type="hidden" name="@String.Format("{0}.ItemOID", type)" value="@Model.ItemOID" />
+            <input type="hidden" name="@String.Format("{0}.FunctionOID", type)" value="@Model.FunctionOID" />
+            <input type="hidden" name="@String.Format("{0}.FunctionType", type)" value="@Model.FunctionType" />
+            <input type="hidden" name="@String.Format("{0}.ImageHeight", type)" value="@Model.ImageHeight" />
+            <input type="hidden" name="@String.Format("{0}.ImageWidth", type)" value="@Model.ImageWidth" />
+            <input type="hidden" name="@String.Format("{0}.FileName", type)" value="@Model.FileName" />
+            <input type="hidden" name="@String.Format("{0}.Bit", type)" value="@Model.Bit" />
+            <input type="hidden" name="@String.Format("{0}.Path", type)" value="@Model.Path" />
+            <input type="hidden" name="@String.Format("{0}.CoverImage", type)" value="@Model.CoverImage" class="coverInput" />
+            <table class="table">
+                <tr>
+                    <td width="30%">
+                        <a data-toggle="modal" data-target="#showPhotoModal" onclick="setCoveragePicPath('@Url.Content(path)')">
+                            <img src="@Url.Content(path)" width="50" />
+                        </a>
+                    </td>
+                    <td width="20%">
+                        <a href="@Url.Content(path)" target="_blank">@Model.FileName</a>
+                    </td>
+                    <td>
+                        <input type="button" value="delete" class="del btn btn-danger" onclick="removeContentImage()" />
+                    </td>
+                </tr>
+            </table>
+      
+    </div>
+
+
+}
+else if (Model.Type == "ImageData")
+{
+    type = "PicUrlList";
+    divId = String.Format("PicUrl_{0}", Model.Index);
+
+    <div id="@divId">
+        <input type="hidden" name="PicUrlList.index" value="@Model.Index" />
+        <input type="hidden" name="PicUrlList[@Model.Index].ItemOID" value="@Model.ItemOID" />
+        <input type="hidden" name="PicUrlList[@Model.Index].FunctionOID" value="@Model.FunctionOID" />
+        <input type="hidden" name="PicUrlList[@Model.Index].FunctionType" value="@Model.FunctionType" />
+        <input type="hidden" name="PicUrlList[@Model.Index].ImageHeight" value="@Model.ImageHeight" />
+        <input type="hidden" name="PicUrlList[@Model.Index].ImageWidth" value="@Model.ImageWidth" />
+        <input type="hidden" name="PicUrlList[@Model.Index].FileName" value="@Model.FileName" />
+        <input type="hidden" name="PicUrlList[@Model.Index].Bit" value="@Model.Bit" />
+        <input type="hidden" name="PicUrlList[@Model.Index].Path" value="@Model.Path" />
+        <input type="hidden" name="PicUrlList[@Model.Index].CoverImage" value="@Model.CoverImage" class="coverInput" />
+        <table class="table">
+            <tr>
+                <td width="30%">
+                    <a data-toggle="modal" data-target="#showPhotoModal" onclick="setCoveragePicPath('@Url.Content(path)')">
+                        <img src="@Url.Content(path)" width="50" />
+                    </a>
+                </td>
+                <td width="20%">
+                    <a href="@Url.Content(path)" target="_blank">@Model.FileName</a>
+                </td>
+               
+                <td>
+                    <input type="button" value="delete" class="del btn btn-danger" onclick="removePicUrl('@Model.Index')" />
+                    <a class="btn btn-primary coverBtn" id="Set_@Model.Index" style="display: inline;" onclick="setPicCoverageUrl('@Model.Index')">SetCoverage</a>
+                    <label style="display: none;" class="coverLabel" id="Cover_@Model.Index">封面圖</label>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+
+}
+else if (Model.Type == "VideoData")
+{
+    type = "VideoUrlList";
+    divId = String.Format("VideoUrl_{0}", Model.Index);
+
+    <div id="@divId">
+        <input type="hidden" name="VideoUrlList.index" value="@Model.Index" />
+        <input type="hidden" name="VideoUrlList[@Model.Index].ItemOID" value="@Model.ItemOID" />
+        <input type="hidden" name="VideoUrlList[@Model.Index].FunctionOID" value="@Model.FunctionOID" />
+        <input type="hidden" name="VideoUrlList[@Model.Index].FunctionType" value="@Model.FunctionType" />
+        <input type="hidden" name="VideoUrlList[@Model.Index].ImageHeight" value="@Model.ImageHeight" />
+        <input type="hidden" name="VideoUrlList[@Model.Index].ImageWidth" value="@Model.ImageWidth" />
+        <input type="hidden" name="VideoUrlList[@Model.Index].FileName" value="@Model.FileName" />
+        <input type="hidden" name="VideoUrlList[@Model.Index].Bit" value="@Model.Bit" />
+        <input type="hidden" name="VideoUrlList[@Model.Index].Path" value="@Model.Path" />
+        <input type="hidden" name="VideoUrlList[@Model.Index].PreviewPath" value="@Model.PreviewPath" />
+        <input type="hidden" name="VideoUrlList[@Model.Index].CoverImage" value="@Model.CoverImage" class="coverInput" />
+        <table class="table">
+            <tr>
+                <td width="30%">
+                    <a data-toggle="modal" data-target="#showPhotoModal" onclick="setCoveragePicPath('@Url.Content(path)')">
+                        <img src="@Url.Content(string.Format("~/{0}/{1}", uploadDir, Model.PreviewPath))" width="50" />
+                    </a>
+                </td>
+                <td width="20%">
+                    <a href="@Url.Content(path)" target="_blank">@Model.FileName</a>
+                </td>
+                <td>
+                    <input type="button" value="delete" class="del btn btn-danger" onclick="removeVideoUrl('@Model.Index')" />
+                </td>
+            </tr>
+        </table>
+    </div>
+
+
+}

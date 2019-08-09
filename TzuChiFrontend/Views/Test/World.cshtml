@@ -1,0 +1,165 @@
+﻿@model TzuChiFrontend.Models.EBookSearchModel
+
+@{
+    ViewBag.Title = "慈濟世界";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+}
+
+
+@section styles{
+    <link href="~/Scripts/inform/css/reset.css" rel="stylesheet" type="text/css">
+    <link href="~/Scripts/inform/css/big_TeachPhilosophy.css" rel="stylesheet" type="text/css">
+    <style type="text/css">
+        #waDiv {
+            position: absolute;
+            width: 544px;
+            height: 327px;
+            left: 1376px;
+            top: 753px;
+            z-index: 1;
+        }
+
+        #gobkDiv {
+            position: absolute;
+            width: 130px;
+            height: 130px;
+            left: 1761px;
+            top: 880px;
+            z-index: 2;
+        }
+
+        #bookDiv {
+            position: absolute;
+            width: 1580px;
+            height: 1000px;
+            left: 164px;
+            top: 73px;
+            z-index: 5;
+        }
+
+        #TabDiv {
+            position: absolute;
+            width: 70px;
+            height: 905px;
+            top: 101px;
+            left: 1703px;
+            z-index: 6;
+        }
+
+        #MvDiv {
+            position: absolute;
+            width: 1920px;
+            height: 1080px;
+            z-index: 8;
+            background-color: #333333;
+            opacity: 0.5;
+        }
+
+        #MvDiv1 {
+            position: absolute;
+            width: 1120px;
+            height: 620px;
+            z-index: 10;
+            left: 375px;
+            top: 230px;
+        }
+
+        #waDiv {
+            top: 749px;
+        }
+
+        body {
+            overflow: hidden;
+        }
+
+        .noscroll {
+            position: fixed;
+            overflow-y: scroll;
+        }
+    </style>
+}
+
+
+
+
+
+<div id="bookDiv" class="bookbk">
+
+    @Html.Partial("_Book", Model)
+</div>
+
+
+<div class='cont2Div'>
+
+    <div style="padding: 0px; text-align: center">
+
+        <!-- tcust加寫側標-->
+        <div id="TabDiv" style="display:none">
+
+        </div>
+        <!--回到首頁按鈕-->
+        <div id="gobkDiv" class="btn">
+            <a href="@Url.Action("index","Test")">
+                <img src="~/images/ebook/gobk.png" width="130" height="130" border="0">
+            </a>
+        </div>
+
+        <div id="waDiv">
+            <canvas id="canvas" width="544" height="327"></canvas>
+        </div>
+        <!--上方主選單 Start-->
+        <div class="cont2Div">
+            @Html.Partial("_MenuWorld", Model)
+        </div>
+
+
+
+
+
+    </div>
+
+
+
+    <!--翻頁控制-->
+    <div id="toolbox">
+
+    </div>
+
+
+</div>
+
+@section scripts{
+    <script type="text/javascript" src="~/Scripts/jquery.min.1.7.js"></script>
+    <script type="text/javascript" src="~/Scripts/turn.js"></script>
+    <!-- 加入按鈕動畫 -->
+    <script src="~/Scripts/easeljs-0.6.0.min.js"></script>
+    <script src="~/Scripts/tweenjs-0.4.0.min.js"></script>
+    <script src="~/Scripts/movieclip-0.6.0.min.js"></script>
+    <script src="~/Scripts/preloadjs-0.3.0.min.js"></script>
+    <script src="~/Scripts/water.js"></script>
+    <script src="~/Scripts/ebook/init.js"></script>
+    <script>
+
+        $(document).ready(function () {
+
+            init();//水紋
+            $('body').css('top', -(document.documentElement.scrollTop) + 'px').addClass('noscroll');
+            //關閉彈跳視窗
+            $(".WINclose").click(function () {
+                document.getElementById('videoDiv').style.visibility = 'hidden';
+            });
+            //bookInit();//for the first time
+            //顯示彈跳視窗
+            $("#showVideoFrame").click(function () {
+                document.getElementById('videoDiv').style.visibility = 'visible';
+            });
+
+
+        });
+
+
+
+
+    </script>
+}

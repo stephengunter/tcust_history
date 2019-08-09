@@ -1,0 +1,106 @@
+﻿
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#bookDiv').slick({
+            //prevArrow: $('.arrowL'),
+            //nextArrow: $('.arrowR'),
+            centerMode: true,
+            slidesToShow: 1,
+            centerPadding: '300px',
+            touchThreshold: 100,
+            infinite:false,
+            onAfterChange:adjustShadow,
+            onInit:adjustShadow
+        });
+        if ($('#videobtn').length !== 0) {
+            $('#videobtn').click(function () {
+                $('#MvDiv').show();
+                $('#MvDiv1').show();
+            });
+        }
+    });
+</script>
+<style>
+    .slick-slide:not(.slick-center) {
+        -webkit-transform: scale(0.8);
+        transform: scale(0.8);
+        opacity: 0.5;
+    }
+
+    .slick-center {
+        -webkit-transform: scale(1);
+        transform: scale(1);
+        opacity: 1;
+    }
+
+    #bookDiv {
+        margin-top: 100px;
+	height:800px;
+    }
+</style>
+
+@*<div class="arrowL" style="left:80px;position:absolute"><a href="#"></a></div>*@
+<div id="bookDiv">
+    <!--slider Strat-->
+    <div><img src="~/Images/Humanistic/book7/slide1.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book7/slide2.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book7/slide3.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book7/slide4.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book7/slide5.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book7/slide6.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book7/slide7.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book7/slide8.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book7/slide9.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book7/slide10.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book7/slide11.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book7/slide12.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book7/slide13.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book7/slide14.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book7/slide15.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book7/slide16.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book7/slide17.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book7/slide18.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book7/slide19.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book7/slide20.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book7/slide21.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book7/slide22.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book7/slide23.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book7/slide24.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book7/slide25.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book7/slide26.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book7/slide27.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book7/slide28.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book7/slide29.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book7/slide30.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book7/slide31.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book7/slide32.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book7/slide33.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book7/slide34.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book7/slide35.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book7/slide36.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book7/slide37.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book7/slide38.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book7/slide39.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book7/slide40.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book7/slide41.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book7/slide42.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book7/slide43.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book7/slide44.jpg" width="950" height="635"></div>
+    <div><img src="~/Images/Humanistic/book7/slide45.jpg" width="950" height="635"></div>
+    <!--slider End-->
+</div>
+@*<div class="arrowR" style="right:260px;position:absolute"><a href="#"></a></div>*@
+
+<!--上方主選單 Start-->
+<div class="cont7Div">
+    <!--<div class="cbtnmenu">
+    <div style="float:left;display:block;width:220px; height:50px;">
+    <ul class="cbtn1"><a href="book7-1.html">室內空間</a></ul><ul class="cbtnline"><img src="images/cbtnline4.png" width="220" height="5"></ul></div>
+    <div style="float:left;display:block;width:220px; height:50px;">
+      <ul class="cbtn1D">戶外空間</ul><ul class="cbtnline"><img src="images/cbtnline5D.png" width="240" height="5"></ul></div>-->
+    @if (ViewBag.Video != null && ViewBag.Video.Count != 0)
+    {
+        <div id="videobtn" class="btn" style="float:left;display:block;width:100px; height:50px;"><a href="#"><img src="/Images/Humanistic/btn3.png" width="56" height="56" border="0"></a></div>
+    }
+</div>
+<!--上方主選單 End-->

@@ -1,0 +1,94 @@
+﻿@{
+    ViewBag.Title = "校史館 - 資訊查詢 | 校景相簿";
+}
+
+@section scripts {
+    <script src="@Url.Content("~/Scripts/slick_v.js")"></script>
+    <script>
+        $('#slick-area').slick({
+            centerMode: false,
+            dots: false,
+            vertical: true,
+            slidesToShow: 1,
+            infinite: true,
+            arrows: true
+        });
+
+        $('.picmenu2').click(function () {
+            $('.slick-prev').click();
+        });
+
+        $('.picmenu3').click(function () {
+            $('.slick-next').click();
+        });
+    </script>
+}
+
+@section styles{
+    <link href="~/Content/slick.css" rel="stylesheet" />
+    <link href="~/Scripts/inform/css/reset.css" rel="stylesheet" type="text/css">
+    <link href="~/Scripts/inform/css/tzuchi.css" rel="stylesheet" type="text/css">
+    <link href="~/Scripts/inform/css/maptip.css" rel="stylesheet" type="text/css">
+    <link href="~/Scripts/inform/css/style.css" rel="stylesheet" type="text/css" />
+}
+
+<div class="wbox1" style="width:1920px;">
+    <!--左邊標題-->
+    <div class="leftbox"><img src="~/Scripts/inform/images/inform/title_s2.png" width="134" height="750"></div>
+    <!--中間表格-->
+    <div class="centerbox">
+        <div class="map">
+            <div id="tipBox1"><img src="~/Scripts/inform/images/picture/maptip1.png" width="112" height="56"> </div>
+            <div id="tipBox2"><img src="~/Scripts/inform/images/picture/maptip2.png" width="112" height="56"> </div>
+            <div id="tipBox3"><img src="~/Scripts/inform/images/picture/maptip3.png" width="112" height="56"> </div>
+            <div id="tipBox4"><img src="~/Scripts/inform/images/picture/maptip4.png" width="112" height="56"> </div>
+            <div id="tipBox5"><img src="~/Scripts/inform/images/picture/maptip5.png" width="112" height="56"> </div>
+            <div id="tipBox6"><img src="~/Scripts/inform/images/picture/maptip6.png" width="112" height="56"> </div>
+            <div id="tipBox7"><img src="~/Scripts/inform/images/picture/maptip7.png" width="112" height="56"> </div>
+            <div id="tipBox8"><img src="~/Scripts/inform/images/picture/maptip8.png" width="112" height="56"> </div>
+            <div id="tipBox9"><img src="~/Scripts/inform/images/picture/maptip9.png" width="112" height="56"> </div>
+            <div id="tipBox10"><img src="~/Scripts/inform/images/picture/maptip10.png" width="112" height="56"> </div>
+            <div id="tipBox11"><img src="~/Scripts/inform/images/picture/maptip11.png" width="112" height="56"> </div>
+            <div id="tipBox12"><img src="~/Scripts/inform/images/picture/maptip12.png" width="112" height="56"> </div>
+            <div id="tipBox13"><img src="~/Scripts/inform/images/picture/maptip13.png" width="112" height="56"> </div>
+            <div id="tipBox14"><img src="~/Scripts/inform/images/picture/maptip14.png" width="112" height="56"> </div>
+            <div id="tipBox15"><img src="~/Scripts/inform/images/picture/maptip15.png" width="112" height="56"> </div>
+            <div id="tipBox16"><img src="~/Scripts/inform/images/picture/maptip16.png" width="112" height="56"> </div>
+        </div>
+    </div>
+    <!--右邊選單-->
+    <div style="float:left;display:block;width:50px;padding:0px 0px 0px 0px;margin:0px 0px 0px -50px;">
+        <ul class="menu1"><img src="~/Scripts/inform/images/picture/menu_1.png" width="263" height="70"></ul>
+        <ul class="picmenu2"><a href="#"></a></ul><!---->
+        <ul class="picmenu4">
+            <!--
+                TODO 
+                RAZOR 
+                IMAGE
+            -->
+            <div id="slick-area">
+                <div class="slick-el">
+                    <li class="picmenu5"><a href="inform_2_pic.html"></a></li>
+                    <li class="picmenu6"><a href="inform_2_pic.html"></a></li>
+                    <li class="picmenu7"><a href="inform_2_pic.html"></a></li>
+                    <li class="picmenu8"><a href="inform_2_pic.html"></a></li>
+                    <li class="picmenu9"><a href="inform_2_pic.html"></a></li>
+                    <li class="picmenu10"><a href="inform_2_pic.html"></a></li>
+                </div>
+                <div class="slick-el">
+                    <li class="picmenu5"><a href="inform_2_pic.html"></a></li>
+                    <li class="picmenu6"><a href="inform_2_pic.html"></a></li>
+                    <li class="picmenu7"><a href="inform_2_pic.html"></a></li>
+                    <li class="picmenu8"><a href="inform_2_pic.html"></a></li>
+                    <li class="picmenu9"><a href="inform_2_pic.html"></a></li>
+                    <li class="picmenu10"><a href="inform_2_pic.html"></a></li>
+                </div>
+            </div>
+        </ul>
+        <ul>
+            <p class="picmenu3"><a  href="#"></a></p><!---->
+        </ul>
+        <ul class="btnIconr2"><a href="@Url.Content("~/InfoInquiry/Index")"></a></ul>
+    </div>
+</div>
+

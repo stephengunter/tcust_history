@@ -1,0 +1,43 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section styles {
+    <link href="~/Scripts/inform/css/reset.css" rel="stylesheet" type="text/css">
+    <link href="~/Scripts/inform/css/big.css" rel="stylesheet" type="text/css">
+}
+
+@section scripts{
+<script src="~/Scripts/jquery-1.10.2.js"></script>
+<script>
+    var carouselImgs = ['/Images/Founding/bk1.jpg',
+        '/Images/Founding/bk2.jpg',
+        '/Images/Founding/bk3.jpg',
+        '/Images/Founding/bk4.jpg',
+        '/Images/Founding/bk5.jpg',
+        '/Images/Founding/bk6.jpg', ],//所有輪播圖片路徑
+    carouselIndex = 1;
+
+
+    $(function () {
+        setInterval('carouselInit()', 5000);
+    });
+
+    function carouselInit() {
+        $('.timebk').fadeOut('slow', function () {
+            $('.timebk').attr('src', carouselImgs[carouselIndex]);
+            carouselIndex = (carouselIndex + 1) % carouselImgs.length;
+            $('.timebk').fadeIn();
+        });
+    }
+</script>
+}
+<div id="supersize">
+    <span class="big">
+        <a href="@Url.Action("GetAllForFrontPage","Founding")">
+            <img class="timebk" src="~/Images/Founding/bk1.jpg" width="3840" height="1080" border="0" align="left">
+        </a>
+    </span>
+</div>
+

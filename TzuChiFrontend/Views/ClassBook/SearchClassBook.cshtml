@@ -1,0 +1,306 @@
+﻿@model TzuChiClassLibrary.BO.PagenationModel
+@{
+    ViewBag.Title = "校史館 - 資訊查詢 | 校園日誌";
+    string frontendBaseURL = System.Web.Configuration.WebConfigurationManager.AppSettings["website.frontend"];
+    string backendBaseURL = System.Web.Configuration.WebConfigurationManager.AppSettings["website.backend"];
+}
+
+@section scripts {
+    <script src="@Url.Content("~/Scripts/inform/js/modernizr.custom.79639.js")" type="text/javascript"></script>
+    <script src="~/Scripts/infinite-scroll/jquery.infinitescroll.js"></script>
+    <script src="~/Scripts/hammer.js-master/hammer.js"></script>
+    <script>
+        $(function () {
+            //infScroll();
+            //triggerInfiniteScoll();
+            dropDonwList();
+            bindSearch();
+
+            $('.dd').click(function () {
+                $('.textbox').val('');
+            });
+
+            $('#stunumberinput').focus(function () {
+                $('#stunameinput').val('');
+            });
+
+            $('#stunameinput').focus(function () {
+                $('#stunumberinput').val('');
+            });
+
+            var scrollTop = '@Request.Params["scrollTop"]';
+            $('.scrollFrame').scrollTop(parseInt(scrollTop));
+        });
+
+        function bindSearch() {
+
+            console.log('year' + '@Model.Year');
+            console.log('stuNumber' + '@Model.StudentID');
+            console.log('dep' + '@Model.Department');
+            console.log('cls' + '@Model.Class');
+            console.log('stuName' + '@Model.KeyWord');
+
+
+            var year = '@Model.Year' + '';
+            console.log(year);
+            if (year.length > 0) {
+                $('#yeardroplist').attr('data-value', year);
+                $('#yeardroplist').text(year);
+            }
+            var stuNumber = '@Model.StudentID' + '';
+            console.log(stuNumber);
+            if (stuNumber.length > 0) {
+                $('#stunumberinput').val(stuNumber)
+            }
+            var dep = '@Model.Department' + '';
+            console.log(dep);
+            if (dep.length > 0) {
+                $('#depdroplist').attr('data-value', dep);
+                $('#depdroplist').text(dep);
+            }
+            var cls = '@Model.Class' + '';
+            console.log(cls);
+            if (cls.length > 0) {
+                $('#clsdroplist').attr('data-value', cls);
+                $('#clsdroplist').text(cls);
+            }
+            var stuName = '@Model.KeyWord' + '';
+            console.log(stuName);
+            if (stuName.length > 0) {
+                $('#stunameinput').val(stuName);
+            }
+        }
+
+
+        function infScroll() {
+            $('.scrollFrame').infinitescroll({
+                navSelector: "#next:last",
+                nextSelector: "a#next:last",
+                itemSelector: ".Search",
+                dataType: 'html',
+                path: function (index) {
+                    return "scrollSearchClassBook?page=" + index;
+                }
+            }, function (newElements, data, url) { });
+            $(window).unbind('.infscr');
+            $('#next').click(function () {
+                jQuery('.scrollFrame').infinitescroll('retrieve');
+                return false;
+            });
+        }
+
+        function triggerInfiniteScoll() {
+            var $scrollFrame = $('.scrollFrame'),
+                _height = $scrollFrame.height(),
+                _scrollHeight = $scrollFrame.prop('scrollHeight'),
+                _maxScrollHeight = _scrollHeight - _height - 20;
+            _least = 0, // 距離底部多少就可以, 0 表示得完全到底部
+
+            $('.scrollFrame').scroll(function () {
+                var $this = $(this);
+                // 如果高度已經達到指定的高度就啟用 $submit
+                if (_maxScrollHeight - $this.scrollTop() <= _least) {
+                    $('#next').click();
+                    _height = $scrollFrame.height();
+                    _scrollHeight = $scrollFrame.prop('scrollHeight');
+                    _maxScrollHeight = _scrollHeight - _height - 20;
+                }
+            });
+        }
+        function submitForm() {
+            $("#clssearch").val($('#clsdroplist').attr('data-value'));
+            $("#depsearch").val($('#depdroplist').attr('data-value'));
+            $("#yearsearch").val($('#yeardroplist').attr('data-value'));
+            $("#stunamesearch").val($('#stunameinput').val());
+            $("#stunumbersearch").val($('#stunumberinput').val());
+            document.forms["submitForm"].submit();
+        }
+
+        function dropDonwList() {
+            $('.dropdown li').click(function () {
+                var txt = $(this).text();
+                var val = $(this).attr('data-value');
+                console.log(txt);
+                console.log(val);
+                $(this).parent('ul').siblings('.dd-text').text(txt);
+                $(this).parent('ul').siblings('.dd-text').attr('data-value', val);
+            });
+        }
+
+        function goTo(contentID) {
+            var scrollTop = $('.scrollFrame').scrollTop();
+            var clssearch = '@Model.Class';
+            var depsearch = '@Model.Department';
+            var yearsearch = '@Model.Year';
+            var stunumbersearch = '@Model.StudentID';
+            var stunamesearch = '@Model.KeyWord';
+            location.href = '@Url.Content("~/ClassBook/GetClassBookByContentID/")'
+                            + contentID
+                            + "?scrollTop="
+                            + scrollTop
+                              + "&clssearch="
+                              + clssearch
+                              + "&depsearch="
+                              + depsearch
+                              + "&yearsearch="
+                              + yearsearch
+                              + "&stunumbersearch="
+                              + stunumbersearch
+                              + "&stunamesearch="
+                              + stunamesearch;
+        }
+
+    </script>
+}
+
+@section styles{
+    <link href="~/Scripts/inform/css/reset.css" rel="stylesheet" type="text/css">
+    <link href="~/Scripts/inform/css/tzuchi.css" rel="stylesheet" type="text/css">
+    <link href="~/Scripts/inform/css/style.css" rel="stylesheet" type="text/css">
+    <noscript>
+        <link href="~/Scripts/inform/css/noJS.css" rel="stylesheet" type="text/css" />
+    </noscript>
+    <style>
+        .Search {
+            text-align: left !important;
+            padding-left: 50px;
+            overflow: hidden;
+        }
+    </style>
+
+
+}
+
+<div class="wbox1" style="width:1920px;">
+    <!--左邊標題-->
+    <div class="leftbox"><img src="~/Scripts/inform/images/inform/title_s3.png" width="134" height="750"></div>
+    <!--中間表格-->
+    <div class="centerbox">
+        <!--內文一-->
+        <div class="intxt5 scrollFrame">
+
+            @if (ViewBag.DataModel.Count > 0)
+            {
+                foreach (var item in ViewBag.DataModel)
+                {
+                    //int maxWordlength = 38; //不破版上限字38;
+                    int maxWordlength = 68; //不破版上限字38;
+                    var splitChar = "";
+
+                    //for (int i = 0; i < maxWordlength - item.StudentName.Length; i++)
+                    for (int i = 0; i < maxWordlength; i++)
+                    {
+                        splitChar += "..";
+                    }
+                    <ul class="Search">
+                        @*<span class="Seartxt"><a href="@Url.Content("~/ClassBook/GetClassBookByContentID/" + item.ClassBookID)">@string.Format("{0:yyyy.MM.dd}", item.ContentTime) @splitChar@item.StudentName</a></span>*@
+                        <span class="Seartxt"><a href="javascript:goTo('@item.ClassBookID')">@item.AcademicYear @splitChar@item.StudentName</a></span>
+                    </ul>
+                }
+            }
+            else
+            {
+                <text>查無結果</text>
+            }
+
+
+
+        </div>
+        <a style="display:none;" id="next" href="@Url.Content("~/ClassBook/ScrollSearchClassBook?page=1")">next page?</a>
+    </div>
+    <!--右邊選單-->
+    <div class="rightbox" style=" width:200px;">
+        <div style="float:left;display:block;text-align:center;margin:80px 0px 0px -15px;
+padding:0px 0px 0px 0px;"><img src="~/Scripts/inform/images/inform/righttitle.png" width="210" height="55"></div>
+        <div style="float:left;display:block;text-align:center;margin:10px 0px 0px 0px;
+padding:0px 0px 0px 0px;">
+            <section class="wrapper-demo">
+                <div class="dd wrapper-dropdown-5" tabindex="1" style="z-index:3" ;>
+                    <div class="dd-text" id="yeardroplist">
+                        學年度
+                    </div>
+                    <ul class="dropdown">
+                        <li data-value=""><a href="javascript:void(0)">學年度</a></li>
+                        @foreach (var item in ViewBag.SelectYearList)
+                        {
+                            <li data-value="@item"><a href="javascript:void(0)">@item</a></li>
+                        }
+                    </ul>
+
+                </div>
+            </section>
+            <section class="wrapper-demo">
+                <div class="dd wrapper-dropdown-5" tabindex="1" style="z-index:2" ;>
+                    <div class="dd-text" id="depdroplist">
+                        科系
+                    </div>
+                    <ul class="dropdown">
+                        <li data-value=""><a href="javascript:void(0)">科系</a></li>
+                        @foreach (var item in ViewBag.SelectDepList)
+                        {
+                            <li data-value="@item">
+                                <a href="javascript:void(0)">@item</a>
+                            </li>
+                        }
+                    </ul>
+                </div>
+            </section>
+            <section class="wrapper-demo">
+                <div class="dd wrapper-dropdown-5" tabindex="1" style="z-index:1" ;>
+                    <div class="dd-text" id="clsdroplist">班級</div>
+                    <ul class="dropdown">
+                        <li data-value=""><a href="javascript:void(0)">班級</a></li>
+                        @foreach (var item in ViewBag.SelectClsList)
+                        {
+                            <li data-value="@item">
+                                <a href="javascript:void(0)">@item</a>
+                            </li>
+                        }
+                    </ul>
+                </div>
+            </section>
+            <div class="menu5" style="margin:20px 0px 0px 0px;"><input name="textfield" type="text" class="textbox" id="stunumberinput" placeholder="輸入學號" size="10" maxlength="10"></div>
+            <div class="menu5" style="margin:20px 0px 0px 0px;"><input name="textfield" type="text" class="textbox" id="stunameinput" placeholder="輸入姓名" size="10" maxlength="5"></div>
+
+            <div class="btnright"><a href="javascript:submitForm();">搜尋</a></div>
+            <div class="btnIconr2"><a href="@Url.Content("~/SchoolDiary/Index")"></a></div>
+        </div>
+        <!-- jQuery if needed -->
+        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+        <script type="text/javascript">
+
+            function DropDown(el) {
+                this.dd = el;
+                this.initEvents();
+            }
+            DropDown.prototype = {
+                initEvents: function () {
+                    var obj = this;
+
+                    obj.dd.on('click', function (event) {
+                        $(this).toggleClass('active');
+                        event.stopPropagation();
+                    });
+                }
+            }
+
+            $(function () {
+                var dd = new DropDown($('.dd'));
+
+                $(document).click(function () {
+                    // all dropdowns
+                    $('.wrapper-dropdown-5').removeClass('active');
+                });
+            });
+
+        </script>
+    </div>
+</div>
+@using (Html.BeginForm("SearchClassBook", "ClassBook", null, FormMethod.Post, new { @id = "submitForm" }))
+{
+    <input type="hidden" id="clssearch" name="clssearch" />
+    <input type="hidden" id="depsearch" name="depsearch" />
+    <input type="hidden" id="yearsearch" name="yearsearch" />
+    <input type="hidden" id="stunumbersearch" name="stunumbersearch" />
+    <input type="hidden" id="stunamesearch" name="stunamesearch" />
+}

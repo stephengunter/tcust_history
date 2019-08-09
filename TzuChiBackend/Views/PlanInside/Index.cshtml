@@ -1,0 +1,218 @@
+﻿@model TzuChiBackend.ViewModels.PlanInsideSearchForm
+
+@using PagedList;
+@using PagedList.Mvc;
+
+@{
+    ViewBag.Title = "天涯比鄰-境內";
+    string message = TempData["PlanInsideMessage"] as string;
+
+    string pageNumber = "_page_";
+    string type = "_type_";
+    string area= "_area_";
+    string keyword = "_keyword_";
+    string order = "_order_";
+    string desc = "_desc_";
+    var routeValues = new { type = type, area=area, keyword= keyword, page = pageNumber, order=order, desc=desc };
+    Model.SearchUrl = Url.Action("Index", routeValues);
+}
+
+@section Scripts {
+    <script src='@Url.Content("~/Scripts/jquery-ui/jquery-ui.js")'></script>
+    <link href="@Url.Content("~/Scripts/jquery-ui/jquery-ui.css")" rel="stylesheet">
+    <style type="text/css">
+        .auto-style1 {
+            font-size: small;
+        }
+
+        .auto-style2 {
+            text-align: center;
+        }
+
+        .auto-style3 {
+            font-size: small;
+            text-align: center;
+        }
+
+        .auto-style4 {
+            color: #FF6300;
+            font-size: medium;
+        }
+    </style>
+    <script type="text/javascript">
+
+        function search() {
+            document.forms["searchForm"].submit();
+        }
+
+        function toggleOrder() {
+
+            if ($('#OrderByDescending').val() == 'True') {
+                $('#OrderByDescending').val('False')
+            } else {
+                $('#OrderByDescending').val('True')
+            }
+        }
+
+        $(document).ready(function () {
+            $('#select-type').change(function () {
+                search();
+            });
+            $('#select-area').change(function () {
+                search();
+            });
+
+            $('#th-department').click(function (e) {
+                e.preventDefault();
+                if ($('#OrderOptionId').val() == 1) {
+                    toggleOrder();
+                } else {
+                    $('#OrderOptionId').val(1)
+                }
+
+                search();
+            });
+            $('#th-city').click(function (e) {
+                e.preventDefault();
+                if ($('#OrderOptionId').val() == 2) {
+                    toggleOrder();
+                } else {
+                    $('#OrderOptionId').val(2)
+                }
+
+                search();
+            });
+            $('#th-company').click(function (e) {
+                e.preventDefault();
+                if ($('#OrderOptionId').val() == 3) {
+                    toggleOrder();
+                } else {
+                    $('#OrderOptionId').val(3)
+                }
+
+                search();
+            });
+
+            $('#btn-add').click(function (e) {
+                e.preventDefault();
+                var url = '@Url.Action("Page", new { categoryInsideID = "_type_" } )';
+                window.location = url.replace('_type_', '@Model.TypeId');
+
+            });
+
+            $(".btn-edit").click(function (e) {
+                e.preventDefault();
+                var id = $(this).data('id');
+
+                var url = '@Url.Action("Page", new { contentID = "_id_" } )';
+                window.location = url.replace('_id_', id);
+            });
+
+            $(".btn-delete").click(function (e) {
+                e.preventDefault();
+                var id = $(this).data('id');
+
+                del(id);
+            });
+
+
+            if ('@message' != "") {
+                alert('@message');
+            }
+
+
+        });
+    </script>
+}
+<h2>天涯比鄰-境內</h2>
+
+
+    
+<div class="form-inline">
+@using (Html.BeginForm("Index", "PlanInside", null, FormMethod.Post, new { @name = "searchForm"  }))
+{
+    <label class="control-label">類型</label>
+    @Html.DropDownListFor(m => m.TypeId, Model.TypeOptions, new { id = "select-type", @class = "form-control" })
+
+
+    <label class="control-label">地區</label>
+    @Html.DropDownListFor(m => m.AreaId, Model.AreaOptions, new { id = "select-area", @class = "form-control" })
+
+
+    <label class="control-label">檢索</label>
+    @Html.TextBoxFor(model => model.KeyWord, new { id = "input-keyword", @class = "form-control", @placeholder = "關鍵字" })
+
+    <input class="btn btn-success" id="btn-search" type="submit" value="搜索">
+
+    @Html.HiddenFor(m=>m.OrderOptionId, new { id = "OrderOptionId" }  )
+    @Html.HiddenFor(m => m.OrderByDescending, new { id = "OrderByDescending" })
+}
+</div>
+<div>
+    <label class="control-label">總筆數：(@Model.DataCount)</label>
+    <div class="btn-group">
+        <button id="btn-add" type="button" class="btn btn-primary" >
+            新增
+           
+        </button>
+        
+    </div>
+</div>
+
+
+<div style="padding-top:5px;">
+    @if (Model.TypeName == "Intern")
+    {
+        @Html.Partial("_Interns")
+    }
+    else
+    {
+        @Html.Partial("_Unions")
+    }
+
+</div>
+
+<br>
+@if (Model.DataCount > 0)
+{
+
+
+    <div>
+        @Html.PagedListPager(Model.PagedRecordResults,
+                             page => Model.SearchUrl.Replace(pageNumber, page.ToString()).Replace(type, Model.TypeId)
+                                                   .Replace(area, Model.AreaId).Replace(keyword, Model.KeyWord)
+                                                   .Replace(order, Model.OrderOptionId.ToString()).Replace(desc, Model.OrderByDescending.ToString()),
+
+                             Model.GetPagedListRenderOption()
+                           )
+    
+    </div>
+
+}
+
+<!-- Popup Photo Modal -->
+@Html.Partial("_PopupPhotoModal")
+<script>
+
+
+    function del(ContentID) {
+        if (confirm("資料刪除後將無法復原，確定要刪除嗎?")) {
+            $.ajax({
+                url: '@Url.Action("Delete")',
+                type: "POST",
+                data: {
+                    contentId: ContentID
+                },
+                dataType: "json"
+                }).success(function (json) {
+                    search();
+                });
+        }
+    }
+
+    function setCoveragePicPath(path) {
+        $(".popupPhoto").attr("src", "@Url.Content("~/Uploads/")" + path);
+        console.log(path);
+    }
+
+</script>

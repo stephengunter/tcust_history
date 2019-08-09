@@ -1,0 +1,139 @@
+﻿@{
+    ViewBag.Title = "創校緣起";
+}
+
+@section Scripts {
+    <script src='@Url.Content("~/Scripts/jquery-ui/jquery-ui.js")'></script>
+    <link href="@Url.Content("~/Scripts/jquery-ui/jquery-ui.css")" rel="stylesheet">
+    <style type="text/css">
+        .auto-style1 {
+            font-size: small;
+        }
+
+        .auto-style2 {
+            text-align: center;
+        }
+
+        .auto-style3 {
+            font-size: small;
+            text-align: center;
+        }
+
+        .auto-style4 {
+            color: #FF6300;
+            font-size: medium;
+        }
+
+        .fileUpload {
+            position: relative;
+            overflow: hidden;
+            margin: 10px;
+        }
+
+            .fileUpload input.upload {
+                position: absolute;
+                top: 0;
+                right: 0;
+                margin: 0;
+                padding: 0;
+                font-size: 20px;
+                cursor: pointer;
+                opacity: 0;
+                filter: alpha(opacity=0);
+            }
+    </style>
+    <script type="text/javascript">
+        $(function () {
+            //上傳
+            $(".upload").change(function () {
+                var file = this.files[0];
+                var fileName = $(this).val().replace(/C:\\fakepath\\/i, '');
+                var fileExtension = fileName.replace(/^.*\./, '');
+                var data_filename = $(this).attr('data-filename');
+
+                if (fileExtension != "cshtml") {
+                    alert("僅接受 cshtml 格式檔案。");
+                } else {
+                    if (confirm("即將上傳" + fileName + "，確定上傳？")) {
+                        var formData = new FormData();
+                        formData.append("filedata", file);
+                        formData.append("coverPath", "Views/Founding/");
+                        formData.append("fileName", data_filename);
+                        $.ajax({
+                            type: "POST",
+                            url: '@Url.Action("UploadMaintainData", "FileUtility")',
+                            data: formData,
+                            dataType: 'json',
+                            contentType: false,
+                            processData: false,
+                            success: function (response) {
+                                if (response == "true") {
+                                    alert("上傳成功");
+                                } else {
+                                    alert("上傳失敗");
+                                }
+                            },
+                            error: function (error) {
+                                alert("上傳失敗");
+                            }
+                        });
+                    }
+                }
+
+                $(this).val('');
+            });
+        });
+    </script>
+
+}
+<h2>創校緣起</h2>
+<div class="auto-style4"><strong>Founding</strong></div>
+<div style="padding-left:20px; padding-top:10px;">
+    <table>
+        <tr>
+            <td style="text-align:right"><label class="control-label">創校緣起首頁cshtml檔案：</label></td>
+            <td>
+                <a class="btn btn-success" target="_blank" href="/Founding/DownloadFounding?name=GetAllForFrontPage">下載</a>
+                <div class="fileUpload btn btn-primary">
+                    <span>上傳</span>
+                    <input name="filedata" type="file" class="upload" data-filename="GetAllForFrontPage.cshtml" />
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td style="text-align:right"><label class="control-label">創校緣起cshtml檔案：</label></td>
+            <td>
+                <a class="btn btn-success" target="_blank" href="/Founding/DownloadFounding?name=_OriginalPartialView">下載</a>
+                <div class="fileUpload btn btn-primary">
+                    <span>上傳</span>
+                    <input name="filedata" type="file" class="upload" data-filename="_OriginalPartialView.cshtml" />
+                </div>
+                <br />
+            </td>
+        </tr>
+        <tr>
+            <td style="text-align:right"><label class="control-label">副總執行長cshtml檔案：</label></td>
+            <td>
+                <a class="btn btn-success" target="_blank" href="/Founding/DownloadFounding?name=_CEOPartialView">下載</a>
+                <div class="fileUpload btn btn-primary">
+                    <span>上傳</span>
+                    <input name="filedata" type="file" class="upload" data-filename="_CEOPartialView.cshtml" />
+                </div>
+
+            </td>
+
+        </tr>
+        <tr>
+            <td style="text-align:right"><label class="control-label">歷任校長cshtml檔案：</label></td>
+            <td>
+                <a class="btn btn-success" target="_blank" href="/Founding/DownloadFounding?name=_PrincipalPartialView">下載</a>
+                <div class="fileUpload btn btn-primary">
+                    <span>上傳</span>
+                    <input name="filedata" type="file" class="upload" data-filename="_PrincipalPartialView.cshtml" />
+                </div>
+            </td>
+        </tr>
+    </table>
+</div>
+<br>
+

@@ -1,0 +1,95 @@
+﻿@using Microsoft.AspNet.Identity
+@using TzuChiBackend.Security
+
+@if (Request.IsAuthenticated)
+{
+    <ul class="nav navbar-nav">
+        <li class="dropdown">
+            <a href="javascript:void(0)">
+                首頁
+                <span class="caret"></span>
+            </a>
+            <ul class="dropdown-menu">
+                <!-- dropdown menu links -->
+                <li>@Html.ActionLink("置頂文章", "Index", "Tops")</li>
+              
+            </ul>
+        </li>
+        <li>@Html.ActionLink("大事紀要", "List", "EventCalendar")</li>
+        <li class="dropdown">
+            <a href="javascript:void(0)">
+                資訊管理
+                <span class="caret"></span>
+            </a>
+            <ul class="dropdown-menu">
+                <!-- dropdown menu links -->
+                <li>@Html.ActionLink("校園日誌與榮譽榜", "Index", "SchoolDiary")</li>
+                <li>@Html.ActionLink("大愛新聞", "List", "News")</li>
+            </ul>
+        </li>
+        <li>@Html.ActionLink("輪播管理", "List", "ImageShow")</li>
+        <li class="dropdown">
+            <a href="javascript:void(0)">
+                天涯比鄰
+                <span class="caret"></span>
+            </a>
+            <ul class="dropdown-menu">
+                <!-- dropdown menu links -->
+                <li>@Html.ActionLink("境內", "Index", "PlanInside")</li>
+                <li>@Html.ActionLink("境外", "Index", "PlanOutside")</li>
+            </ul>
+        </li>
+        <li class="dropdown">
+            <a href="javascript:void(0)">
+                檔案上傳
+                <span class="caret"></span>
+            </a>
+            <ul class="dropdown-menu">
+                <!-- dropdown menu links -->
+                <li>@Html.ActionLink("畢業紀念冊", "List", "ClassBook")</li>
+                <li>@Html.ActionLink("證嚴上人與慈濟世界", "List", "TeachPhilosophy")</li>
+                <li>@Html.ActionLink("慈濟人文與博雅教育", "List", "Humanistic")</li>
+                <li>@Html.ActionLink("創校緣起", "List", "Founding")</li>
+            </ul>
+        </li>
+        <li class="dropdown">
+            <a href="javascript:void(0)">
+                類別管理
+                <span class="caret"></span>
+            </a>
+            <ul class="dropdown-menu">
+                <!-- dropdown menu links -->
+                <li>
+                    <a id="modal" data-toggle="modal" data-target="#myModal" href="@Url.Action("Index", "Category", new { categoryTypeID = TzuChiClassLibrary.BO.CategoryModel.CATEGORY_CATEGORYTYPEID_YEAR })">年度管理</a>
+                </li>
+                <li>
+                    <a id="modal" data-toggle="modal" data-target="#myModal" href="@Url.Action("Index", "Category", new { categoryTypeID = TzuChiClassLibrary.BO.CategoryModel.CATEGORY_CATEGORYTYPEID_DEPARTMENT })">科系管理</a>
+                </li>
+                <li>
+                    <a id="modal" data-toggle="modal" data-target="#myModal" href="@Url.Action("Index", "Category", new { categoryTypeID = TzuChiClassLibrary.BO.CategoryModel.CATEGORY_CATEGORYTYPEID_CLASS })">班級管理</a>
+                </li>
+                <li>
+                    <a id="modal" data-toggle="modal" data-target="#myModal" href="@Url.Action("Index", "Category", new { categoryTypeID = TzuChiClassLibrary.BO.CategoryModel.CATEGORY_CATEGORYTYPEID_CONTRACTDE })">天涯比鄰(境外)_簽約單位管理</a>
+                </li>
+                <li>
+                    <a id="modal" data-toggle="modal" data-target="#myModal" href="@Url.Action("Index", "Category", new { categoryTypeID = TzuChiClassLibrary.BO.CategoryModel.CATEGORY_CATEGORYTYPEID_COUNTRY })">天涯比鄰(境外)_國別管理</a>
+                </li>
+            </ul>
+        </li>
+        <li class="dropdown">
+            <a href="javascript:void(0)">
+                電子書
+                <span class="caret"></span>
+            </a>
+            <ul class="dropdown-menu">
+               
+                <li>@Html.ActionLink("電子書", "Index", "EBook")</li>
+                <li>@Html.ActionLink("影片專區", "Index", "Video")</li>
+            </ul>
+        </li>
+    </ul>
+}
+else
+{
+        
+}

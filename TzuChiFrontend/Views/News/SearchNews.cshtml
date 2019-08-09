@@ -1,0 +1,261 @@
+﻿@model TzuChiClassLibrary.BO.PagenationModel
+@{
+    ViewBag.Title = "SearchNews";
+    string frontendBaseURL = System.Web.Configuration.WebConfigurationManager.AppSettings["website.frontend"];
+    string backendBaseURL = System.Web.Configuration.WebConfigurationManager.AppSettings["website.backend"];
+}
+
+@section scripts {
+    <script type="text/javascript" src="~/Scripts/inform/js/modernizr.custom.79639.js"></script>
+    <script src="~/Scripts/infinite-scroll/jquery.infinitescroll.js"></script>
+    <script src="@Url.Content("~/Scripts/slick_h.js")"></script>
+
+    <script>
+        $(function () {
+            dropDonwList();
+            $('#submitBtn').click(function () {
+                submitForm();
+            });
+            infScroll();
+            triggerInfiniteScoll();
+            bindSearch();
+
+            @if(ViewBag.DataModel.Count < 10)
+            {
+              <text>
+                $('.intxt5').css('overflow','hidden');
+              </text>
+            }
+
+            console.log('month' + '@Model.Month');
+            console.log('year' + '@Model.Year');
+            console.log('keyword' + '@Model.KeyWord');
+        });
+
+        function dropDonwList() {
+            $('.dropdown li').click(function () {
+                var txt = $(this).text();
+                var val = $(this).attr('data-value');
+                console.log(txt);
+                console.log(val);
+                $(this).parent('ul').siblings('.dd-text').text(txt);
+                $(this).parent('ul').siblings('.dd-text').attr('data-value', val);
+            });
+        }
+
+        function submitForm() {
+            $("#yearSearch").val($('#yearDropList').attr('data-value'));
+            $("#monthSearch").val($('#monthDropList').attr('data-value'));
+            $("#keywordSearch").val($('#keyWordInput').val());
+            document.forms["submitForm"].submit();
+        }
+
+        function infScroll() {
+            $('.scrollFrame').infinitescroll({
+                navSelector: "#next:last",
+                nextSelector: "a#next:last",
+                itemSelector: ".Search",
+                dataType: 'html',
+                path: function (index) {
+                    return "ScrollSearchNews?page=" + index;
+                }
+            }, function (newElements, data, url) {
+                //USE FOR PREPENDING
+                // $(newElements).css('background-color','#ffef00');
+                // $(this).prepend(newElements);
+                //
+                //END OF PREPENDING
+                // window.console && console.log('context: ',this);
+                // window.console && console.log('returned: ', newElements);
+            });
+            $(window).unbind('.infscr');
+            $('#next').click(function () {
+                jQuery('.scrollFrame').infinitescroll('retrieve');
+                return false;
+            });
+        }
+
+        function triggerInfiniteScoll() {
+            var $scrollFrame = $('.scrollFrame'),
+                _height = $scrollFrame.height(),
+                _scrollHeight = $scrollFrame.prop('scrollHeight'),
+                _maxScrollHeight = _scrollHeight - _height - 20;
+            _least = 0, // 距離底部多少就可以, 0 表示得完全到底部
+
+            $('.scrollFrame').scroll(function () {
+                var $this = $(this);
+                // 如果高度已經達到指定的高度就啟用 $submit
+                if (_maxScrollHeight - $this.scrollTop() <= _least) {
+                    $('#next').click();
+                    _height = $scrollFrame.height();
+                    _scrollHeight = $scrollFrame.prop('scrollHeight');
+                    _maxScrollHeight = _scrollHeight - _height - 20;
+                }
+            });
+        }
+
+        function bindSearch() {
+
+            var year = '@Model.Year' + '';
+            var month = '@Model.Month' + '';
+            var keyword = '@Model.KeyWord' + '';
+
+            if (month.length > 0) {
+                $('#monthDropList').attr('data-value', month);
+
+                var monthArray = new Array(
+                    "一月", "二月", "三月",
+                    "四月", "五月", "六月",
+                    "七月", "八月", "九月",
+                    "十月", "十一月", "十二月");
+
+                $('#monthDropList').text(monthArray[month - 1]);
+            }
+
+            if (year.length > 0) {
+                $('#yearDropList').attr('data-value', year);
+                $('#yearDropList').text(year);
+            }
+
+            if (keyword.length > 0) {
+                $('#keyWordInput').val(keyword);
+            }
+        }
+    </script>
+}
+
+
+@section styles{
+    <link href="~/Content/slick.css" rel="stylesheet" type="text/css">
+    <link href="~/Scripts/inform/css/reset.css" rel="stylesheet" type="text/css" />
+    <link href="~/Scripts/inform/css/tzuchi.css" rel="stylesheet" type="text/css" />
+    <link href="~/Scripts/inform/css/style.css" rel="stylesheet" type="text/css" />
+    <noscript>
+        <link href="~/Scripts/inform/css/noJS.css" rel="stylesheet" type="text/css" />
+    </noscript>
+
+    <style>
+        .menu5 {
+            margin-top: 20px;
+        }
+
+        .Search {
+            text-align: left !important;
+            padding-left: 50px;
+            overflow: hidden;
+        }
+    </style>
+}
+<div class="wbox1" style="width:1920px;">
+    <!--左邊標題-->
+    <div class="leftbox"><img src="~/Scripts/inform/images/inform/title_s4.png" width="134" height="750"></div>
+    <!--中間表格-->
+    <div class="centerbox">
+        <!--內文一-->
+        @*<div class="intxt5 scrollFrame"> 移除無限卷軸*@
+        <div class="intxt5">
+            @if (ViewBag.DataModel.Count > 0)
+            {
+                foreach (var item in ViewBag.DataModel)
+                {   
+                    int maxWordlength = 40; //不破版上限字38;
+                    var splitChar = "";
+                    var contentName = item.ContentName.Trim();
+
+                    for (int i = 0; i < maxWordlength - contentName.Length; i++)
+                    {
+                        splitChar += "..";
+                    }
+                    <ul class="Search">
+                        <span class="Seartxt">
+                            <a href="@Url.Action("GetNews", "News", new { contentID = @item.ContentID })">@string.Format("{0:yyyy.MM.dd}", item.ContentTime) @splitChar@contentName</a>
+                        </span>
+                    </ul>
+                }
+            }
+            else
+            {
+                <text>查無結果</text>
+            }
+        </div>
+        <a style="display:none;" id="next" href="@frontendBaseURL/News/ScrollSearchNews?page=1">next page?</a>
+    </div>
+    <!--右邊選單-->
+    <div class="rightbox">
+        <div class="div2">
+            <section class="main">
+                <div class="wrapper-demo">
+                    <div class="dd wrapper-dropdown-5" tabindex="1" style="z-index:3" ;>
+                        <div id="yearDropList" class="dd-text" data-value="">年度</div>
+                        <ul class="dropdown" style="overflow-y:scroll;height:130px" ;>
+                            <li data-value=""><a href="javascript:void(0)">年度</a></li>
+                            @foreach (var item in ViewBag.SelectYearList)
+                            {
+                                <li data-value="@item.CategoryName"><a href="javascript:void(0)">@item.CategoryName</a></li>
+                            }
+                        </ul>
+                    </div>
+                </div>
+            </section>
+            <section class="main">
+                <div class="wrapper-demo">
+                    <div class="dd wrapper-dropdown-5" tabindex="1" style="z-index:2" ;>
+                        <div id="monthDropList" class="dd-text" data-value="">月份</div>
+                        <ul class="dropdown">
+                            <li data-value=""><a href="#">月份</a></li>
+                            <li data-value="1"><a href="#">一月</a></li>
+                            <li data-value="2"><a href="#">二月</a></li>
+                            <li data-value="3"><a href="#">三月</a></li>
+                            <li data-value="4"><a href="#">四月</a></li>
+                            <li data-value="5"><a href="#">五月</a></li>
+                            <li data-value="6"><a href="#">六月</a></li>
+                            <li data-value="7"><a href="#">七月</a></li>
+                            <li data-value="8"><a href="#">八月</a></li>
+                            <li data-value="9"><a href="#">九月</a></li>
+                            <li data-value="10"><a href="#">十月</a></li>
+                            <li data-value="11"><a href="#">十一月</a></li>
+                            <li data-value="12"><a href="#">十二月</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+        </div>
+        <div>
+            <ul class="menu5"><input name="textfield" type="text" class="textbox" id="keyWordInput" placeholder="輸入" size="10" maxlength="5"></ul>
+            <ul class="righttitle"><img src="~/Scripts/inform/images/inform/righttitle.png" width="210" height="55"></ul>
+            <ul class="btnright"><a id="submitBtn" href="javascript:void(0)">搜尋</a></ul>
+            <ul class="btnIcon"><a href="@Url.Content("~/SchoolDiary/Index")"></a></ul>
+        </div>
+        <!-- jQuery if needed -->
+        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+        <script type="text/javascript">
+            function DropDown(el) {
+                this.dd = el;
+                this.initEvents();
+            }
+            DropDown.prototype = {
+                initEvents: function () {
+                    var obj = this;
+                    obj.dd.on('click', function (event) {
+                        $(this).toggleClass('active');
+                        event.stopPropagation();
+                    });
+                }
+            }
+            $(function () {
+                var dd = new DropDown($('.dd'));
+                $(document).click(function () {
+                    // all dropdowns
+                    $('.wrapper-dropdown-5').removeClass('active');
+                });
+            });
+        </script>
+    </div>
+</div>
+
+@using (Html.BeginForm("SearchNews", "News", null, FormMethod.Post, new { @id = "submitForm" }))
+{
+    <input type="hidden" id="keywordSearch" name="keywordSearch" />
+    <input type="hidden" id="yearSearch" name="yearSearch" />
+    <input type="hidden" id="monthSearch" name="monthSearch" />
+}

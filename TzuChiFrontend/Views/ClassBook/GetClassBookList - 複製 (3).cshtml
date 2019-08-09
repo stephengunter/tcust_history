@@ -1,0 +1,551 @@
+﻿@model TzuChiClassLibrary.BO.PagenationModel
+@{
+    ViewBag.Title = "校史館 - 資訊查詢 | 校園日誌";
+    string frontendBaseURL = System.Web.Configuration.WebConfigurationManager.AppSettings["website.frontend"];
+    string backendBaseURL = System.Web.Configuration.WebConfigurationManager.AppSettings["website.backend"];
+}
+
+@section scripts {
+    <script src="@Url.Content("~/Scripts/inform/js/modernizr.custom.79639.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/slick_h.js")"></script>
+    <script src="~/Scripts/hammer.js-master/hammer.js"></script>
+    <script>
+        function iEsc() { return false; }
+        function iRec() { return true; }
+        function DisableKeys() {
+            if (event.ctrlKey || event.shiftKey || event.altKey) {
+                window.event.returnValue = false;
+                iEsc();
+            }
+        }
+        document.ondragstart = iEsc;
+        document.onkeydown = DisableKeys;
+        document.oncontextmenu = iEsc;
+        if (typeof document.onselectstart != "undefined")
+            document.onselectstart = iEsc;
+        else {
+            document.onmousedown = iEsc;
+            document.onmouseup = iRec;
+        }
+        function DisableRightClick(qsyzDOTnet) {
+            if (window.Event) {
+                if (qsyzDOTnet.which == 2 || qsyzDOTnet.which == 3)
+                    iEsc();
+            }
+            else
+                if (event.button == 2 || event.button == 3) {
+                    event.cancelBubble = true
+                    event.returnValue = false;
+                    iEsc();
+                }
+        }
+
+
+
+
+        /*防止拖動出現禁止符號*/
+        window.onload = function (e) {
+            var evt = e || window.event, imgs, i;
+            if (evt.preventDefault) {
+                imgs = document.getElementsByTagName('img');
+                for (i = 0; i < imgs.length; i++) {
+                    imgs[i].onmousedown = disableDragging;
+                }
+            }
+            else {
+                document.ondragstart = function () {
+                    return false;
+                };
+            }
+        };
+        function disableDragging(e) {
+            e.preventDefault();
+            return false;
+        }
+
+
+
+        $(function () {
+            $('.slider-for').slick({
+                infinite: true,
+                slidesToShow: 1,
+                slidesToScroll: 4,
+                arrows: false,
+                fade: true,
+                asNavFor: '.slider-nav',
+                slide: 'span',
+                onAfterChange: function () {
+                    yearTxtChg(); //學年度文字替換
+                    focusFirstSlickActive();
+                }
+            });
+            $('.slider-nav').slick({
+                initialSlide:1,
+                infinite: true,
+                slidesToShow: 5,
+                slidesToScroll: 4,
+                asNavFor: '.slider-for',
+                centerPadding: '30px',
+                dots: false,
+                arrows: false,
+                centerMode: false,
+                focusOnSelect: true
+            });
+            yearTxtChg();
+            dropDonwList();
+            focusFirstSlickActive();
+
+            $('.dd').click(function () {
+                $('.textbox').val('');
+            });
+
+            $('#stunumberinput').focus(function () {
+                $('#stunameinput').val('');
+            });
+
+            $('#stunameinput').focus(function () {
+                $('#stunumberinput').val('');
+            });
+
+            $('.wbox1').fadeIn();
+        });
+        function focusFirstSlickActive() {
+            //$(".slick-active:eq(1)").addClass("hollow");
+            //$(".slick-active:gt(1)").removeClass("hollow");
+        }
+
+        function yearTxtChg() {
+            var dataYear = $('.divbookbig').find('.slick-active').find('img').attr('data-year');
+
+            dataYear = (dataYear.length > 0) ? dataYear : '';
+            $('.title_08').text(dataYear);
+        }
+
+        function submitForm() {
+            $("#clssearch").val($('#clsdroplist').attr('data-value'));
+            $("#depsearch").val($('#depdroplist').attr('data-value'));
+            $("#yearsearch").val($('#yeardroplist').attr('data-value'));
+            $("#stunamesearch").val($('#stunameinput').val());
+            $("#stunumbersearch").val($('#stunumberinput').val());
+            document.forms["submitForm"].submit();
+        }
+
+        function dropDonwList() {
+            $('.dropdown li').click(function () {
+                var txt = $(this).text();
+                var val = $(this).attr('data-value');
+                console.log(txt);
+                console.log(val);
+                $(this).parent('ul').siblings('.dd-text').text(txt);
+                $(this).parent('ul').siblings('.dd-text').attr('data-value', val);
+            });
+        }
+
+        $('.arrowL').click(function () {
+            $('.slider-nav').slickPrev();
+            $('.slider-nav').slickPrev();
+            $('.slider-nav').slickPrev();
+            $('.slider-nav').slickPrev();
+        });
+
+        $('.arrowR').click(function () {
+            $('.slider-nav').slickNext();
+            $('.slider-nav').slickNext();
+            $('.slider-nav').slickNext();
+            $('.slider-nav').slickNext();
+        });
+
+
+
+
+
+
+    </script>
+
+}
+
+@section styles{
+    <link href="~/Content/slick_style.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/slick.css" rel="stylesheet" />
+    <link href="~/Scripts/inform/css/reset.css" rel="stylesheet" type="text/css">
+    <link href="~/Scripts/inform/css/tzuchi.css" rel="stylesheet" type="text/css">
+    <link href="~/Scripts/inform/css/style.css" rel="stylesheet" type="text/css">
+    <noscript>
+        <link href="~/Scripts/inform/css/noJS.css" rel="stylesheet" type="text/css" />
+    </noscript>
+    <style>
+        img {
+            border: none !important;
+        }
+
+        .slick-slide {
+            margin-left: -5px !important;
+            margin-right: -5px !important;
+        }
+
+        .slider-nav {
+            /*left: 350px;*/
+        }
+
+        /*.slick-track {
+            width:1420px !important;
+
+        }*/
+
+        .hollow {
+          border:#FFF;
+          border-style:solid;
+          border-width:2px;
+          box-shadow: 2px  2px 10px #333;
+        }
+    </style>
+}
+
+
+
+<div class="wbox1" style="width:1920px; display:none;">
+    <!--左邊標題-->
+    <div class="leftbox"><img src="~/Scripts/inform/images/inform/title_s3.png" width="134" height="750"></div>
+    <!--中間表格-->
+    <div class="centerbox">
+        <!--年度-->
+        <div class="divbook">
+            <ul class="title_10">
+                <li class="title_08">98</li>
+                <li class="title_09">學年度</li>
+            </ul>
+            <ul class="divline">
+                <img src="~/Scripts/inform/images/book/bookline.png" width="200" height="1">
+            </ul>
+            <ul class="divbookbig slider-for" style="width:413px !important;">
+                <span class=" slider-for-el">
+                    <a href="@Url.Content("~/ClassBook/GetClassBookByContentID" + "?year=80")">
+                        <img data-year="80" src="~/Scripts/inform/images/book/classbook/1991/1991-001.jpg" width="413" height="584">
+                    </a>
+                </span>
+                <span class=" slider-for-el">
+                    <a href="@Url.Content("~/ClassBook/GetClassBookByContentID" + "?year=81")">
+                        <img data-year="81" src="~/Scripts/inform/images/book/classbook/1992/1992-001.jpg" width="413" height="584">
+                    </a>
+                </span>
+                <span class=" slider-for-el">
+                    <a href="@Url.Content("~/ClassBook/GetClassBookByContentID" + "?year=82")">
+                        <img data-year="82" src="~/Scripts/inform/images/book/classbook/1993/1993-001.jpg" width="413" height="584">
+                    </a>
+                </span>
+                <span class=" slider-for-el">
+                    <a href="@Url.Content("~/ClassBook/GetClassBookByContentID" + "?year=83")">
+                        <img data-year="83" src="~/Scripts/inform/images/book/classbook/1994/1994-001.jpg" width="413" height="584">
+                    </a>
+                </span>
+                <span class=" slider-for-el">
+                    <a href="@Url.Content("~/ClassBook/GetClassBookByContentID" + "?year=84")">
+                        <img data-year="84" src="~/Scripts/inform/images/book/classbook/1995/1995-001.jpg" width="413" height="584">
+                    </a>
+                </span>
+                <span class=" slider-for-el">
+                    <a href="@Url.Content("~/ClassBook/GetClassBookByContentID" + "?year=85")">
+                        <img data-year="85" src="~/Scripts/inform/images/book/classbook/1996/1996-001.jpg" width="413" height="584">
+                    </a>
+                </span>
+                <span class=" slider-for-el">
+                    <a href="@Url.Content("~/ClassBook/GetClassBookByContentID" + "?year=86")">
+                        <img data-year="86" src="~/Scripts/inform/images/book/classbook/1997/1997-001.jpg" width="413" height="584">
+                    </a>
+                </span>
+                <span class=" slider-for-el">
+                    <a href="@Url.Content("~/ClassBook/GetClassBookByContentID" + "?year=87")">
+                        <img data-year="87" src="~/Scripts/inform/images/book/classbook/1998/1998-001.jpg" width="413" height="584">
+                    </a>
+                </span>
+                <span class=" slider-for-el">
+                    <a href="@Url.Content("~/ClassBook/GetClassBookByContentID" + "?year=88")">
+                        <img data-year="88" src="~/Scripts/inform/images/book/classbook/1999/1999-001.jpg" width="413" height="584">
+                    </a>
+                </span>
+                <span class=" slider-for-el">
+                    <a href="@Url.Content("~/ClassBook/GetClassBookByContentID" + "?year=89")">
+                        <img data-year="89" src="~/Scripts/inform/images/book/classbook/2000/2000-001.jpg" width="413" height="584">
+                    </a>
+                </span>
+                <span class=" slider-for-el">
+                    <a href="@Url.Content("~/ClassBook/GetClassBookByContentID" + "?year=90")">
+                        <img data-year="90" src="~/Scripts/inform/images/book/classbook/2001/2001-001.jpg" width="413" height="584">
+                    </a>
+                </span>
+                <span class=" slider-for-el">
+                    <a href="@Url.Content("~/ClassBook/GetClassBookByContentID" + "?year=91")">
+                        <img data-year="91" src="~/Scripts/inform/images/book/classbook/2002/2002-001.jpg" width="413" height="584">
+                    </a>
+                </span>
+                <span class=" slider-for-el">
+                    <a href="@Url.Content("~/ClassBook/GetClassBookByContentID" + "?year=92")">
+                        <img data-year="92" src="~/Scripts/inform/images/book/classbook/2003/2003-001.jpg" width="413" height="584">
+                    </a>
+                </span>
+                <span class=" slider-for-el">
+                    <a href="@Url.Content("~/ClassBook/GetClassBookByContentID" + "?year=93")">
+                        <img data-year="93" src="~/Scripts/inform/images/book/classbook/2004/2004-001.jpg" width="413" height="584">
+                    </a>
+                </span>
+                <span class=" slider-for-el">
+                    <a href="@Url.Content("~/ClassBook/GetClassBookByContentID" + "?year=94")">
+                        <img data-year="94" src="~/Scripts/inform/images/book/classbook/2005/2005-001.jpg" width="413" height="584">
+                    </a>
+                </span>
+                <span class=" slider-for-el">
+                    <a href="@Url.Content("~/ClassBook/GetClassBookByContentID" + "?year=95")">
+                        <img data-year="95" src="~/Scripts/inform/images/book/classbook/2006/2006-001.jpg" width="413" height="584">
+                    </a>
+                </span>
+                <span class=" slider-for-el">
+                    <a href="@Url.Content("~/ClassBook/GetClassBookByContentID" + "?year=96")">
+                        <img data-year="96" src="~/Scripts/inform/images/book/classbook/2007/2007-001.jpg" width="413" height="584">
+                    </a>
+                </span>
+                <span class=" slider-for-el">
+                    <a href="@Url.Content("~/ClassBook/GetClassBookByContentID" + "?year=97")">
+                        <img data-year="97" src="~/Scripts/inform/images/book/classbook/2008/2008-001.jpg" width="413" height="584">
+                    </a>
+                </span>
+                <span class=" slider-for-el">
+                    <a href="@Url.Content("~/ClassBook/GetClassBookByContentID" + "?year=98")">
+                        <img data-year="98" src="~/Scripts/inform/images/book/classbook/2009/2009-001.jpg" width="413" height="584">
+                    </a>
+                </span>
+                <span class=" slider-for-el">
+                    <a href="@Url.Content("~/ClassBook/GetClassBookByContentID" + "?year=99")">
+                        <img data-year="99" src="~/Scripts/inform/images/book/classbook/2010/2010-001.jpg" width="413" height="584">
+                    </a>
+                </span>
+                <span class=" slider-for-el">
+                    <a href="@Url.Content("~/ClassBook/GetClassBookByContentID" + "?year=100")">
+                        <img data-year="100" src="~/Scripts/inform/images/book/classbook/2011/2011-001.jpg" width="413" height="584">
+                    </a>
+                </span>
+                <span class=" slider-for-el">
+                    <a href="@Url.Content("~/ClassBook/GetClassBookByContentID" + "?year=101")">
+                        <img data-year="101" src="~/Scripts/inform/images/book/classbook/2012/2012-001.jpg" width="413" height="584">
+                    </a>
+                </span>
+                <span class=" slider-for-el">
+                    <a href="@Url.Content("~/ClassBook/GetClassBookByContentID" + "?year=102")">
+                        <img data-year="102" src="~/Scripts/inform/images/book/classbook/2013/2013-001.jpg" width="413" height="584">
+                    </a>
+                </span>
+                <span class=" slider-for-el">
+                    <a href="@Url.Content("~/ClassBook/GetClassBookByContentID" + "?year=103")">
+                        <img data-year="103" src="~/Scripts/inform/images/book/classbook/2014/2014-001.jpg" width="413" height="584">
+                    </a>
+                </span>
+
+            </ul>
+        </div>
+        <div class="arrowL">
+            <a href="javascript:void(0)"><img src="~/Scripts/inform/images/book/arrowL.png" width="36" height="70" border="0"></a>
+        </div>
+        <div class="divbook1 slider-nav" style="width:890px; height:209px">
+            <div class=" slider-nav-el">
+                <img src="~/Scripts/inform/images/book/1991s.png">
+                <div class="title_12">80學年度</div>
+            </div>
+            <div class=" slider-nav-el">
+                <img src="~/Scripts/inform/images/book/1992s.png">
+                <div class="title_12">81學年度</div>
+            </div>
+            <div class=" slider-nav-el">
+                <img src="~/Scripts/inform/images/book/1993s.png">
+                <div class="title_12">82學年度</div>
+            </div>
+            <div class=" slider-nav-el">
+                <img src="~/Scripts/inform/images/book/1994s.png">
+                <div class="title_12">83學年度</div>
+            </div>
+            <div class=" slider-nav-el">
+                <img src="~/Scripts/inform/images/book/1995s.png">
+                <div class="title_12">84學年度</div>
+            </div>
+            <div class=" slider-nav-el">
+                <img src="~/Scripts/inform/images/book/1996s.png">
+                <div class="title_12">85學年度</div>
+            </div>
+            <div class=" slider-nav-el">
+                <img src="~/Scripts/inform/images/book/1997s.png">
+                <div class="title_12">86學年度</div>
+            </div>
+            <div class=" slider-nav-el">
+                <img src="~/Scripts/inform/images/book/1998s.png">
+                <div class="title_12">87學年度</div>
+            </div>
+            <div class=" slider-nav-el">
+                <img src="~/Scripts/inform/images/book/1999s.png">
+                <div class="title_12">88學年度</div>
+            </div>
+
+            <div class=" slider-nav-el">
+                <img src="~/Scripts/inform/images/book/2000s.png">
+                <div class="title_12">89學年度</div>
+            </div>
+            <div class=" slider-nav-el">
+                <img src="~/Scripts/inform/images/book/2001s.png">
+                <div class="title_12">90學年度</div>
+            </div>
+            <div class=" slider-nav-el">
+                <img src="~/Scripts/inform/images/book/2002s.png">
+                <div class="title_12">91學年度</div>
+            </div>
+            <div class=" slider-nav-el">
+                <img src="~/Scripts/inform/images/book/2003s.png">
+                <div class="title_12">92學年度</div>
+            </div><div class=" slider-nav-el">
+                <img src="~/Scripts/inform/images/book/2004s.png">
+                <div class="title_12">93學年度</div>
+            </div>
+            <div class=" slider-nav-el">
+                <img src="~/Scripts/inform/images/book/2005s.png">
+                <div class="title_12">94學年度</div>
+            </div>
+            <div class=" slider-nav-el">
+                <img src="~/Scripts/inform/images/book/2006s.png">
+                <div class="title_12">95學年度</div>
+            </div>
+            <div class=" slider-nav-el">
+                <img src="~/Scripts/inform/images/book/2007s.png">
+                <div class="title_12">96學年度</div>
+            </div>
+            <div class=" slider-nav-el">
+                <img src="~/Scripts/inform/images/book/2008s.png">
+                <div class="title_12">97學年度</div>
+            </div>
+            <div class=" slider-nav-el">
+                <img src="~/Scripts/inform/images/book/2009s.png">
+                <div class="title_12">98學年度</div>
+            </div>
+            <div class=" slider-nav-el">
+                <img src="~/Scripts/inform/images/book/2010s.png">
+                <div class="title_12">99學年度</div>
+            </div>
+            <div class=" slider-nav-el">
+                <img src="~/Scripts/inform/images/book/2011s.png">
+                <div class="title_12">100學年度</div>
+            </div>
+            <div class=" slider-nav-el">
+                <img src="~/Scripts/inform/images/book/2012s.png">
+                <div class="title_12">101學年度</div>
+            </div>
+            <div class=" slider-nav-el">
+                <img src="~/Scripts/inform/images/book/2013s.png">
+                <div class="title_12">102學年度</div>
+            </div>
+            <div class=" slider-nav-el">
+                <img src="~/Scripts/inform/images/book/2014s.png">
+                <div class="title_12">103學年度</div>
+            </div>
+
+        </div>
+        <div class="arrowR">
+            <a href="javascript:void(0)"><img src="~/Scripts/inform/images/book/arrowR.png" width="36" height="70" border="0"></a>
+        </div>
+    </div>
+    <!--右邊選單-->
+    <div class="rightbox" style=" width:200px; ">
+        <div style="float:left;display:block;text-align:center;margin:80px 0px 0px -15px;
+padding:0px 0px 0px 0px;"><img src="~/Scripts/inform/images/inform/righttitle.png" width="210" height="55"></div>
+        <div style="float:left;display:block;text-align:center;margin:10px 0px 0px 0px;
+padding:0px 0px 0px 0px;">
+            <section class="wrapper-demo">
+                <div class="dd wrapper-dropdown-5" tabindex="1" style="z-index:3" ;>
+                    <div class="dd-text" id="yeardroplist">
+                        學年度
+                    </div>
+                    <ul class="dropdown">
+                        <li data-value=""><a href="javascript:void(0)">學年度</a></li>
+                        @foreach (var item in ViewBag.SelectYearList)
+                        {
+                            <li data-value="@item"><a href="javascript:void(0)">@item</a></li>
+                        }
+                    </ul>
+
+                </div>
+            </section>
+            <section class="wrapper-demo">
+                <div class="dd wrapper-dropdown-5" tabindex="1" style="z-index:2" ;>
+                    <div class="dd-text" id="depdroplist">
+                        科系
+                    </div>
+                    <ul class="dropdown">
+                        <li data-value=""><a href="javascript:void(0)">科系</a></li>
+                        @foreach (var item in ViewBag.SelectDepList)
+                        {
+                            <li data-value="@item">
+                                <a href="javascript:void(0)">@item</a>
+                            </li>
+                        }
+                    </ul>
+                </div>
+            </section>
+            <section class="wrapper-demo">
+                <div class="dd wrapper-dropdown-5" tabindex="1" style="z-index:1" ;>
+                    <div class="dd-text" id="clsdroplist">班級</div>
+                    <ul class="dropdown">
+                        <li data-value=""><a href="javascript:void(0)">班級</a></li>
+                        @foreach (var item in ViewBag.SelectClsList)
+                        {
+                            <li data-value="@item">
+                                <a href="javascript:void(0)">@item</a>
+                            </li>
+                        }
+                    </ul>
+                </div>
+            </section>
+            <div class="menu5" style="margin:20px 0px 0px 0px;">
+                <input name="textfield" type="text" class="textbox" id="stunumberinput" placeholder="輸入學號" size="10" maxlength="10">
+            </div>
+            <div class="menu5" style="margin:20px 0px 0px 0px;">
+                <input name="textfield" type="text" class="textbox" id="stunameinput" placeholder="輸入姓名" size="10" maxlength="5">
+            </div>
+
+
+
+            <div class="btnright"><a href="javascript:submitForm();">搜尋</a></div>
+            <div class="btnIconr2"><a href="@Url.Content("~/SchoolDiary/Index")"></a></div>
+        </div>
+        <!-- jQuery if needed -->
+        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+        <script type="text/javascript">
+
+            function DropDown(el) {
+                this.dd = el;
+                this.initEvents();
+            }
+            DropDown.prototype = {
+                initEvents: function () {
+                    var obj = this;
+
+                    obj.dd.on('click', function (event) {
+                        $(this).toggleClass('active');
+                        event.stopPropagation();
+                    });
+                }
+            }
+
+            $(function () {
+                var dd = new DropDown($('.dd'));
+
+                $(document).click(function () {
+                    // all dropdowns
+                    $('.wrapper-dropdown-5').removeClass('active');
+                });
+            });
+
+        </script>
+    </div>
+</div>
+@using (Html.BeginForm("SearchClassBook", "ClassBook", null, FormMethod.Post, new { @id = "submitForm" }))
+{
+    <input type="hidden" id="clssearch" name="clssearch" />
+    <input type="hidden" id="depsearch" name="depsearch" />
+    <input type="hidden" id="yearsearch" name="yearsearch" />
+    <input type="hidden" id="stunumbersearch" name="stunumbersearch" />
+    <input type="hidden" id="stunamesearch" name="stunamesearch" />
+}

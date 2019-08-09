@@ -1,0 +1,56 @@
+﻿@model TzuChiBackend.ViewModels.PlanInsideSearchForm
+<table class="table">
+    <thead>
+        <tr style="background-color:#CCCCCC">
+            <th style="width:15%">
+
+                封面(附件)
+
+            </th>
+            <th >
+                類型
+            </th>
+            <th >
+                <a id="th-department" href="#" class="orderT">科系</a>
+            </th>
+            <th >
+                <a id="th-city" href="#" class="orderT">所在地</a>
+            </th>
+            <th  >
+                <a id="th-company" href="#" class="orderT">企業名稱</a>
+            </th>
+
+            <th >
+                &nbsp;
+            </th>
+        </tr>
+    </thead>
+    @if (Model.DataCount > 0)
+    {
+        <tbody>
+
+            @foreach (var item in Model.PagedViewResults)
+            {
+                <tr>
+                    <td>
+                        @Html.Partial("_Image",item)
+                    </td>
+                    <td> @item.TypeName </td>
+                    <td> @item.DepartmentName </td>
+                    <td> @item.CityName </td>
+                    <td> @item.CompanyName </td>
+                    <td>
+                        <button data-id="@item.Id" type="button" class="btn btn-primary btn-edit">
+                            修改
+                        </button>
+                        <button data-id="@item.Id" type="button" class="btn btn-danger btn-delete">
+                            刪除
+                        </button>
+
+                    </td>
+                </tr>
+            }
+        </tbody>
+    }
+   
+</table>

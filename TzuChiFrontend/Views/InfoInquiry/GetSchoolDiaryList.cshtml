@@ -1,0 +1,326 @@
+﻿@*
+    校園日誌清單輪播列表
+    樣板inform_1
+*@
+
+@{
+    ViewBag.Title = "校史館 - 資訊查詢 | 校園日誌";
+    string frontendBaseURL = System.Web.Configuration.WebConfigurationManager.AppSettings["website.frontend"];
+    string backendBaseURL = System.Web.Configuration.WebConfigurationManager.AppSettings["website.backend"];
+}
+
+@section scripts {
+    <script src="@Url.Content("~/Scripts/slick_v.js")"></script>
+    <script src="@Url.Content("~/Scripts/inform/js/modernizr.custom.79639.js")" type="text/javascript"></script>
+    <script>
+        $(function () {
+            setDivCenter();
+            $('.tztable').eq(-2).click(function () {
+                ajaxSlick();
+            });
+            dropDonwList();
+
+            $('#submitBtn').click(function () {
+                submitForm();
+            });
+
+        });
+
+        var ajaxCnt = 0;
+        function ajaxSlick() {
+            var URLs = '@frontendBaseURL';
+            $.ajax({
+                url: URLs + '/InfoInquiry/AjaxGetSchoolDiaryList',
+                data: 'work', //TODO 要放入頁面;
+                type: "POST",
+                dataType: 'json',
+                success: function (jdata) {
+                    var NumOfJData = jdata.length;
+
+                    ajaxCnt++;
+
+                    for (var i = 0; i < NumOfJData; i++) {
+
+                        var jsonDate = jdata[i].ContentTime;  // returns "/Date(1245398693390)/";
+                        var re = /-?\d+/;
+                        var m = re.exec(jsonDate);
+                        var d = new Date(parseInt(m[0]));
+                        var html = '';
+
+                        html += '<div class="tztable">';
+                        html += '<ul class="title_01">';
+                        html += '<li class="title_02">' + d.getFullYear() + '</li>';
+                        html += '<li class="title_03">____________</li>';
+                        html += '<li class="title_04">' + (d.getMonth() + 1) + '.' + d.getDate() + '</li>';
+                        html += '</ul>';
+                        html += '<ul class="title_05">';
+                        html += jdata[i].ContentName + ajaxCnt;
+                        html += '</ul>';
+                        html += '<ul>';
+                        html += '<li class="intxt">' + jdata[i].Description + '</li>';
+                        html += '<li class="imgintxt">';
+                        html += '<img src="~/Scripts/inform/~/Scripts/inform/' + jdata[i].CoverImage.Path + '" width="433" height="325">';
+                        html += '</li>';
+                        html += '<li class="intxt1">';
+                        html += '<a href="' + 'alert(' + jdata[i].ContentID + ')' + '">more....</a>';
+                        html += '</li>';
+                        html += '</ul>';
+                        html += '</div>';
+
+                        $('.divcenter').slickAdd(html);
+                    }
+                    console.log('work');
+                    //setSlick(); //slick重新設定
+                },
+                error: function (xhr, ajaxOptions, thrownError) {
+                    console.log('fail');
+                    console.log(xhr.status);
+                    console.log(thrownError);
+                }
+            });
+        }
+
+
+        function setDivCenter() {
+            //var mainWidth = $(".wbox1").width();
+            //var centerWidht = $('.mid').width();
+            //var setCenterW = mainWidth / 2 - centerWidht / 2;
+
+            var mainHeight = $(".wbox1").height();
+            var centerHeight = $('.divcenter').height();
+            var setCenterH = mainHeight / 2 - centerHeight / 2;
+            //$('.divcenter').offset({
+            //    top: setCenterH
+            //});
+            $('.divcenter').slick({
+                centerMode: false,
+                dots: false,
+                vertical: true,
+                slidesToShow: 3,
+                slidesToScroll: 1,
+                infinite: false
+            });
+        }
+
+        function dropDonwList() {
+            $('.dropdown li').click(function () {
+                
+                var txt = $(this).text();
+                var val = $(this).attr('data-value');
+                console.log(txt);
+                console.log(val);
+                $(this).parent('ul').siblings('.dd-text').text(txt);
+                $(this).parent('ul').siblings('.dd-text').attr('data-value', val);
+            });
+        }
+
+        function submitForm() {
+            if ($('#semDropList').attr('data-value') != "" || $('#yearDropList').attr('data-value') != "" || $('#keyWordInput').val() != "" ) {
+
+                $("#keywordSearch").val($('#semDropList').attr('data-value'));
+                $("#yearSearch").val($('#yearDropList').attr('data-value'));
+                $("#semSearch").val($('#keyWordInput').val());
+                document.forms["submitForm"].submit();
+            }
+            else
+                alert("請選擇搜尋條件！！");
+        } // SubmitFormDepart()
+    </script>
+}
+
+@section styles{
+    <link href="~/Content/slick.css" rel="stylesheet" />
+    <link href="~/Scripts/inform/css/reset.css" rel="stylesheet" type="text/css">
+    <link href="~/Scripts/inform/css/tzuchi.css" rel="stylesheet" type="text/css">
+    <link href="~/Scripts/inform/css/style.css" rel="stylesheet" type="text/css">
+    <noscript>
+        <link href="~/Scripts/inform/css/noJS.css" rel="stylesheet" type="text/css" />
+    </noscript>
+    <style>
+        .tztable {
+            width: 1240px !important;
+        }
+
+
+        .slick-next, .slick-prev {
+            display: none;
+        }
+
+        .divcenter {
+            /*margin-top: 0 !important;*/
+        }
+
+        /*
+        Body {
+            overflow: hidden;
+        }*/
+    </style>
+}
+
+<div class="wbox1" style="width:1920px;">
+    <!--左邊標題-->
+    <div class="leftbox"><img src="~/Scripts/inform/images/inform/title_s1.png" width="134" height="750"></div>
+    <!--中間表格-->
+    <div class="centerbox">
+        <div style="vertical-align:middle; position:absolute; margin-top:-130px;">
+            <div id="slick-area" class="divcenter">
+                <!--內文1-->
+                <div class="tztable">
+                    <ul class="title_01">
+                        <li class="title_02">2014</li>
+                        <li class="title_03">____________</li>
+                        <li class="title_04">06.17</li>
+                    </ul>
+                    <ul class="title_05">
+                        HEAD
+                        <br>
+                        提前瞭解相關科系
+                    </ul>
+                    <ul>
+                        <li class="intxt">五月二十八日，在教務處招生組安排下，邀請500位羅東高商師生至本校參訪。為了羅東商師生更深入了解本校，校長羅文瑞表示，學校每年遴選多位學生前往馬來西亞、英國、美國及中國大陸進行業界實習及國際交流，學校也支援相關費用，此外，獎學金制度完善，慈濟基金會也</li>
+                        <li class="imgintxt"><img src="~/Scripts/inform/images/inform/new1.jpg" width="433" height="325"></li>
+                        <li class="intxt1"><a href="inform_1_dalay.html">more....</a></li>
+                    </ul>
+                </div>
+                <!--內文1-->
+                @foreach (var item in ViewBag.DataModel)
+                {
+                    <div class="tztable">
+                        <ul class="title_01">
+                            <li class="title_02">@string.Format("{0:yyyy}", item.ContentTime) </li>
+                            <li class="title_03">____________</li>
+                            <li class="title_04">@string.Format("{0:MM.dd}", item.ContentTime)</li>
+                        </ul>
+                        <ul class="title_05">
+                            @item.ContentName
+                            <br>
+                            string
+                        </ul>
+                        <ul>
+                            <li class="intxt">@item.Description</li>
+                            <li class="imgintxt "><img src="~/Scripts/inform/images/inform/new1.jpg" width="450" height="340"></li>
+                            <li class="intxt1"><a href="@frontendBaseURL/InfoInquiry/GetSchoolDiaryByContentID/@item.ContentID">more....</a></li>
+                        </ul>
+                    </div>
+                }
+
+                <!--內文2-->
+                <div class="tztable">
+                    <ul class="title_01">
+                        <li class="title_02">2014</li>
+                        <li class="title_03">____________</li>
+                        <li class="title_04">06.17</li>
+                    </ul>
+                    <ul class="title_05">
+                        500位羅東高商師生參訪本校
+                        <br>
+                        提前瞭解相關科系
+                    </ul>
+                    <ul>
+                        <li class="intxt">五月二十八日，在教務處招生組安排下，邀請500位羅東高商師生至本校參訪。為了羅東商師生更深入了解本校，校長羅文瑞表示，學校每年遴選多位學生前往馬來西亞、英國、美國及中國大陸進行業界實習及國際交流，學校也支援相關費用，此外，獎學金制度完善，慈濟基金會也</li>
+                        <li class="imgintxt"><img src="~/Scripts/inform/images/inform/new1.jpg" width="433" height="325"></li>
+                        <li class="intxt1"><a href="inform_1_dalay.html">more....</a></li>
+                    </ul>
+                </div>
+                <!--內文3-->
+                <div class="tztable">
+                    <ul class="title_01">
+                        <li class="title_02">2014</li>
+                        <li class="title_03">____________</li>
+                        <li class="title_04">06.17</li>
+                    </ul>
+                    <ul class="title_05">
+                        FOOT
+                        <br>
+                        提前瞭解相關科系
+                    </ul>
+                    <ul>
+                        <li class="intxt">五月二十八日，在教務處招生組安排下，邀請500位羅東高商師生至本校參訪。為了羅東商師生更深入了解本校，校長羅文瑞表示，學校每年遴選多位學生前往馬來西亞、英國、美國及中國大陸進行業界實習及國際交流，學校也支援相關費用，此外，獎學金制度完善，慈濟基金會也</li>
+                        <li class="imgintxt "><img src="~/Scripts/inform/images/inform/new1.jpg" width="433" height="325"></li>
+                        <li class="intxt1"><a href="inform_1_dalay.html">more....</a></li>
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <!--右邊選單-->
+    <div class="rightbox">
+        <div class="div2">
+            <section class="main">
+                <div class="wrapper-demo">
+                    <div id="" class="dd wrapper-dropdown-5" tabindex="1" style="z-index:3" ;>
+                        <div class="dd-text" id="yearDropList" data-value="">學年度</div>
+                        <ul class="dropdown">
+                            <li data-value="103"><a href="#">103年</a></li>
+                            <li data-value="103"><a href="#">102年</a></li>
+                            <li data-value="101"><a href="#">101年</a></li>
+                            <li data-value="100"><a href="#">100年</a></li>
+                            <li data-value="99"><a href="#">99年</a></li>
+                            <li data-value="98"><a href="#">98年</a></li>
+                            <li data-value="97"><a href="#">97年</a></li>
+                            <li data-value="96"><a href="#">96年</a></li>
+                            <li data-value="95"><a href="#">95年</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+            <section class="main">
+                <div class="wrapper-demo">
+                    <div id="" class="dd wrapper-dropdown-5" tabindex="1" style="z-index:2" ;>
+                        <div id="semDropList" class="dd-text" data-value="">學期</div>
+                        <ul class="dropdown" style="overflow-y:scroll;height:130px" ;>
+                            <li data-value="1s"><a href="#">上學期</a></li>
+                            <li data-value="2s"><a href="#">下學期</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+        </div>
+        <div>
+            <ul class="menu5">
+                <input style="z-index:999999999999999;" name="textfield" type="text" class="textbox" id="keyWordInput" value="輸入" size="10" maxlength="5">
+            </ul>
+            <ul class="righttitle"><img src="~/Scripts/inform/images/inform/righttitle.png" width="210" height="55"></ul>
+            <ul class="btnright"><a id="submitBtn" href="javascript:void(0)">搜尋</a></ul>
+            <ul class="btnIcon"><a href="inform.html"></a></ul>
+        </div>
+        <!-- jQuery if needed -->
+        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+        <script type="text/javascript">
+
+            function DropDown(el) {
+                this.dd = el;
+                this.initEvents();
+            }
+            DropDown.prototype = {
+                initEvents: function () {
+                    var obj = this;
+
+                    obj.dd.on('click', function (event) {
+                        $(this).toggleClass('active');
+                        event.stopPropagation();
+                    });
+                }
+            }
+
+            $(function () {
+                var dd = new DropDown($('.dd'));
+                $(document).click(function () {
+                    // all dropdowns
+                    $('.wrapper-dropdown-5').removeClass('active');
+                });
+            });
+
+        </script>
+    </div>
+</div>
+
+@using (Html.BeginForm("SearchSchoolDiary", "InfoInquiry", null, FormMethod.Post, new { @id = "submitForm" }))
+{
+    @Html.AntiForgeryToken()
+    <input type="hidden" id="keywordSearch" name="keywordSearch" />
+    <input type="hidden" id="yearSearch" name="yearSearch" />
+    <input type="hidden" id="semSearch" name="semSearch" />
+}
+

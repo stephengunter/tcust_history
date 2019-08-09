@@ -1,0 +1,48 @@
+﻿@{
+    ViewBag.Title = "天涯比鄰-系所介紹";
+    string partialPath = ViewBag.PartialPath;
+}
+@section scripts {
+}
+
+@section styles{
+    <link href="@Url.Content("~/Content/Map/reset.css")" rel="stylesheet" type="text/css">
+    <link href="@Url.Content("~/Content/Map/big.css")" rel="stylesheet" type="text/css">
+   <style type="text/css">
+    #gobkDiv1 {
+        position: absolute;
+        width: 165px;
+        height: 159px;
+        z-index: 99;
+        left: 1710px;
+        top: 869px;
+    }
+
+    #EngDiv1 {
+        position: absolute;
+        width: 178px;
+        height: 78px;
+        z-index: 99;
+        left: 1710px;
+        top: 450px;
+    }
+
+    #EngDiv2 {
+        position: absolute;
+        z-index: 100;
+        left: 0px;
+        top: 247px;
+    }
+
+    body {
+        background-color: #333;
+        overflow:hidden;
+    }
+
+
+</style>
+}
+
+@Html.Partial(partialPath)
+
+

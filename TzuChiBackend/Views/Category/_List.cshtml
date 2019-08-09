@@ -1,0 +1,23 @@
+﻿@model TzuChiBackend.ViewModels.CategoryViewModel
+
+@foreach (var cate in Model.Categories)
+{
+    <tr id="cate_@cate.CategoryID">
+
+        <td class="col-sm-1">
+            <span id="text_@cate.CategoryID">@cate.CategoryName</span>
+            <input id="name_@cate.CategoryID" name="CateList[@cate.CategoryID].CategoryName" class="form-control" value="@cate.CategoryName" style="display:none" />
+        </td>
+        <td class="col-sm-1">
+            <button class="btn btn-info" id="edit_@cate.CategoryID" onclick="edit('@cate.CategoryID')">編輯</button>
+            <button class="btn btn-default" id="cancel_@cate.CategoryID" onclick="cancel('@cate.CategoryID')" style="display:none">取消</button>
+            <button class="btn btn-success" id="save_@cate.CategoryID" onclick="save('@cate.CategoryID')" style="display:none">存檔</button>
+            <button class="btn btn-danger" onclick="categoryDelete('@Url.Action("Delete", "Category")','@cate.CategoryID')">刪除</button>
+        </td>
+        <td style="display:none">
+            <input type="hidden" name="CateList.index" value="@cate.CategoryID" />
+            <input type="hidden" name="CateList[@cate.CategoryID].CategoryID" class="CategoryID" value="@cate.CategoryID" />
+            <input type="hidden" name="CateList[@cate.CategoryID].Sort" class="sort" value="@cate.Sort" />
+        </td>
+    </tr>
+}

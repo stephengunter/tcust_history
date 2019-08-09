@@ -1,0 +1,136 @@
+﻿@{
+    ViewBag.Title = "SearchYearBook";
+}
+
+<div class="wbox1" style="width:1920px;">
+    <!--左邊標題-->
+    <div class="leftbox"><img src="images/inform/title_s3.png" width="134" height="750"></div>
+    <!--中間表格-->
+    <div class="centerbox">
+        <!--內文一-->
+        <div class="intxt5">
+            <ul class="Search">
+                <span class="Seartxt"><a href="#">2014.06.17 .......................................................................樂齡大學結業式 </a></span>
+            </ul>
+            <ul class="Search">
+                <span class="Seartxt"><a href="#">2013.10.12 .......................................................................樂齡大學結業式 </a></span>
+            </ul>
+            <ul class="Search">
+                <span class="Seartxt"><a href="#">2012.10.15 .........................................................................樂齡大學成立 </a></span>
+            </ul>
+            <ul class="Search">
+                <span class="Seartxt"><a href="#">2014.06.17 .......................................................................樂齡大學結業式 </a></span>
+            </ul>
+            <ul class="Search">
+                <span class="Seartxt"><a href="#">2014.06.17 .......................................................................樂齡大學結業式 </a></span>
+            </ul>
+            <ul class="Search">
+                <span class="Seartxt"><a href="#">2013.10.12 .......................................................................樂齡大學結業式 </a></span>
+            </ul>
+            <ul class="Search">
+                <span class="Seartxt"><a href="#">2012.10.15 .........................................................................樂齡大學成立 </a></span>
+            </ul>
+            <ul class="Search">
+                <span class="Seartxt"><a href="#">2014.06.17 .......................................................................樂齡大學結業式 </a></span>
+            </ul>
+            <ul class="Search">
+                <span class="Seartxt"><a href="#">2014.06.17 .......................................................................樂齡大學結業式 </a></span>
+            </ul>
+            <ul class="Search">
+                <span class="Seartxt"><a href="#">2013.10.12 .......................................................................樂齡大學結業式 </a></span>
+            </ul>
+            <ul class="Search">
+                <span class="Seartxt"><a href="#">2012.10.15 .........................................................................樂齡大學成立 </a></span>
+            </ul>
+            <ul class="Search">
+                <span class="Seartxt"><a href="#">2014.06.17 .......................................................................樂齡大學結業式 </a></span>
+            </ul>
+        </div>
+    </div>
+    <!--右邊選單-->
+    <div class="rightbox" style=" width:200px;">
+        <div style="float:left;display:block;text-align:center;margin:80px 0px 0px -15px;
+padding:0px 0px 0px 0px;"><img src="images/inform/righttitle.png" width="210" height="55"></div>
+        <div style="float:left;display:block;text-align:center;margin:10px 0px 0px 0px;
+padding:0px 0px 0px 0px;">
+            <section class="wrapper-demo">
+                <div id="dd" class="wrapper-dropdown-5" tabindex="1" style="z-index:3" ;>
+                    學年度
+                    <ul class="dropdown">
+                        <li><a href="#">103年</a></li>
+                        <li><a href="#">102年</a></li>
+                        <li><a href="#">101年</a></li>
+                        <li><a href="#">100年</a></li>
+                        <li><a href="#">99年</a></li>
+                        <li><a href="#">98年</a></li>
+                        <li><a href="#">97年</a></li>
+                        <li><a href="#">96年</a></li>
+                        <li><a href="#">95年</a></li>
+                    </ul>
+                </div>
+            </section>
+            <section class="wrapper-demo">
+                <div class="dd wrapper-dropdown-5" tabindex="1" style="z-index:2" ;>
+                    科系
+                    <ul class="dropdown">
+                        <li><a href="#">護理系</a></li>
+                        <li><a href="#">醫務管理系</a></li>
+                        <li><a href="#">行銷與流通管理系</a></li>
+                        <li><a href="#">資訊科技與管理系</a></li>
+                        <li><a href="#">醫學影像暨放射科學系</a></li>
+                        <li><a href="#">放射醫學科學研究所</a></li>
+                    </ul>
+                </div>
+            </section>
+            <section class="wrapper-demo">
+                <div class="dd wrapper-dropdown-5" tabindex="1" style="z-index:1" ;>
+                    班級
+                    <ul class="dropdown">
+                        <li><a href="#">甲班</a></li>
+                        <li><a href="#">乙班</a></li>
+                        <li><a href="#">丙班</a></li>
+                        <li><a href="#">丁班</a></li>
+                        <li><a href="#">戊班</a></li>
+                        <li><a href="#">己班</a></li>
+                    </ul>
+                </div>
+            </section>
+            <div class="menu5" style="margin:20px 0px 0px 0px;"><input name="textfield" type="text" class="textbox" id="textfield" value="輸入學號" size="10" maxlength="10"></div>
+            <div class="menu5" style="margin:20px 0px 0px 0px;"><input name="textfield" type="text" class="textbox" id="textfield" value="輸入姓名" size="10" maxlength="5"></div>
+
+            <div class="btnright"><a href="inform_1_search.html">搜尋</a></div>
+            <div class="btnIconr2"><a href="inform.html"></a></div>
+        </div>
+        <!-- jQuery if needed -->
+        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+        <script type="text/javascript">
+
+            function DropDown(el) {
+                this.dd = el;
+                this.initEvents();
+            }
+            DropDown.prototype = {
+                initEvents: function () {
+                    var obj = this;
+
+                    obj.dd.on('click', function (event) {
+                        $(this).toggleClass('active');
+                        event.stopPropagation();
+                    });
+                }
+            }
+
+            $(function () {
+
+                var dd = new DropDown($('.dd'));
+
+                $(document).click(function () {
+                    // all dropdowns
+                    $('.wrapper-dropdown-5').removeClass('active');
+                });
+
+            });
+
+        </script>
+    </div>
+</div>

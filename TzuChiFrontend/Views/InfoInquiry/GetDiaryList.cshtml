@@ -1,0 +1,148 @@
+﻿@* 
+    校園日誌清單輪播列表      
+    樣板inform_1
+*@
+
+@{
+    ViewBag.Title = "校史館 - 資訊查詢 | 校園日誌";
+}
+
+@section scripts {
+    <script src="@Url.Content("~/Scripts/slick.js")"></script>
+    <script src="@Url.Content("~/Scripts/inform/js/jssor.js")"></script>
+    <script src="@Url.Content("~/Scripts/inform/js/jssor.slider.js")"></script>
+
+    <script>
+        $(function () {
+
+            setDivCenter();
+
+            $('.divcenter').slick({
+                dots: false,
+                vertical: true,
+                slidesToShow: 1,
+                infinite : true
+            });
+        });
+
+
+        //取消
+        //function banScroll()
+        //{
+        //    $(document).delegate(
+        //        'div:not([class="tztable"])',
+        //        'touchmove',
+        //        false);
+        //}
+
+        function setDivCenter()
+        {
+            var mainWidth = $(".wbox1").width();
+            var mainHeight = $(".wbox1").height();
+            var centerWidht = $('.divcenter').width();
+            var centerHeight = $('.divcenter').height();
+
+            var setCenterH = mainHeight / 2 - centerHeight / 2;
+            var setCenterW = mainWidth / 2 - centerWidht / 2;
+
+            $('.divcenter').offset({
+                top: setCenterH
+            });
+        }
+    </script>
+
+}
+
+@section styles{
+    <link href="~/Scripts/inform/css/reset.css" rel="stylesheet" type="text/css">
+    <link href="~/Scripts/inform/css/tzuchi.css" rel="stylesheet" type="text/css">
+    <link href="~/Scripts/inform/css/inform.css" rel="stylesheet" type="text/css">
+    <style>
+        .tztable {
+            width: 1280px !important;
+        }
+
+        .slick-prev, .slick-next {
+            display: none !important;
+        }
+
+        .divcenter {
+            margin-top: 0 !important;
+        }
+
+        Body {
+            overflow: hidden;
+        }
+    </style>
+}
+
+<div class="wbox1">
+    <!--左邊標題-->
+    <div class="leftbox"><img src="@Url.Content("~/Scripts/inform/images/inform/title_s1.png")" width="134" height="750"></div>
+    <!--中間表格-->
+    <div class="centerbox">
+        <div class="divcenter">
+            <!--內文1-->
+            <div class="tztable">
+                <ul class="title_01">
+                    <li class="title_02">2014</li>
+                    <li class="title_03">____________</li>
+                    <li class="title_04">06.17</li>
+                </ul>
+                <ul class="title_05">
+                    11111111111
+                    <br>
+                    提前瞭解相關科系
+                </ul>
+                <ul>
+                    <li class="intxt">11111111111，在教務處招生組安排下，邀請500位羅東高商師生至本校參訪。為了羅東商師生更深入了解本校，校長羅文瑞表示，學校每年遴選多位學生前往馬來西亞、英國、美國及中國大陸進行業界實習及國際交流，學校也支援相關費用，此外，獎學金制度完善，慈濟基金會也</li>
+                    <li class="imgintxt "><img src="@Url.Content("~/Scripts/inform/images/inform/new1.jpg")" width="450" height="340">></li>
+                    <li class="intxt1"><a href="javascript:void(0)">more....</a></li>
+                </ul>
+            </div>
+            <!--內文2-->
+            <div class="tztable">
+                <ul class="title_01">
+                    <li class="title_02">2014</li>
+                    <li class="title_03">____________</li>
+                    <li class="title_04">06.17</li>
+                </ul>
+                <ul class="title_05">
+                    2222222222222222
+                    <br>
+                    提前瞭解相關科系
+                </ul>
+                <ul>
+                    <li class="intxt">五月二十八日，在教務處招生組安排下，邀請500位羅東高商師生至本校參訪。為了羅東商師生更深入了解本校，校長羅文瑞表示，學校每年遴選多位學生前往馬來西亞、英國、美國及中國大陸進行業界實習及國際交流，學校也支援相關費用，此外，獎學金制度完善，慈濟基金會也</li>
+                    <li class="imgintxt "><img src="@Url.Content("~/Scripts/inform/images/inform/new1.jpg")" width="450" height="340"></li>
+                    <li class="intxt1"><a href="javascript:void(0)">more....</a></li>
+                </ul>
+            </div>
+            <!--內文3-->
+            <div class="tztable">
+                <ul class="title_01">
+                    <li class="title_02">2014</li>
+                    <li class="title_03">____________</li>
+                    <li class="title_04">06.17</li>
+                </ul>
+                <ul class="title_05">
+                    33333333333333333
+                    <br>
+                    提前瞭解相關科系
+                </ul>
+                <ul>
+                    <li class="intxt">五月二十八日，在教務處招生組安排下，邀請500位羅東高商師生至本校參訪。為了羅東商師生更深入了解本校，校長羅文瑞表示，學校每年遴選多位學生前往馬來西亞、英國、美國及中國大陸進行業界實習及國際交流，學校也支援相關費用，此外，獎學金制度完善，慈濟基金會也</li>
+                    <li class="imgintxt "><img src="@Url.Content("~/Scripts/inform/images/inform/new1.jpg")" width="450" height="340">></li>
+                    <li class="intxt1"><a href="javascript:void(0)">more....</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!--右邊選單-->
+    <div class="rightbox">
+        <div class="div2">
+            <ul class="btnsearch"><a href="@Url.Content("~/Scripts/inform/")inform_1_search.html">搜尋</a></ul>
+            <ul class="btnIcon"><a href="@Url.Content("~/Scripts/inform/")inform.html"></a></ul>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,73 @@
+﻿@model TzuChiBackend.ViewModels.SchoolDiarySearchForm
+<table class="table">
+    <thead>
+        <tr style="background-color:#CCCCCC">
+            <th style="width:10%">
+
+                封面圖
+
+            </th>
+            <th>
+                <a id="th-number" href="#" class="orderT">編號</a>
+                
+            </th>
+            <th>
+                標題
+            </th>
+           
+            <th style="width:10%">
+                學年度
+            </th>
+            <th>
+                <a id="th-date" href="#" class="orderT">日期</a>
+            </th>
+            <th style="width:18%">
+                作者
+            </th>
+
+            <th style="width:8%">
+                &nbsp;
+            </th>
+        </tr>
+    </thead>
+    @if (Model.DataCount > 0)
+    {
+        <tbody>
+
+            @foreach (var item in Model.PagedViewResults)
+            {
+                <tr>
+                    <td>
+                        @Html.Partial("_Image", item)
+                    </td>
+                    <td> @item.Number </td>
+                    <td> @item.Title </td>
+                    <td> @item.SchoolYear&nbsp;@item.Term</td>
+                    
+                    <td> @item.DairyDate.ToShortDateString() </td>
+                    <td> @item.Author </td>
+                    <td>
+                        @*<button data-id="@item.Id" type="button" class="btn btn-primary btn-edit">
+                            修改
+                        </button>
+                        <button data-id="@item.Id" type="button" class="btn btn-danger btn-delete">
+                            刪除
+                        </button>*@
+
+                        <a href="@Url.Action("Page",new { contentID = item.Id })" class="btn btn-primary  btn-sm" data-toggle="tooltip" title="編輯">
+                            <span class="glyphicon glyphicon-pencil"></span>
+                        </a>
+
+
+
+                        <button data-id="@item.Id" type="button" class="btn btn-danger btn-delete  btn-sm" data-toggle="tooltip" title="刪除">
+                            <span class="glyphicon glyphicon-trash"></span>
+                        </button>
+
+                    </td>
+                </tr>
+            }
+        </tbody>
+    }
+
+</table>

@@ -1,0 +1,11 @@
+2019-08-07 12:55:46.7219|DEBUG|TzuChiClassLibrary.DAL.EventCalendarManagementImpl|(Debug)除錯序列未包含項目
+2019-08-07 12:55:54.0113|DEBUG|TzuChiClassLibrary.DAL.EventCalendarManagementImpl|(Debug)除錯序列未包含項目
+2019-08-07 13:07:44.8327|DEBUG|TzuChiClassLibrary.DAL.EventCalendarManagementImpl|(Debug)除錯序列未包含項目
+2019-08-07 13:08:51.4360|DEBUG|TzuChiClassLibrary.DAL.EventCalendarManagementImpl|(Debug)除錯序列未包含項目
+2019-08-07 13:09:20.2822|DEBUG|TzuChiClassLibrary.DAL.EventCalendarManagementImpl|(Debug)除錯序列未包含項目
+2019-08-07 13:09:26.1886|DEBUG|TzuChiClassLibrary.DAL.EventCalendarManagementImpl|(Debug)除錯序列未包含項目
+2019-08-07 13:09:37.0262|DEBUG|TzuChiClassLibrary.DAL.EventCalendarManagementImpl|(Debug)除錯序列未包含項目
+2019-08-07 13:09:46.1407|DEBUG|TzuChiClassLibrary.DAL.EventCalendarManagementImpl|(Debug)除錯序列未包含項目
+2019-08-07 13:19:12.6311|DEBUG|TzuChiClassLibrary.DAL.EventCalendarManagementImpl|(Debug)除錯序列未包含項目
+2019-08-07 13:24:11.0332|DEBUG|TzuChiClassLibrary.DAL.EventCalendarManagementImpl|(Debug)除錯無法繫結多重部分 (Multi-Part) 識別碼 "ac.Account"。
+無法繫結多重部分 (Multi-Part) 識別碼 "au.Account"。

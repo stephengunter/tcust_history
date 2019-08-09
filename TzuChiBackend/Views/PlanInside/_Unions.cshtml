@@ -1,0 +1,65 @@
+﻿@model TzuChiBackend.ViewModels.PlanInsideSearchForm
+<table class="table">
+    <thead>
+        <tr style="background-color:#CCCCCC">
+            <th style="width:20%">
+             
+                    封面(附件)
+                
+            </th>
+             <th>
+                類型
+            </th>
+            
+            <th>
+                <a id="th-city" href="#" class="orderT">所在地</a>
+            </th>
+            <th>
+                <a id="th-company" href="#" class="orderT">合作單位(簽約對象)</a>
+            </th>
+
+            <th>
+                &nbsp;
+            </th>
+        </tr>
+    </thead>
+@if (Model.DataCount > 0)
+{
+    <tbody>
+        @foreach (var item in Model.PagedViewResults)
+        {
+            <tr>
+                <td class="auto-style3" style="width: 50px">
+                    @if (item.PicUrlList != null && item.PicUrlList.Count > 0)
+                    {//popup 視窗顯示圖片
+                        <a data-toggle="modal" data-target="#showPhotoModal" onclick="setCoveragePicPath('@item.PicUrlList[0].Path')">
+                            <img src="@Url.Content("~/imgs/zoom/50/50/" + item.PicUrlList[0].Path)" width="50" />
+                        </a>
+                    }
+                    else if (item.AttachPicUrl != null)
+                    {
+                        <a data-toggle="modal" data-target="#showPhotoModal" onclick="setCoveragePicPath('@item.AttachPicUrl.Path')">
+                            <img src="@Url.Content("~/imgs/zoom/50/50/" + item.AttachPicUrl.Path)" width="50" />
+                        </a>
+                    }
+                </td>
+                <td> @item.TypeName </td>
+                <td> @item.CityName </td>
+                <td> @item.DepartmentName </td>
+                <td>
+                   
+                    <button  data-id="@item.Id" type="button" class="btn btn-primary btn-edit">
+                        修改
+                    </button>
+                    <button  data-id="@item.Id"  type="button" class="btn btn-danger btn-delete">
+                        刪除
+                    </button>
+      
+                   
+                </td>
+            </tr>
+        }
+    </tbody>
+
+}
+</table>

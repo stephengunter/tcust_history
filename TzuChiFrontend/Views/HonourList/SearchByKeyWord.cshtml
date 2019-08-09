@@ -1,0 +1,187 @@
+﻿@model List<TzuChiClassLibrary.BO.HonourListModel>
+@{
+    ViewBag.Title = "ContSearch";
+}
+
+
+@section styles{
+    <link href="~/Content/reset.css" rel="stylesheet" />
+    <link href="~/Content/tzuchi.css" rel="stylesheet" />
+    <style type="text/css">
+        #keyDiv1 {
+	        position:absolute;
+	        width:308px;
+	        height:52px;
+	        z-index:99;
+	        left: 1565px;
+	        top: 25px;
+        }
+        .Seartxt a{
+            float:left;
+            margin-left:50px;
+        }
+        
+    </style>
+}
+
+@section scripts{
+    <script src="~/Scripts/HonourList.js"></script>
+    <script>
+   
+
+    var $terms, _height, _scrollHeight, _maxScrollHeight ;
+    var _least = 0;// 距離底部多少就可以, 0 表示得完全到底部
+    var currentCount; //目前筆數
+    var totalCount = @ViewBag.TotalCount ; //此關鍵字的總筆數
+    var totalPage = @ViewBag.TotalPage ; //此關鍵字資料總頁數
+    var perPage = @ViewBag.CntPerPage; 
+    
+    $(function () {
+        initScrollbar();
+    });
+
+    function initScrollbar() {
+        // 先取得 .intxt5 及其各種高度
+        $terms = $('.intxt5');
+        calculate();
+
+        // 當 .intxt5 中捲軸捲動時
+        $('.intxt5').scroll(function () {
+            var $this = $(this);
+            // 如果高度已經達到指定的高度就啟用
+            if (_maxScrollHeight - $this.scrollTop() <= _least) {
+                if(currentCount < totalCount){
+                    nextDataHandler( currentCount / perPage + 1);
+                }
+            }
+        });
+    }
+
+    function calculate() {
+        _height = $terms.height();
+        _scrollHeight = $terms.prop('scrollHeight');
+        _maxScrollHeight = _scrollHeight - _height - 20;
+        currentCount = $('.Search').length;
+        console.log("此關鍵字資料筆數共" + totalCount );
+        console.log("目前筆數" + currentCount);
+    }
+
+    function nextDataHandler(nextPage) {
+        console.log("請求的頁數" + nextPage);
+
+        jQuery.ajax({
+            url: "/HonourList/NextDataAjax",
+            type: "POST",
+            async: false,
+            cache: false,
+            data: { "textfield": '@Request.Params["textfield"]' , "nextPage": nextPage },
+            dataType: "json"
+        }).success(function (json) {
+            parseJson(json);
+            calculate();
+        });
+
+    };
+
+    function parseJson(json) {
+        var count = Object.keys(json).length;
+        var element = "";
+        for (var i = 0 ; i < count ; i++) {
+            var d = netDateToJSDate(json[i].ContentTime);
+            var year = d.getFullYear();
+
+            element += '<ul class="Search"><span class="Seartxt">' +
+                      '<a href="/HonourList/GetByYear?year=' + year + '&ContentID=' + json[i].ContentID + '">' +
+                       dateformate(d) + '..............' + contentNameFromate(json[i].ContentName) +
+                      '</a></span></ul>';
+        }
+
+        $(".Search:last").after(element);
+    }
+
+    function netDateToJSDate(date) {
+        var m = /-?\d+/.exec(date);
+        var d = new Date(parseInt(m[0]));
+        return d;
+    }
+
+    function dateformate(d) {
+        var year = d.getFullYear();
+        var month = (d.getMonth() + 1) + ''; //tostring
+        var date = (d.getDate()) + ''; //tostring
+        month = (month.length == 1 ? '0' + month : month);
+        date = (date.length == 1 ? '0' + date : date);
+
+        return year + '.' + month + '.' + date;
+    }
+
+    function contentNameFromate(contentName) {
+        return byte2String(byteFilter(string2Byte(contentName), 18)) + "...";
+    }
+    
+    //超過特定字元加"..." string2Byte、byte2String、byteFilter
+    function string2Byte(str) {
+        var byteArr = [];
+        for (var i = 0 ; i < str.length ; i++) {
+            byteArr.push(str.charCodeAt(i));
+        }
+        return byteArr;
+    }
+
+    function byte2String(byteArr) {
+        return String.fromCharCode.apply(String, byteArr);
+    }
+
+    function byteFilter(byteArr, filterLength) {
+        var len = 0;
+        var newByteArr = [];
+        for (var i = 0 ; i < byteArr.length ; i++) {
+            if (len < filterLength && byteArr[i] > 256) {
+                len = len + 2;
+                newByteArr.push(byteArr[i]);
+            }
+            else if (len < filterLength && byteArr[i] < 256) {
+                len = len + 1;
+                newByteArr.push(byteArr[i]);
+            }
+            else
+                break;
+        }
+        return newByteArr;
+    }
+    </script>
+}
+
+<!--關鍵字-->
+<div id="keyDiv1">
+    @Html.Partial("_SearchPartial") 
+</div>
+<!--主畫面-->
+<div class="wbox">
+    <!--內文一-->
+    <div class="intxt5">
+        @if(!String.IsNullOrEmpty(ViewBag.EmptyResult))
+        {
+            <text>@ViewBag.EmptyResult</text>
+            <text>@Request.Params["textfield"]</text>
+        }
+
+        @foreach(var honourModel in Model){
+            
+            int contentNameLength = @honourModel.ContentName.Length;
+            string contentName = @honourModel.ContentName;
+            if (contentNameLength > 6) 
+                @contentName = String.Concat(@contentName.Substring(0, 12), "...");
+            
+            
+            
+            <ul class="Search">
+                <span class="Seartxt">
+                    <a href='@Url.Action("GetByYear", "HonourList", new { year = honourModel.ContentTime.Year, contentID = honourModel.ContentID })'>
+                        @honourModel.ContentTime.ToString("yyyy.MM.dd", System.Globalization.CultureInfo.InvariantCulture) ..............@contentName 
+                    </a>
+                </span>
+            </ul>
+        }
+    </div>
+</div>

@@ -1,0 +1,147 @@
+﻿@model TzuChiClassLibrary.BO.PlanInsideModel
+@{
+    string uploadDir = System.Web.Configuration.WebConfigurationManager.AppSettings["upload.folder.name"];
+}
+<tr>
+    <td style="width: 230px" class="auto-style9">
+        <strong>
+            產學類型
+        </strong>
+    </td>
+    <td style="width: 1262px">
+        策略聯盟
+        <input type="hidden" name="CategoryPrepID" value="@ViewBag.CategoryPrepID">
+    </td>
+</tr>
+<tr>
+    <td style="width: 230px" class="auto-style9">
+        <label style="color:red">*</label>
+        <strong>
+            地圖座標
+        </strong>
+    </td>
+    <td style="width: 1262px">
+        使用關聯座標:
+        是<input type="radio" name="xy" value="true" checked />
+        @Html.DropDownListFor(m => m.ImageXY, (List<SelectListItem>)ViewBag.SelectCoordinateList, "請選擇", new { @class = "form-control", @style = "display: inline;" })
+        @Html.ValidationMessageFor(m => m.ImageXY)
+        否<input type="radio" name="xy" value="fasle" />
+        @Html.TextBoxFor(m => m.Coordinate.PointX, new { @class = "Coordinate" })
+        -
+        @Html.TextBoxFor(m => m.Coordinate.PointY, new { @class = "Coordinate" })
+        @Html.ValidationMessageFor(m => m.Coordinate.PointX)
+        @Html.ValidationMessageFor(m => m.Coordinate.PointY)
+    </td>
+</tr>
+<tr>
+    <td style="width: 230px" class="auto-style9">
+        <label style="color:red">*</label>
+        <strong>
+            分區
+        </strong>
+    </td>
+    <td style="width: 1262px">
+        @Html.DropDownListFor(m => m.CategoryPartitionID, (List<SelectListItem>)ViewBag.SelectPartitionList, "請選擇", new { @class = "form-control", @style = "display: inline;" })
+        @Html.ValidationMessageFor(m => m.CategoryPartitionID)
+    </td>
+</tr>
+<tr>
+    <td style="width: 230px" class="auto-style9">
+        <label style="color:red">*</label>
+        <strong>
+            所在地(縣市)
+        </strong>
+    </td>
+    <td style="width: 1262px">
+        @Html.DropDownListFor(m => m.CategorySiteID, (List<SelectListItem>)ViewBag.SelectSiteList, "請選擇", new { @class = "form-control", @style = "display: inline;" })
+        @Html.ValidationMessageFor(m => m.CategorySiteID)
+    </td>
+</tr>
+
+<tr>
+    <td style="width: 230px" class="auto-style9">
+        <strong>
+            簽約日期
+        </strong>
+    </td>
+    <td style="width: 1262px">
+        @Html.TextBoxFor(m => m.ContentTime, "{0:yyyy/MM/dd}", new { @class = "datepicker" })
+        @Html.ValidationMessageFor(m => m.ContentTime)
+    </td>
+</tr>
+
+<tr>
+    <td style="width: 230px" class="auto-style9">
+        <strong>
+            簽約對象
+        </strong>
+    </td>
+    <td style="width: 1262px">
+        @Html.TextBoxFor(m => m.Department)
+        @Html.ValidationMessageFor(m => m.Department)
+    </td>
+</tr>
+<tr>
+    <td style="width: 230px" class="auto-style9">
+        <strong>
+            簡介
+        </strong>
+    </td>
+    <td style="width: 1262px">
+        @Html.TextAreaFor(m => m.Description, new { @Style = "width: 600px; height: 300px; max-width:600px" })
+        @Html.ValidationMessageFor(m => m.Description)
+    </td>
+</tr>
+<tr>
+    <td style="width: 230px" class="auto-style9">
+        <strong>
+            相簿
+        </strong>
+    </td>
+    <td style="width: 1262px">
+
+        <div id="ImageQueue"></div>
+        <input id="ImageData" type="file" name="ImageData" />
+
+        <div id="PicUrlListDiv">
+            @if ("edit".Equals(ViewBag.Commamd) && Model != null && Model.PicUrlList != null)
+            {
+                foreach (var f in Model.PicUrlList)
+                {
+                    <div id="PicUrl_@(f.ItemOID)">
+                        <input type="hidden" name="PicUrlList.index" value="@(f.ItemOID)" />
+                        <input type="hidden" name="PicUrlList[@(f.ItemOID)].ItemOID" value="@(f.ItemOID)" />
+                        <input type="hidden" name="PicUrlList[@(f.ItemOID)].FunctionOID" value="@(f.FunctionOID)" />
+                        <input type="hidden" name="PicUrlList[@(f.ItemOID)].FunctionType" value="@(f.FunctionType)" />
+                        <input type="hidden" name="PicUrlList[@(f.ItemOID)].ImageHeight" value="@(f.ImageHeight)" />
+                        <input type="hidden" name="PicUrlList[@(f.ItemOID)].ImageWidth" value="@(f.ImageWidth)" />
+                        <input type="hidden" name="PicUrlList[@(f.ItemOID)].FileName" value="@(f.FileName)" />
+                        <input type="hidden" name="PicUrlList[@(f.ItemOID)].Bit" value="@(f.Bit)" />
+                        <input type="hidden" name="PicUrlList[@(f.ItemOID)].Path" value="@(f.Path)" />
+                        <input type="hidden" name="PicUrlList[@(f.ItemOID)].CoverImage" value="@(f.CoverImage ? "true":"false")" class="coverInput" />
+                        <table class="table">
+                            <tr>
+                                <td width="20%">
+                                    <a data-toggle="modal" data-target="#showPhotoModal" onclick="setCoveragePicPath('@Url.Content(string.Format("~/{0}/{1}", uploadDir, f.Path))')">
+                                        <img src="@Url.Content(string.Format("~/{0}/{1}", uploadDir, f.Path))" width="50" />
+                                    </a>
+                                </td>
+                                <td width="20%"><a href="@Url.Content(string.Format("~/{0}/{1}", uploadDir, f.Path))" target="_blank">@(f.FileName)</a></td>
+                                <td width="30%">圖檔描述:<input type="text" name="PicUrlList[@(f.ItemOID)].ItemInfo" value="@(f.ItemInfo)" /></td>
+                                <td>
+                                    <input type="button" value="delete" class="del btn btn-danger" onclick="removePicUrl('@(f.ItemOID)')" />
+                                    <a class="btn btn-primary coverBtn" id="Set_@(f.ItemOID)" style="display: @(f.CoverImage ? "none" : "inline");" onclick="setPicCoverageUrl('@(f.ItemOID)')">SetCoverage</a>
+                                    <label style="display: @(f.CoverImage ? "inline" : "none");" class="coverLabel" id="Cover_@(f.ItemOID)">封面圖</label>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                } // foreach()
+            }
+        </div>
+        <span class="auto-style8">
+            封面圖片：預設為上傳的第一張照片，圖片格式為gif、png、jpg。
+            超過800x600px時，系統會自動作縮圖處理。
+        </span>
+    </td>
+</tr>

@@ -1,0 +1,220 @@
+﻿@{
+    ViewBag.Title = "慈濟人文與博雅教育";
+    string frontend = System.Web.Configuration.WebConfigurationManager.AppSettings["website.frontend"] + "/ClassBook/DownloadClassBook";
+    string message = ViewBag.tmpMsg as string;
+}
+
+@section Scripts {
+    <script src='@Url.Content("~/Scripts/jquery-ui/jquery-ui.js")'></script>
+    <link href="@Url.Content("~/Scripts/jquery-ui/jquery-ui.css")" rel="stylesheet">
+    <style type="text/css">
+        .auto-style1 {
+            font-size: small;
+        }
+
+        .auto-style2 {
+            text-align: center;
+        }
+
+        .auto-style3 {
+            font-size: small;
+            text-align: center;
+        }
+
+        .auto-style4 {
+            color: #FF6300;
+            font-size: medium;
+        }
+
+        .fileUpload {
+            position: relative;
+            overflow: hidden;
+            margin: 10px;
+        }
+
+            .fileUpload input.upload {
+                position: absolute;
+                top: 0;
+                right: 0;
+                margin: 0;
+                padding: 0;
+                font-size: 20px;
+                cursor: pointer;
+                opacity: 0;
+                filter: alpha(opacity=0);
+            }
+    </style>
+    <script type="text/javascript">
+        $(function () {
+            //上傳
+            $(".upload").change(function () {
+                var file = this.files[0];
+                var fileName = $(this).val().replace(/C:\\fakepath\\/i, '');
+                var fileExtension = fileName.replace(/^.*\./, '');
+                var data_filename = $(this).attr('data-filename');
+
+                if (fileExtension != "xml") {
+                    alert("僅接受 xml 格式檔案。");
+                } else {
+                    if (confirm("即將上傳" + fileName + "，確定上傳？")) {
+                        var formData = new FormData();
+                        formData.append("filedata", file);
+                        formData.append("coverPath", "Scripts/book/");
+                        formData.append("fileName", data_filename);
+                        $.ajax({
+                            type: "POST",
+                            url: '@Url.Action("UploadMaintainData", "FileUtility")',
+                            data: formData,
+                            dataType: 'json',
+                            contentType: false,
+                            processData: false,
+                            success: function (response) {
+                                alert(response);
+                            },
+                            error: function (error) {
+                                alert("");
+                            }
+                        });
+                    }
+                }
+
+                $(this).val('');
+            });
+        });
+    </script>
+
+}
+<h2>慈濟人文與博雅教育</h2>
+<div style="padding-left:20px; padding-top:10px;">
+    <table>
+        <tr>
+            <td colspan="2">
+                <div class="auto-style4"><strong>慈誠懿德會</strong></div>
+            </td>
+        </tr>
+        <tr>
+            <td style="text-align:right"><label class="control-label">細說從頭xml檔案：</label></td>
+            <td>
+                <a class="btn btn-success" target="_blank" href="/Humanistic/DownloadHumanistic?num=1">下載</a>
+                <div class="fileUpload btn btn-primary">
+                    <span>上傳</span>
+                    <input name="filedata" type="file" class="upload" data-filename="book_culture_book1.xml" />
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td style="text-align:right"><label class="control-label">溫馨互動xml檔案：</label></td>
+            <td>
+                <a class="btn btn-success" target="_blank" href="/Humanistic/DownloadHumanistic?num=2">下載</a>
+                <div class="fileUpload btn btn-primary">
+                    <span>上傳</span>
+                    <input name="filedata" type="file" class="upload" data-filename="book_culture_book2.xml" />
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td style="text-align:right"><label class="control-label">緣起不滅xml檔案：</label></td>
+            <td>
+                <a class="btn btn-success" target="_blank" href="/Humanistic/DownloadHumanistic?num=3">下載</a>
+                <div class="fileUpload btn btn-primary">
+                    <span>上傳</span>
+                    <input name="filedata" type="file" class="upload" data-filename="book_culture_book3.xml" />
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td style="text-align:right"><label class="control-label">懿德名單xml檔案：</label></td>
+            <td>
+                <a class="btn btn-success" target="_blank" href="/Humanistic/DownloadHumanistic?num=4">下載</a>
+                <div class="fileUpload btn btn-primary">
+                    <span>上傳</span>
+                    <input name="filedata" type="file" class="upload" data-filename="book_culture_book4.xml" />
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <br />
+                <div class="auto-style4"><strong>慈濟人文學程</strong></div>
+            </td>
+        </tr>
+        <tr>
+            <td style="text-align:right"><label class="control-label">慈濟首創xml檔案：</label></td>
+            <td>
+                <a class="btn btn-success" target="_blank" href="/Humanistic/DownloadHumanistic?num=5">下載</a>
+                <div class="fileUpload btn btn-primary">
+                    <span>上傳</span>
+                    <input name="filedata" type="file" class="upload" data-filename="book_culture_book5.xml" />
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td style="text-align:right"><label class="control-label">課程清單xml檔案：</label></td>
+            <td>
+                <a class="btn btn-success" target="_blank" href="/Humanistic/DownloadHumanistic?num=6">下載</a>
+                <div class="fileUpload btn btn-primary">
+                    <span>上傳</span>
+                    <input name="filedata" type="file" class="upload" data-filename="book_culture_book6.xml" />
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td style="text-align:right"><label class="control-label">志工服務xml檔案：</label></td>
+            <td>
+                <a class="btn btn-success" target="_blank" href="/Humanistic/DownloadHumanistic?num=7">下載</a>
+                <div class="fileUpload btn btn-primary">
+                    <span>上傳</span>
+                    <input name="filedata" type="file" class="upload" data-filename="book_culture_book7.xml" />
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <br />
+                <div class="auto-style4"><strong>無語良師</strong></div>
+            </td>
+        </tr>
+        <tr>
+            <td style="text-align:right"><label class="control-label">無語示教xml檔案：</label></td>
+            <td>
+                <a class="btn btn-success" target="_blank" href="/Humanistic/DownloadHumanistic?num=8">下載</a>
+                <div class="fileUpload btn btn-primary">
+                    <span>上傳</span>
+                    <input name="filedata" type="file" class="upload" data-filename="book_culture_book8.xml" />
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td style="text-align:right"><label class="control-label">技職唯一xml檔案：</label></td>
+            <td>
+                <a class="btn btn-success" target="_blank" href="/Humanistic/DownloadHumanistic?num=9">下載</a>
+                <div class="fileUpload btn btn-primary">
+                    <span>上傳</span>
+                    <input name="filedata" type="file" class="upload" data-filename="book_culture_book9.xml" />
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td style="text-align:right"><label class="control-label">大愛長存xml檔案：</label></td>
+            <td>
+                <a class="btn btn-success" target="_blank" href="/Humanistic/DownloadHumanistic?num=10">下載</a>
+                <div class="fileUpload btn btn-primary">
+                    <span>上傳</span>
+                    <input name="filedata" type="file" class="upload" data-filename="book_culture_book10.xml" />
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td style="text-align:right"><label class="control-label">學子感恩xml檔案：</label></td>
+            <td>
+                <a class="btn btn-success" target="_blank" href="/Humanistic/DownloadHumanistic?num=11">下載</a>
+                <div class="fileUpload btn btn-primary">
+                    <span>上傳</span>
+                    <input name="filedata" type="file" class="upload" data-filename="book_culture_book11.xml" />
+                </div>
+            </td>
+        </tr>
+    </table>
+</div>
+<br>
+

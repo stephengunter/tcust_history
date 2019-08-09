@@ -1,0 +1,48 @@
+﻿@{
+    ViewBag.Title = "校史館 - 資訊查詢";
+    string frontendBaseURL = System.Web.Configuration.WebConfigurationManager.AppSettings["website.frontend"];
+    string backendBaseURL = System.Web.Configuration.WebConfigurationManager.AppSettings["website.backend"];
+}
+
+@section scripts {
+    <script src="~/Scripts/imgDragforbidden.js"></script>
+    <script src="~/Scripts/hammer.js-master/hammer.js"></script>
+    <script>
+        function newsLoading() {
+            $('.loading').show();
+            window.location = '@Url.Content("~/News/GetNews")';
+        }
+    </script>
+}
+
+@section styles{
+    <link href="~/Scripts/inform/css/reset.css" rel="stylesheet" type="text/css">
+    <link href="~/Scripts/inform/css/tzuchi.css" rel="stylesheet" type="text/css">
+    <style>
+        .loading {
+            width:100%;
+            height:100%;
+            top:0px;
+            position:absolute;
+            background-color:rgba(0,0,0,0.5);
+            text-align:center;
+            line-height:1050px;
+            color:white;
+            font-size:32px;
+            display:none;
+        }
+    </style>
+}
+
+
+<div class="wbox">
+    <div class="leftbox" style="width:320px;"><img src="~/Scripts/inform/images/inform/title_s.png"></div>
+
+    <div class="btnIcon4"><a href="javascript:newsLoading()"></a></div>
+    <div class="btnIcon3"><a href="@Url.Content("~/ClassBook/GetClassBookList")"></a></div>
+    <div class="btnIcon2"><a href="@Url.Content("~/SchoolMap/SchoolMapList")"></a></div>
+    <div class="btnIcon1"><a href="@Url.Content("~/SchoolDiary/GetSchoolDiaryList")"></a></div>
+
+</div>
+
+<div class="loading">資料載入中<img src="~/Scripts/inform/images/w.gif"></div>

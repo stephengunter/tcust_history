@@ -1,0 +1,346 @@
+﻿@model TzuChiClassLibrary.BO.PagenationModel
+@{
+    ViewBag.Title = "輪播管理";
+    string message = TempData["ImageShowMessage"] as string;
+    string uploadDir = System.Web.Configuration.WebConfigurationManager.AppSettings["upload.folder.name"];
+}
+
+@section Scripts {
+    <script src='@Url.Content("~/Scripts/jquery-ui/jquery-ui.js")'></script>
+    <link href="@Url.Content("~/Scripts/jquery-ui/jquery-ui.css")" rel="stylesheet">
+    <style type="text/css">
+        .auto-style1 {
+            font-size: small;
+        }
+
+        .auto-style2 {
+            text-align: center;
+        }
+
+        .auto-style3 {
+            font-size: small;
+            text-align: center;
+        }
+
+        .auto-style4 {
+            color: #FF6300;
+            font-size: medium;
+        }
+    </style>
+    <script type="text/javascript">
+                $(function () {
+                    if ('@message' != "") {
+                        alert('@message');
+                    }
+
+                    $(".orderT").click(function () {
+                        $(".OrderNum").val(parseInt($(".orderT").index(this) + 1));
+                        $(".Order").val(($(".Order").val() == "True") ? "false" : "true");
+                        document.forms["sortForm"].submit();
+                    });
+
+                });
+    </script>
+@*引用Uploadify樣式，Queue會用到*@
+<link href='@Url.Content("~/Scripts/uploadify/uploadify.css")' rel="stylesheet" />
+@*引用uploadify核心*@
+<script src='@Url.Content("~/Scripts/uploadify/jquery.uploadify-3.2.min.js")'></script>
+<script type="text/javascript">
+    $(document).ready(init);
+    function init() {
+        //解決Firefox掉Session用的程式碼
+        var ASPSESSID = "@Session.SessionID";
+        var AUTHID = "@(Request.Cookies[FormsAuthentication.FormsCookieName] == null ? string.Empty : Request.Cookies[FormsAuthentication.FormsCookieName].Value)";
+
+        var width = 814;
+        var height = 269;
+        var buttonImageUrl = "@Url.Content("~/Images/uploadButton.jpg")";//這是我自己準備的按鈕圖
+
+        //js註冊使用jQuery Uploadify
+        //Filedata為input的id
+        //queue為div id，佇列div的 id
+        UploadFileFunc("ImageData", "ImageQueue", ASPSESSID, AUTHID, width, height, buttonImageUrl);
+
+    }
+
+    //這個function再自行放到自己的.js檔
+    function UploadFileFunc(FiledataID, QueueID, ASPSESSID, AUTHID, width, height, buttonImageUrl) {
+
+        var mfileTypeExts = "*.jpg;*.gif;*.png;*.JPG;*.GIF;*.PNG";
+        var mfileTypeDesc = "Image Files (.jpg, .gif, .png)";
+        var mfileSizeLimit = "100MB";
+
+        $('#' + FiledataID).uploadify({
+            //buttonImage: buttonImageUrl,//依美工給的圖置換上傳按鈕圖
+            //width: width,//按鈕寬度和圖片一樣
+            //height: height,//按鈕高度和圖片一樣
+
+            swf: '@Url.Content("~/Scripts/uploadify/uploadify.swf")',//必填
+            uploader: '@Url.Action("UploadFile", "FileUtility")',//使用哪個Action 做上傳
+
+            multi: false,//true支援選擇多檔案上傳
+            auto: true,//設置true，檔案選擇框，一按確定就上傳，false的話，要另外呼叫方法傳遞upload參數觸發上傳行為
+            fileTypeExts: mfileTypeExts,//限制可以選擇的檔案類型
+            fileTypeDesc: mfileTypeDesc,//選擇檔案時的說明
+            fileSizeLimit: mfileSizeLimit,//在js端就限制檔案大小，User選擇超過大小的檔案時，就會跳出error
+            queueID: QueueID,//上傳進度條呈現的地方
+            queueSizeLimit: 4,//限制queue的數量
+            simUploadLimit: 0,//同時上傳檔案數，0為無限
+            removeCompleted: true,//檔案上傳完成時，畫面上的佇列是否消失
+
+            fileObjName: 'Filedata',//Server端的Action，以什麼名稱接收HttpPostedFileBase物件
+
+            onSelectError: function (file) {//當選擇檔案不符合條件時，觸發： http://www.uploadify.com/documentation/uploadify/onselecterror/
+
+                //alert('The file ' + file.name + ' returned an error and was not added to the queue.');
+
+            },
+            onUploadSuccess: function (file, data, response) {
+                //一個佇列上傳成功時
+                //alert('The file ' + file.name + ' was successfully uploaded with a response of ' + response + ':' + data);
+                //data參數是Controller回傳的字串，想要Json格式的話，要再另外找Plugin把字串轉成Json物件
+                //以本文範例data就是該圖片上傳後的Url字串
+                var jsondata = jQuery.parseJSON(data);
+
+                if ("ImageData" == FiledataID) {
+
+                    removeImageData();
+                    $.tmpl(imageDataTemplate, { index: new Date().getTime(), fileData: jsondata }).appendTo("#imageDataPreview");
+
+                }
+               
+            },
+            onQueueComplete: function (queueData) {
+                //全部佇列執行完畢時
+                //alert(queueData.uploadsSuccessful + ' files were successfully uploaded.');
+
+            },
+            //解決Firefox掉Session的程式碼，ASPSESSID和AUTHID命名要和Global.asax.cs裡寫的一樣
+            formData: {
+                ASPSESSID: ASPSESSID,
+                AUTHID: AUTHID
+            }
+        });
+    }
+
+</script>
+<script type="text/javascript">
+    var imageDataTemplate;
+
+    $(function () {
+        // 將 DIV 內容先轉成 template
+        imageDataTemplate = $("#ImageDataTemplate").template();
+    });
+
+</script>
+
+}
+<h2>輪播管理</h2>
+<div class="auto-style4"><strong>ImageShow List</strong></div>
+<div>
+    @using (Html.BeginForm("List", "ImageShow", null, FormMethod.Post, new { @name = "submitForm", @role = "form", @class = "form-inline" }))
+    {
+        <div>
+            <label class="control-label">檢索</label>
+
+            @Html.DropDownListFor(model => model.QueryField, (List<SelectListItem>)ViewBag.TypeList, "全部", new { @class = "form-control" })
+            @Html.HiddenFor(model => model.KeyWord, new { @Value = "key" })
+            @Html.HiddenFor(model => model.Page, new { @Value = 1 })
+            @Html.HiddenFor(model => model.Order, new { @Value = false })
+            @Html.HiddenFor(model => model.OrderNum, new { @Value = 0 })
+            <input type="text" name='totalPage' value='@ViewBag.TotalPage' style='display:none' />
+            <input class="btn btn-success" type="submit" value="搜索" />
+
+        </div>
+    }
+</div>
+
+<div>
+    <label class="control-label">總筆數：(@ViewBag.TotalImageShow)</label>
+    <br>
+    
+    <div id="ImageQueue"></div>
+    <input id="ImageData" type="file" name="ImageData" />
+</div>
+<br>
+@using (Html.BeginForm("Create", "ImageShow", FormMethod.Post, new { }))
+{
+    @Html.AntiForgeryToken()
+    <div id="imageDataPreview">
+    </div>
+}
+<label style="color:red; font-size:xx-small">＊請先選擇檔案，以新增輪播項目。</label>
+<div>
+    <table class="table">
+        <tr style="background-color:#CCCCCC">
+            <td class="auto-style2" style="width: 50px; height: 17px">
+                <strong>
+                    輪播圖片
+                </strong>
+            </td>
+            <td class="auto-style2" style="width: 100px; height: 17px">
+                <a href="javascript:void(0)" class="orderT">
+                    <strong>
+                        圖片簡介
+                    </strong>
+                </a>
+            </td>
+            <td class="auto-style2" style="width: 50px; height: 17px">
+                <a href="javascript:void(0)" class="orderT">
+                    <strong>
+                        類別
+                    </strong>
+                </a>
+            </td>
+            <td class="auto-style2" style="width: 90px; height: 17px">
+                @*<a href="javascript:void(0)" class="orderT">*@
+                    <strong>
+                        操作
+                    </strong>
+                @*</a>*@
+            </td>
+        </tr>
+        @foreach (var item in ViewBag.DataModel)
+        {
+            <tr id="imageShow_@item.ImageShowID">
+                <td class="auto-style3" style="width: 50px">
+                    @if (item.ImageUrl != null)
+                    {//popup 視窗顯示圖片
+                        <a data-toggle="modal" data-target="#showPhotoModal" onclick="setCoveragePicPath('@Url.Content("~/Uploads/" + item.ImageUrl)')">
+                            <img src="@Url.Content("~/imgs/zoom/50/50/" + item.ImageUrl)" width="50" />
+                        </a>
+                    }
+                </td>
+                <td class="auto-style3" style="width: 50px">@item.ImageName</td>
+                <td class="auto-style3" style="width: 50px">@item.TypeID</td>
+                <td class="auto-style3" style="width: 90px">
+                    <input type="button" class="btn btn-default btn-sm btn-danger" value="刪除" onclick="imageShowDelete('@item.ImageShowID');" />
+                </td>
+            </tr>
+        }
+    </table>
+    <br />
+    <table width="100%" border="0" cellspacing="0">
+        <tr>
+            <td width="50%" align="right" class="inpage_basic2">
+
+                @if (Model.Page == 1)
+                {
+                    <input class="btn btn-default" type="button" disabled="disabled" value="第一頁" />
+                    <input class="btn btn-default" type="button" disabled="disabled" value="上一頁" />
+                }
+                else
+                {
+                    <input class="btn btn-default" type="button" id="firstPage" onclick="SubmitPage(1)" value="第一頁" />
+                    <input class="btn btn-default" type="button" onclick="SubmitPage(@Model.Page-1)" value="前一頁" />
+                }
+                @if (Model.Page == ViewBag.TotalPage)
+                {
+                    <input class="btn btn-default" type="button" disabled="disabled" value="下一頁" />
+                    <input class="btn btn-default" type="button" disabled="disabled" value="末頁" />
+                }
+                else
+                {
+                    <input class="btn btn-default" type="button" onclick="SubmitPage(@Model.Page+1)" value="後一頁" />
+                    <input class="btn btn-default" type="button" id="lastPage" onclick="SubmitPage(@(ViewBag.TotalPage == 0 ? 1 : ViewBag.TotalPage))" value="末頁" />
+                }
+
+            </td>
+            <td width="15%" align="right" class="inpage_basic2">跳至第</td>
+            <td width="10%" class="inpage_basic2">
+                <input type="text" id="jumptext" value="@Model.Page" size="5" />
+            </td>
+            <td><input class="btn btn-default" type="button" id="jumpBtn" onclick="JumpPage()" value="跳頁" /></td>
+            <td class="inpage_basic2">@Model.Page/@(ViewBag.TotalPage == 0 ? 1 : ViewBag.TotalPage)頁</td>
+
+        </tr>
+    </table>
+</div>
+
+@using (Html.BeginForm("List", "ImageShow", null, FormMethod.Post, new { @name = "sortForm" }))
+{
+     <!--for 分頁-->
+    <span>
+        <!--對應條件-->
+        @Html.HiddenFor(model => model.KeyWord)
+        @Html.HiddenFor(model => model.QueryField)
+        @Html.HiddenFor(model => model.BeginDateTime)
+        @Html.HiddenFor(model => model.EndDateTime)
+        @Html.HiddenFor(model => model.Page, new { @class = "PageSearch", @Value = 1 })
+        @Html.HiddenFor(model => model.Order, new { @class = "Order" })
+        @Html.HiddenFor(model => model.OrderNum, new { @class = "OrderNum" })
+        @Html.HiddenFor(model => model.Page, new { @class = "PageSearch", @Value = 1 })
+        <input type="text" name='totalPage' value='@ViewBag.TotalPage' style='display:none' />
+    </span>
+}
+<!-- Popup Photo Modal -->
+@Html.Partial("_PopupPhotoModal")
+<div id="ImageDataTemplate" style="display: none;">
+    {{if fileData}}
+    <div id="ImageData">
+        <input type="hidden" name="ImageShowID" value="${fileData.ItemOID}" />
+        <input type="hidden" name="ImageHeight" value="${fileData.ImageHeight}" />
+        <input type="hidden" name="ImageWidth" value="${fileData.ImageWidth}" />
+        <input type="hidden" name="ImageName" value="${fileData.FileName}" />
+        <input type="hidden" name="ImageUrl" value="${fileData.Path}" />
+        <table class="table">
+            <tr>
+                <td width="30%">
+                    <a data-toggle="modal" data-target="#showPhotoModal" onclick="setCoveragePicPath('@Url.Content(string.Format("~/{0}/", uploadDir))${fileData.Path}')">
+                        <img src="@Url.Content(string.Format("~/{0}/", uploadDir))${fileData.Path}" width="50" />
+                    </a>
+                </td>
+                <td width="20%"><a href="@Url.Content(string.Format("~/{0}/", uploadDir))${fileData.Path}" target="_blank">${fileData.FileName}</a></td>
+                <td width="20%">
+                    @Html.DropDownList("TypeID", (List<SelectListItem>)ViewBag.TypeList, new { @class = "form-control" })
+                </td>
+                <td>
+                    <input type="button" value="delete" class="del btn btn-danger" onclick="removeImageData()" />
+                    <input type="submit" value="create" class="del btn btn-primary"/>
+                </td>
+            </tr>
+        </table>
+    </div>
+    {{/if}}
+</div>
+
+<script>
+
+    function SubmitPage(page) {
+
+        $(".PageSearch").val(page);
+
+        if ('@Model.Page' != page)
+            document.forms["sortForm"].submit();
+
+    } // SubmitPage()
+
+    function JumpPage() {
+
+        $(".PageSearch").val($("#jumptext").val());
+
+        if ('@Model.Page' != $("#jumptext").val())
+            document.forms["sortForm"].submit();
+    } // JumpPage()
+
+    var removeImageData = function () {
+        $('#imageDataPreview').empty();
+    }
+
+    function imageShowDelete(ImageShowID) {
+        if (confirm("資料刪除後將無法復原，確定要刪除嗎?")) {
+            var form = $('<form method="POST" action=" @Url.Action("Delete") ">');
+            form.append($('<input type="hidden" name="ImageShowID" value="' + ImageShowID + '">'));
+            $('body').append(form);
+            form.submit();
+            form.remove();
+        } else {
+
+        }
+    }
+
+    function setCoveragePicPath(path) {
+        $(".popupPhoto").attr("src", path);
+        console.log(path);
+    }
+</script>
